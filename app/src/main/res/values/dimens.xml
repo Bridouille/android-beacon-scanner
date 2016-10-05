@@ -1,0 +1,16 @@
+<resources>
+    <dimen name="keyline_2">2dp</dimen>
+    <dimen name="keyline_4">4dp</dimen>
+    <dimen name="keyline_8">8dp</dimen>
+    <dimen name="keyline_16">16dp</dimen>
+    <dimen name="keyline_24">24dp</dimen>
+    <dimen name="keyline_32">32dp</dimen>
+    <dimen name="keyline_40">40dp</dimen>
+    <dimen name="keyline_48">48dp</dimen>
+    <dimen name="keyline_56">56dp</dimen>
+    <dimen name="keyline_64">64dp</dimen>
+    <dimen name="keyline_72">72dp</dimen>
+    <dimen name="keyline_80">80dp</dimen>
+    <dimen name="keyline_88">88dp</dimen>
+    <dimen name="keyline_96">96dp</dimen>
+</resources>

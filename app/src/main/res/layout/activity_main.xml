@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bridou_n.beaconscanner.features.beaconList.MainActivity">
+
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+        <!-- Header with bluetooth state -->
+        <TextView
+            android:id="@+id/bluetooth_state"
+            android:layout_below="@id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/keyline_48"
+            android:textSize="16sp"
+            android:paddingStart="@dimen/keyline_16"
+            android:paddingEnd="@dimen/keyline_16"
+            android:gravity="center_vertical"
+            android:background="@color/bluetoothDisabledLight"
+            android:textColor="@color/bluetoothDisabled"
+            android:elevation="@dimen/keyline_4"
+            tools:text="Bluetooth disabled" />
+
+        <!-- Actual content -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/beacons_rv"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/bluetooth_state"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:scrollbars="vertical" />
+
+        <!-- Empty view -->
+        <RelativeLayout
+            android:id="@+id/empty_view"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="@color/colorPrimary"
+                android:src="@mipmap/ic_wifi_tethering_black_48dp"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/error_image" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_scanned_beacons_yet"
+                android:id="@+id/empty_state_title"
+                android:textColor="@color/primaryText"
+                android:layout_below="@+id/error_image"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/keyline_16"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_state_content"
+                android:id="@+id/empty_state_content"
+                android:layout_below="@+id/empty_state_title"
+                android:layout_centerHorizontal="true"
+                android:textSize="14sp"
+                android:textAlignment="center"
+                android:maxWidth="250dip"
+                android:layout_marginLeft="@dimen/keyline_32"
+                android:layout_marginRight="@dimen/keyline_32" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <com.dmitrymalkovich.android.ProgressFloatingActionButton
+        android:id="@+id/scan_fab_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:clickable="true">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/scan_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/keyline_16"
+            android:tint="@android:color/white"
+            android:src="@mipmap/ic_loop_white_24dp"
+            app:fabSize="normal" />
+
+        <ProgressBar
+            android:visibility="invisible"
+            android:id="@+id/scan_progress"
+            android:layout_margin="@dimen/keyline_4"
+            android:indeterminateTint="@color/colorScanProgress"
+            android:indeterminateTintMode="src_in"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </com.dmitrymalkovich.android.ProgressFloatingActionButton>
+
+</android.support.design.widget.CoordinatorLayout>

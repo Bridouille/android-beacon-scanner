@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/beacon_container"
+    android:clickable="true"
+    android:background="?selectableItemBackground"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:padding="@dimen/keyline_16"
+        android:background="@android:color/white"
+        android:elevation="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!-- Distance -->
+        <LinearLayout
+            android:id="@+id/distance_container"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="@dimen/keyline_80">
+
+            <TextView
+                android:text="@string/distance"
+                android:textSize="12sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/keyline_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/distance"
+                    tools:text="12.56"
+                    android:textStyle="bold"
+                    android:textSize="22sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:text="@string/metters_abbreviation"
+                    android:textSize="12sp"
+                    android:layout_marginStart="@dimen/keyline_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/distance_qualifier"
+                android:layout_marginTop="@dimen/keyline_4"
+                tools:text="Near"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- type@address -->
+        <TextView
+            android:id="@+id/beacon_type"
+            tools:text="Eddystone-URL&amp;TLM"
+            android:textSize="14sp"
+            android:textColor="@color/colorPrimary"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_marginStart="@dimen/keyline_4"
+            android:layout_toEndOf="@id/distance_container"
+            android:layout_toStartOf="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/address"
+            tools:text="A5:09:FD:B7:C3:22"
+            android:textSize="12sp"
+            android:layout_marginTop="@dimen/keyline_2"
+            android:layout_marginStart="@dimen/keyline_4"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- URL -->
+        <LinearLayout
+            android:id="@+id/url_container"
+            android:orientation="horizontal"
+            android:layout_marginStart="@dimen/keyline_4"
+            android:layout_marginTop="@dimen/keyline_16"
+            android:layout_below="@id/beacon_type"
+            android:layout_toEndOf="@id/distance_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="14sp"
+                android:text="@string/url"/>
+            <TextView
+                android:id="@+id/url"
+                android:layout_marginStart="@dimen/keyline_8"
+                tools:text="http://example.com"
+                android:textSize="22sp"
+                android:autoLink="web"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <include layout="@layout/beacon_more_info" android:id="@+id/more_info" />
+
+</LinearLayout>

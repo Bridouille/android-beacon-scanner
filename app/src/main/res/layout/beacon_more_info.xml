@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="@dimen/keyline_16"
+    android:background="@color/bgMoreInfo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- RSSI + TX-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- RSSI -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.5">
+            <TextView
+                android:text="@string/rssi"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/keyline_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/rssi"
+                    tools:text="-69"
+                    android:textStyle="bold"
+                    android:textSize="26sp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:text="@string/dbm"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:layout_marginStart="@dimen/keyline_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- TX -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.5">
+            <TextView
+                android:text="@string/tx"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/keyline_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tx"
+                    tools:text="-63"
+                    android:textStyle="bold"
+                    android:textSize="26sp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:text="@string/dbm"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:layout_marginStart="@dimen/keyline_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- TLM data -->
+    <LinearLayout
+        android:id="@+id/tlm_data"
+        android:layout_marginTop="@dimen/keyline_8"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <TextView
+            android:text="@string/tlm_data"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/keyline_8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Battery-->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/battery"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/keyline_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/battery"
+                        tools:text="500"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="@string/millivolts_abbreviation"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/white"
+                        android:layout_marginStart="@dimen/keyline_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ticks-->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/pdu_count"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/keyline_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/ticks"
+                        tools:text="2.1k"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Uptime -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/uptime"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="@dimen/keyline_4"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/uptime"
+                        tools:text="66k"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="@string/seconds_abbreviation"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/white"
+                        android:layout_marginStart="@dimen/keyline_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--Temperature-->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/temperature"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/keyline_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/temperature"
+                        tools:text="22.3"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:text="@string/celcius_abbreviation"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/white"
+                        android:layout_marginStart="@dimen/keyline_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--Manufacturer -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/keyline_8"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <TextView
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/manufacturer" />
+        <TextView
+            android:id="@+id/manufacturer"
+            tools:text="0x0118"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="@dimen/keyline_8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <!--Last seen -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/keyline_8"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <TextView
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/last_seen" />
+        <TextView
+            android:id="@+id/last_seen"
+            tools:text="01/10/2016 12:32:34"
+            android:textSize="12sp"
+            android:textStyle="italic|bold"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="@dimen/keyline_8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>
