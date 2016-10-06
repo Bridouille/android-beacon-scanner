@@ -2,9 +2,9 @@
 
 A simple android beacon scanner that can recognize iBeacons, Eddystone beacons (UID and URL, with or without TLM) and AltBeacons [available on Google Play](https://play.google.com/store/apps/details?id=com.bridou_n.beaconscanner).
 
-![enter image description here](https://github.com/Bridouille/android-beacon-scanner/screenshots/Eddystone-UID+TLM.png)
-![enter image description here](https://github.com/Bridouille/android-beacon-scanner/screenshots/Eddystone-URL+TLM.png)
-![enter image description here](https://github.com/Bridouille/android-beacon-scanner/screenshots/scan_discovery.png)
+<img src="screenshots/Eddystone_uid_tlm.png" width="25%" />
+<img src="screenshots/Eddystone_url_tlm.png" width="25%" />
+<img src="screenshots/scan_discovery.png" width="25%" />
 
 Available for android 4.3+ and smartphones with Bluetooth LE.
 
