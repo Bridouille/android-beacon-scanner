@@ -23,12 +23,12 @@ public class BluetoothModule {
         this.ctx = ctx;
     }
 
-    @Provides @Singleton
+    @Provides @PerActivity
     public BluetoothAdapter providesBluetoothAdapter() {
         return BluetoothAdapter.getDefaultAdapter();
     }
 
-    @Provides @Singleton
+    @Provides @PerActivity
     public BeaconManager providesBeaconManager() {
         BeaconManager instance = BeaconManager.getInstanceForApplication(ctx);
 

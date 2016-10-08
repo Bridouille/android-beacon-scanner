@@ -66,8 +66,9 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     private static final int RC_COARSE_LOCATION = 1;
     private static final int RC_SETTINGS_SCREEN = 2;
     private static final String PREF_TUTO_KEY = "PREF_TUTO_KEY";
+    private static final String STATE_SCANNING = "scanState";
 
-    private BroadcastReceiver receiver;
+    private BroadcastReceiver btStateReceiver;
     private Subscription sub = null;
 
     @Inject @Named("fab_search") Animation rotate;
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        AppSingleton.component().inject(this);
+        AppSingleton.activityComponent().inject(this);
 
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.main_menu);
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                 });
 
         // Register a broadcast receiver for bluetooth state changes
-        receiver = new BroadcastReceiver() {
+        btStateReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
@@ -137,10 +138,14 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
             }
         };
 
-        registerReceiver(receiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+        registerReceiver(btStateReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 
         if (!getPreferences(Context.MODE_PRIVATE).getBoolean(PREF_TUTO_KEY, false)) {
             showTutorial();
+        }
+
+        if (savedInstanceState != null && savedInstanceState.getBoolean(STATE_SCANNING)) {
+            startScan();
         }
     }
 
@@ -281,14 +286,18 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                 Snackbar.make(rootView, getString(R.string.enable_bluetooth_to_start_scanning), Snackbar.LENGTH_LONG).show();
                 return ;
             }
-            bindBeaconManager();
-            rotate.setRepeatCount(Animation.INFINITE);
-            scanFab.startAnimation(rotate);
-            scanProgress.setVisibility(View.VISIBLE);
-            toolbar.setTitle(getString(R.string.scanning_for_beacons));
+            startScan();
         } else {
             stopScan();
         }
+    }
+
+    public void startScan() {
+        bindBeaconManager();
+        rotate.setRepeatCount(Animation.INFINITE);
+        scanFab.startAnimation(rotate);
+        scanProgress.setVisibility(View.VISIBLE);
+        toolbar.setTitle(getString(R.string.scanning_for_beacons));
     }
 
     public void stopScan() {
@@ -373,11 +382,9 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (beaconManager.isBound(this)) {
-            stopScan();
-        }
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putBoolean(STATE_SCANNING, beaconManager.isBound(this)); // save the scanning state
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
@@ -386,7 +393,10 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
         if (sub != null && !sub.isUnsubscribed()) {
             sub.unsubscribe();
         }
+        if (beaconManager.isBound(this)) {
+            beaconManager.unbind(this);
+        }
         realm.close();
-        unregisterReceiver(receiver);
+        unregisterReceiver(btStateReceiver);
     }
 }

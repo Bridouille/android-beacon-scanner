@@ -2,9 +2,11 @@ package com.bridou_n.beaconscanner;
 
 import android.app.Application;
 
+import com.bridou_n.beaconscanner.dagger.ActivityComponent;
 import com.bridou_n.beaconscanner.dagger.AnimationModule;
 import com.bridou_n.beaconscanner.dagger.AppComponent;
 import com.bridou_n.beaconscanner.dagger.BluetoothModule;
+import com.bridou_n.beaconscanner.dagger.DaggerActivityComponent;
 import com.bridou_n.beaconscanner.dagger.DaggerAppComponent;
 import com.bridou_n.beaconscanner.dagger.DatabaseModule;
 import com.bridou_n.beaconscanner.dagger.EventModule;
@@ -18,7 +20,8 @@ import io.realm.RealmConfiguration;
 
 public class AppSingleton extends Application {
 
-    private static AppComponent component;
+    private static AppComponent appComponent;
+    private static ActivityComponent activityComponent;
 
     @Override
     public void onCreate() {
@@ -27,15 +30,23 @@ public class AppSingleton extends Application {
         RealmConfiguration config = new RealmConfiguration.Builder().build();
         Realm.setDefaultConfiguration(config);
 
-        component = DaggerAppComponent.builder()
+        appComponent = DaggerAppComponent.builder()
                         .databaseModule(new DatabaseModule())
-                        .bluetoothModule(new BluetoothModule(this))
                         .eventModule(new EventModule())
-                        .animationModule(new AnimationModule(this))
                         .build();
+
+        activityComponent = DaggerActivityComponent.builder()
+                .appComponent(appComponent)
+                .bluetoothModule(new BluetoothModule(this))
+                .animationModule(new AnimationModule(this))
+                .build();
     }
 
-    public static AppComponent component() {
-        return component;
+    public static AppComponent appComponent() {
+        return appComponent;
+    }
+
+    public static ActivityComponent activityComponent() {
+        return activityComponent;
     }
 }

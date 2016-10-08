@@ -24,7 +24,7 @@ public class AnimationModule {
         this.ctx = ctx;
     }
 
-    @Provides @Named("fab_search") @Singleton
+    @Provides @Named("fab_search") @PerActivity
     public Animation providesFabSearchAnimation() {
         return AnimationUtils.loadAnimation(ctx, R.anim.fab_search);
     }
