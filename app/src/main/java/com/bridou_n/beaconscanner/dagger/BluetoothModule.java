@@ -17,11 +17,6 @@ import dagger.Provides;
 
 @Module
 public class BluetoothModule {
-    private Context ctx;
-
-    public BluetoothModule(Context ctx) {
-        this.ctx = ctx;
-    }
 
     @Provides @PerActivity
     public BluetoothAdapter providesBluetoothAdapter() {
@@ -29,7 +24,7 @@ public class BluetoothModule {
     }
 
     @Provides @PerActivity
-    public BeaconManager providesBeaconManager() {
+    public BeaconManager providesBeaconManager(Context ctx) {
         BeaconManager instance = BeaconManager.getInstanceForApplication(ctx);
 
         // BeaconManager setup

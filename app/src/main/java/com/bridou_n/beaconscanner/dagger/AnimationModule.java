@@ -18,14 +18,9 @@ import dagger.Provides;
 
 @Module
 public class AnimationModule {
-    private Context ctx;
-
-    public AnimationModule(Context ctx) {
-        this.ctx = ctx;
-    }
 
     @Provides @Named("fab_search") @PerActivity
-    public Animation providesFabSearchAnimation() {
+    public Animation providesFabSearchAnimation(Context ctx) {
         return AnimationUtils.loadAnimation(ctx, R.anim.fab_search);
     }
 }
