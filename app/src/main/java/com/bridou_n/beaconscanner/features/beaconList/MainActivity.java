@@ -58,6 +58,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 
 public class MainActivity extends AppCompatActivity implements BeaconConsumer, EasyPermissions.PermissionCallbacks {
     protected static final String TAG = "MAIN_ACTIVITY";
@@ -67,8 +68,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     private static final String PREF_TUTO_KEY = "PREF_TUTO_KEY";
     private static final String STATE_SCANNING = "scanState";
 
-    private Subscription sub = null;
-    private Subscription btSub = null;
+    private CompositeSubscription subs = new CompositeSubscription();
 
     @Inject @Named("fab_search") Animation rotate;
     @Inject BluetoothManager bluetooth;
@@ -113,21 +113,22 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
         beaconsRv.setAdapter(new BeaconsRecyclerViewAdapter(this, beaconResults, true));
 
         // Set our event handler
-        sub = rxBus.toObserverable()
+        subs.add(rxBus.toObserverable()
                 .observeOn(AndroidSchedulers.mainThread()) // We use this so we use the realm on the good thread & we can make UI changes
                 .subscribe(e -> {
                     if (e instanceof Events.RangeBeacon) {
                         updateUiWithBeaconsArround(((Events.RangeBeacon) e).getBeacons());
                     }
-                });
+                }));
 
-        btSub = bluetooth.observe()
+        // Setup an observable on the bluetooth changes
+        subs.add(bluetooth.observe()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(e -> {
                     if (e instanceof Events.BluetoothState) {
                         bluetoothStateChanged(((Events.BluetoothState) e).getState());
                     }
-                });
+                }));
 
         if (!getPreferences(Context.MODE_PRIVATE).getBoolean(PREF_TUTO_KEY, false)) {
             showTutorial();
@@ -370,12 +371,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (sub != null && !sub.isUnsubscribed()) {
-            sub.unsubscribe();
-        }
-        if (btSub != null && !btSub.isUnsubscribed()) {
-            btSub.unsubscribe();
-        }
+        subs.unsubscribe();
         if (beaconManager.isBound(this)) {
             beaconManager.unbind(this);
         }
