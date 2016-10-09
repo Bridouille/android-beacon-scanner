@@ -1,5 +1,7 @@
 package com.bridou_n.beaconscanner.dagger;
 
+import android.content.Context;
+
 import com.bridou_n.beaconscanner.events.RxBus;
 
 import javax.inject.Singleton;
@@ -12,10 +14,12 @@ import io.realm.Realm;
  */
 @Singleton
 @Component(modules = {
+        ContextModule.class,
         DatabaseModule.class,
         EventModule.class,
 })
 public interface AppComponent {
+    Context context();
     Realm realm();
     RxBus rxBus();
 }
