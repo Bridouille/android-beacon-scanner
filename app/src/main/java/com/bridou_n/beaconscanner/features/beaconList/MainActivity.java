@@ -342,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         if (!bluetooth.isEnabled()) {
-            menu.getItem(1).setIcon(R.mipmap.ic_bluetooth_disabled_white_24dp);
+            menu.getItem(1).setIcon(R.drawable.ic_bluetooth_disabled_white_24dp);
         }
         return true;
     }

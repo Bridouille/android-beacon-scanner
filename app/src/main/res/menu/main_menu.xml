@@ -4,12 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".features.beaconList.MainActivity">
     <item
-        android:icon="@mipmap/ic_clear_all_white_24dp"
+        android:icon="@drawable/ic_clear_all_white_24dp"
         android:id="@+id/action_clear"
         android:title="@string/clear"
         app:showAsAction="ifRoom"/>
     <item
-        android:icon="@mipmap/ic_bluetooth_white_24dp"
+        android:icon="@drawable/ic_bluetooth_white_24dp"
         android:id="@+id/action_bluetooth"
         android:title="@string/bluetooth_state"
         app:showAsAction="ifRoom"/>
