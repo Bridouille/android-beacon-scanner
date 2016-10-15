@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.annotation.Nullable;
 
 import com.bridou_n.beaconscanner.events.Events;
 
@@ -20,8 +21,9 @@ public class BluetoothManager {
     private final BehaviorSubject<Object> subject;
 
     @Inject
-    public BluetoothManager(BluetoothAdapter adapter, Context context) {
+    public BluetoothManager(@Nullable BluetoothAdapter adapter, Context context) {
         this.adapter = adapter;
+        this.subject = BehaviorSubject.create(new Events.BluetoothState(adapter != null ? adapter.getState() : BluetoothAdapter.STATE_OFF));
 
         BroadcastReceiver receiver = new BroadcastReceiver() {
             @Override
@@ -34,8 +36,6 @@ public class BluetoothManager {
             }
         };
         context.registerReceiver(receiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
-        // Get current state _after_ registering for broadcasts, just in case the state is changing
-        this.subject = BehaviorSubject.create(new Events.BluetoothState(adapter.getState()));
     }
 
     public void disable() {

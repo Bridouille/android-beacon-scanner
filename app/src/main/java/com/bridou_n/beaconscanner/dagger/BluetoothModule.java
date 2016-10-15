@@ -2,6 +2,7 @@ package com.bridou_n.beaconscanner.dagger;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
@@ -18,7 +19,7 @@ import dagger.Provides;
 @Module
 public class BluetoothModule {
 
-    @Provides @PerActivity
+    @Nullable @Provides @PerActivity
     public BluetoothAdapter providesBluetoothAdapter() {
         return BluetoothAdapter.getDefaultAdapter();
     }
