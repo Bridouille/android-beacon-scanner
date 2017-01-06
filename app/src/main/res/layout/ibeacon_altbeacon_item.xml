@@ -22,7 +22,7 @@
             android:id="@+id/distance_container"
             android:orientation="vertical"
             android:layout_height="wrap_content"
-            android:layout_width="@dimen/keyline_80">
+            android:layout_width="@dimen/keyline_85">
 
             <TextView
                 android:text="@string/distance"

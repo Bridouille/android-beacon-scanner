@@ -11,6 +11,7 @@
     <dimen name="keyline_64">64dp</dimen>
     <dimen name="keyline_72">72dp</dimen>
     <dimen name="keyline_80">80dp</dimen>
+    <dimen name="keyline_85">85dp</dimen>
     <dimen name="keyline_88">88dp</dimen>
     <dimen name="keyline_96">96dp</dimen>
 </resources>
