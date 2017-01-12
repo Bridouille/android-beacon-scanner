@@ -3,6 +3,7 @@ package com.bridou_n.beaconscanner.features.beaconList;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -53,7 +54,7 @@ public class BeaconsRecyclerViewAdapter extends RealmRecyclerViewAdapter<BeaconS
         @BindView(R.id.rssi) TextView rssi;
         @BindView(R.id.tx) TextView tx;
         @BindView(R.id.manufacturer) TextView manufacturer;
-        @BindView(R.id.tlm_data) LinearLayout tlmData;
+        @BindView(R.id.tlm_data) ConstraintLayout tlmData;
         @BindView(R.id.battery) TextView battery;
         @BindView(R.id.ticks) TextView pduCount;
         @BindView(R.id.uptime) TextView uptime;
