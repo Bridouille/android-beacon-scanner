@@ -174,6 +174,12 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
         if (!prefs.hasSeenTutorial()) {
             showTutorial();
         }
+
+        // Start scanning if the scan on open is activated
+        if (prefs.isScanOnOpen() && !isScanning()) {
+            bluetooth.enable();
+            startScan();
+        }
         super.onResume();
     }
 
@@ -267,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
     @OnClick(R.id.scan_fab)
     public void startStopScan() {
-        if (!beaconManager.isBound(this)) {
+        if (!isScanning()) {
             if (!bluetooth.isEnabled()) {
                 Snackbar.make(rootView, getString(R.string.enable_bluetooth_to_start_scanning), Snackbar.LENGTH_LONG).show();
                 return ;
@@ -276,6 +282,10 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
         } else {
             stopScan();
         }
+    }
+
+    public boolean isScanning() {
+        return beaconManager.isBound(this);
     }
 
     public void startScan() {
@@ -371,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putBoolean(STATE_SCANNING, beaconManager.isBound(this)); // save the scanning state
+        savedInstanceState.putBoolean(STATE_SCANNING, isScanning()); // save the scanning state
         super.onSaveInstanceState(savedInstanceState);
     }
 
