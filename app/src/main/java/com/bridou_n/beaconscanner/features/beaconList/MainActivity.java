@@ -2,7 +2,6 @@ package com.bridou_n.beaconscanner.features.beaconList;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +25,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.bridou_n.beaconscanner.AppSingleton;
 import com.bridou_n.beaconscanner.R;
 import com.bridou_n.beaconscanner.events.Events;
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     private static final String STATE_SCANNING = "scanState";
 
     private CompositeSubscription subs = new CompositeSubscription();
+    private MaterialDialog dialog;
 
     @Inject @Named("fab_search") Animation rotate;
     @Inject BluetoothManager bluetooth;
@@ -365,9 +368,20 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                 bluetooth.toggle();
                 break ;
             case R.id.action_clear:
-                realm.executeTransactionAsync(tRealm -> {
-                    tRealm.where(BeaconSaved.class).findAll().deleteAllFromRealm();
-                });
+                dialog = new MaterialDialog.Builder(this)
+                        .theme(Theme.LIGHT)
+                        .title(R.string.delete_all)
+                        .content(R.string.are_you_sure_delete_all)
+                        .autoDismiss(true)
+                        .onPositive((dialog, which) -> {
+                            realm.executeTransactionAsync(tRealm -> {
+                                tRealm.where(BeaconSaved.class).findAll().deleteAllFromRealm();
+                            });
+                        })
+                        .positiveText(android.R.string.ok)
+                        .negativeText(android.R.string.cancel)
+                        .build();
+                dialog.show();
                 break ;
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -388,6 +402,9 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     @Override
     protected void onDestroy() {
         subs.unsubscribe();
+        if (dialog != null) {
+            dialog.dismiss();
+        }
         if (beaconManager.isBound(this)) {
             beaconManager.unbind(this);
         }

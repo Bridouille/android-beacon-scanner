@@ -69,4 +69,6 @@
     <string name="the_tutorial_has_been_reset">The tutorial has been reset</string>
     <string name="made_with">Made with</string>
     <string name="by_nicolas_bridoux">by Nicolas Bridoux</string>
+    <string name="delete_all">Delete all</string>
+    <string name="are_you_sure_delete_all">Are you sure you want to delete all the previous scans ?</string>
 </resources>
