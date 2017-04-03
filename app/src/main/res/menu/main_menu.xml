@@ -13,4 +13,9 @@
         android:id="@+id/action_bluetooth"
         android:title="@string/bluetooth_state"
         app:showAsAction="ifRoom"/>
+    <item
+        android:icon="@drawable/ic_settings_white_24dp"
+        android:id="@+id/action_settings"
+        android:title="@string/settings"
+        app:showAsAction="ifRoom"/>
 </menu>

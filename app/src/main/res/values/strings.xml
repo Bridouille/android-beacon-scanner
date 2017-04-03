@@ -53,4 +53,17 @@
     <string name="feature_scan_content">Tap to start and stop scanning for nearby beacons!</string>
     <string name="feature_clear_title">Need a fresh start ?</string>
     <string name="feature_clear_content">Hit this to clear your previous scans</string>
+    <string name="scanner">Scanner</string>
+    <string name="feedback">Feedback</string>
+    <string name="rate_the_app">Rate the app</string>
+    <string name="version">Version</string>
+    <string name="about">About</string>
+    <string name="activate_tutorial">Activate the tutorial</string>
+    <string name="need_some_hints">Need some hints on how to use the app ?</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="feature_request">Feature request</string>
+    <string name="ask_for_a_feature">You think something is missing ?</string>
+    <string name="enjoying_the_app_let_us_know">Enjoying the app ? Let people know!</string>
+    <string name="start_scanning_when_app_opens">Start scanning when the app opens</string>
+    <string name="send_email">Send email</string>
 </resources>

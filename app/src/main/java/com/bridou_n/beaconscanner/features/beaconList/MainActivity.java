@@ -29,9 +29,11 @@ import com.bridou_n.beaconscanner.AppSingleton;
 import com.bridou_n.beaconscanner.R;
 import com.bridou_n.beaconscanner.events.Events;
 import com.bridou_n.beaconscanner.events.RxBus;
+import com.bridou_n.beaconscanner.features.settings.SettingsActivity;
 import com.bridou_n.beaconscanner.models.BeaconSaved;
 import com.bridou_n.beaconscanner.utils.BluetoothManager;
 import com.bridou_n.beaconscanner.utils.DividerItemDecoration;
+import com.bridou_n.beaconscanner.utils.PreferencesHelper;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 
@@ -56,7 +58,6 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import pub.devrel.easypermissions.EasyPermissions;
 import rx.Observable;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     @Inject BeaconManager beaconManager;
     @Inject RxBus rxBus;
     @Inject Realm realm;
+    @Inject PreferencesHelper prefs;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.activity_main) CoordinatorLayout rootView;
@@ -130,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                     }
                 }));
 
-        if (!getPreferences(Context.MODE_PRIVATE).getBoolean(PREF_TUTO_KEY, false)) {
+        if (!prefs.hasSeenTutorial()) {
             showTutorial();
         }
 
@@ -162,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                                                     @Override
                                                     public void onTargetClick(TapTargetView view) {
                                                         super.onTargetClick(view);
-                                                        getPreferences(Context.MODE_PRIVATE).edit().putBoolean(PREF_TUTO_KEY, true).apply();
+                                                        prefs.setHasSeenTutorial(true);
                                                     }
                                                 });
                                     }
@@ -349,17 +351,23 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_bluetooth) {
-            bluetooth.toggle();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_bluetooth:
+                bluetooth.toggle();
+                break ;
+            case R.id.action_clear:
+                realm.executeTransactionAsync(tRealm -> {
+                    tRealm.where(BeaconSaved.class).findAll().deleteAllFromRealm();
+                });
+                break ;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
-        if (id == R.id.action_clear) {
-            realm.executeTransactionAsync(tRealm -> {
-               tRealm.where(BeaconSaved.class).findAll().deleteAllFromRealm();
-            });
-        }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override

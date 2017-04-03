@@ -1,9 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.bridou_n.beaconscanner.features.settings.SettingsActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Scanner title-->
+        <TextView
+            android:text="@string/scanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/colorAccent"/>
+
+        <!-- Scan on open toggle -->
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/scan_open"
+            android:text="@string/start_scanning_when_app_opens"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"/>
+
+        <!-- Feedback and Rating title-->
+        <TextView
+            android:text="@string/feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/colorAccent"/>
+
+        <!-- Rate the app -->
+        <LinearLayout
+            android:id="@+id/rate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:text="@string/rate_the_app"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/primaryText" />
+
+            <TextView
+                android:text="@string/enjoying_the_app_let_us_know"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/secondaryText" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:background="@color/divider" />
+
+        <!-- Feature request -->
+        <LinearLayout
+            android:id="@+id/feature_request"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground">
+            <TextView
+                android:text="@string/feature_request"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/primaryText" />
+
+            <TextView
+                android:text="@string/ask_for_a_feature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/secondaryText" />
+        </LinearLayout>
+
+        <!-- Tutorial Title -->
+        <TextView
+            android:text="@string/tutorial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="16dp"
+            android:textColor="@color/colorAccent" />
+
+        <!-- Activate tutorial -->
+        <LinearLayout
+            android:id="@+id/tutorial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground">
+            <TextView
+                android:text="@string/activate_tutorial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/primaryText" />
+
+            <TextView
+                android:text="@string/need_some_hints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/secondaryText" />
+        </LinearLayout>
+
+        <!-- About Title -->
+        <TextView
+            android:text="@string/about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="16dp"
+            android:textColor="@color/colorAccent"/>
+
+        <!-- Version of the app -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:clickable="true"
+            android:orientation="vertical"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:text="@string/version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/primaryText" />
+
+            <TextView
+                android:id="@+id/version"
+                tools:text="1.0.4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/secondaryText" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:background="@color/divider" />
+
+    </LinearLayout>
+</ScrollView>
