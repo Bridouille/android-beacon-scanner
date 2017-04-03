@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -245,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                 bluetoothState.setTextColor(ContextCompat.getColor(this, R.color.bluetoothDisabledLight));
                 bluetoothState.setBackgroundColor(ContextCompat.getColor(this, R.color.bluetoothDisabled));
                 bluetoothState.setText(getString(R.string.bluetooth_disabled));
+                stopScan();
                 invalidateOptionsMenu();
                 break;
             case BluetoothAdapter.STATE_TURNING_OFF:
