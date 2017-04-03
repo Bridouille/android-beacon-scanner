@@ -66,4 +66,7 @@
     <string name="enjoying_the_app_let_us_know">Enjoying the app ? Let people know!</string>
     <string name="start_scanning_when_app_opens">Start scanning when the app opens</string>
     <string name="send_email">Send email</string>
+    <string name="the_tutorial_has_been_reset">The tutorial has been reset</string>
+    <string name="made_with">Made with</string>
+    <string name="by_nicolas_bridoux">by Nicolas Bridoux</string>
 </resources>

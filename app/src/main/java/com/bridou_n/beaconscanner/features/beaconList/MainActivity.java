@@ -132,10 +132,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                     }
                 }));
 
-        if (!prefs.hasSeenTutorial()) {
-            showTutorial();
-        }
-
         if (savedInstanceState != null && savedInstanceState.getBoolean(STATE_SCANNING)) {
             startScan();
         }
@@ -175,6 +171,9 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
     @Override
     protected void onResume() {
+        if (!prefs.hasSeenTutorial()) {
+            showTutorial();
+        }
         super.onResume();
     }
 
@@ -378,11 +377,11 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         subs.unsubscribe();
         if (beaconManager.isBound(this)) {
             beaconManager.unbind(this);
         }
         realm.close();
+        super.onDestroy();
     }
 }

@@ -3,10 +3,12 @@ package com.bridou_n.beaconscanner.features.settings;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.view.MenuItem;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bridou_n.beaconscanner.AppSingleton;
@@ -25,6 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Inject PreferencesHelper prefs;
 
+    @BindView(R.id.content) ScrollView content;
     @BindView(R.id.scan_open) SwitchCompat scanOpen;
     @BindView(R.id.version) TextView version;
 
@@ -74,7 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
     @OnClick(R.id.tutorial)
     public void onTutorialClicked() {
         prefs.setHasSeenTutorial(false);
-        // TODO: 03/04/2017 display a snackbar
+        Snackbar.make(content, getString(R.string.the_tutorial_has_been_reset), Snackbar.LENGTH_LONG).show();
     }
 
     @Override

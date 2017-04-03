@@ -25,7 +25,7 @@
             android:id="@+id/bluetooth_state"
             android:layout_below="@id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/keyline_48"
+            android:layout_height="@dimen/keyline_32"
             android:textSize="16sp"
             android:paddingStart="@dimen/keyline_16"
             android:paddingEnd="@dimen/keyline_16"

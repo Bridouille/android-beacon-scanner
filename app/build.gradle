@@ -18,12 +18,12 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            buildConfigField "String", "CONTACT_EMAIL", "nicobr65@gmail.com"
+            buildConfigField "String", "CONTACT_EMAIL", "\"nicobr65@gmail.com\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             minifyEnabled false
-            buildConfigField "String", "CONTACT_EMAIL", "nicobr65@gmail.com"
+            buildConfigField "String", "CONTACT_EMAIL", "\"nicobr65@gmail.com\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -72,5 +72,10 @@ dependencies {
 
     // Tap target view, discovery feature
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.3.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+
+    // Constraint Layout
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    // Lottie, animations
+    compile 'com.airbnb.android:lottie:2.0.0-beta3'
 }
