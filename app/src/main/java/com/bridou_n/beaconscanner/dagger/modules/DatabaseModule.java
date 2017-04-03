@@ -1,4 +1,4 @@
-package com.bridou_n.beaconscanner.dagger;
+package com.bridou_n.beaconscanner.dagger.modules;
 
 import dagger.Module;
 import dagger.Provides;

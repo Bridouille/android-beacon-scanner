@@ -1,8 +1,10 @@
-package com.bridou_n.beaconscanner.dagger;
+package com.bridou_n.beaconscanner.dagger.modules;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.support.annotation.Nullable;
+
+import com.bridou_n.beaconscanner.dagger.PerActivity;
 
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;

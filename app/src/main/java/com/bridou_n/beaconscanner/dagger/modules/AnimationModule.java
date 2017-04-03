@@ -1,10 +1,11 @@
-package com.bridou_n.beaconscanner.dagger;
+package com.bridou_n.beaconscanner.dagger.modules;
 
 import android.content.Context;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.bridou_n.beaconscanner.R;
+import com.bridou_n.beaconscanner.dagger.PerActivity;
 
 import javax.inject.Named;
 import javax.inject.Singleton;

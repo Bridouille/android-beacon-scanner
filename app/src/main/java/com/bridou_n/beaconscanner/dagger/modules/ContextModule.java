@@ -1,4 +1,4 @@
-package com.bridou_n.beaconscanner.dagger;
+package com.bridou_n.beaconscanner.dagger.modules;
 
 import android.app.Application;
 import android.content.Context;

@@ -2,15 +2,15 @@ package com.bridou_n.beaconscanner;
 
 import android.app.Application;
 
-import com.bridou_n.beaconscanner.dagger.ActivityComponent;
-import com.bridou_n.beaconscanner.dagger.AnimationModule;
-import com.bridou_n.beaconscanner.dagger.AppComponent;
-import com.bridou_n.beaconscanner.dagger.BluetoothModule;
-import com.bridou_n.beaconscanner.dagger.ContextModule;
+import com.bridou_n.beaconscanner.dagger.components.ActivityComponent;
+import com.bridou_n.beaconscanner.dagger.modules.AnimationModule;
+import com.bridou_n.beaconscanner.dagger.components.AppComponent;
+import com.bridou_n.beaconscanner.dagger.modules.BluetoothModule;
+import com.bridou_n.beaconscanner.dagger.modules.ContextModule;
 import com.bridou_n.beaconscanner.dagger.DaggerActivityComponent;
 import com.bridou_n.beaconscanner.dagger.DaggerAppComponent;
-import com.bridou_n.beaconscanner.dagger.DatabaseModule;
-import com.bridou_n.beaconscanner.dagger.EventModule;
+import com.bridou_n.beaconscanner.dagger.modules.DatabaseModule;
+import com.bridou_n.beaconscanner.dagger.modules.EventModule;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
