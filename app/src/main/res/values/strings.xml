@@ -5,11 +5,11 @@
     <string name="enable_permission_from_settings">Enable permission from settings</string>
     <string name="we_do_need_this_permission_to_scan_for_beacons">We need this permission to scan for beacons</string>
     <string name="bluetooth_disabled">Bluetooth disabled</string>
-    <string name="turning_bluetooth_off">Turning bluetooth off ...</string>
+    <string name="turning_bluetooth_off">Turning bluetooth off …</string>
     <string name="bluetooth_enabled">Bluetooth enabled</string>
     <string name="turning_bluetooth_on">Turning bluetooth on</string>
     <string name="bluetooth_state">Bluetooth state</string>
-    <string name="scanning_for_beacons">Scanning for beacons ...</string>
+    <string name="scanning_for_beacons">Scanning </string>
     <string name="error_while_scanning_for_beacons">Error while scanning for beacons</string>
     <string name="touch_to_retry">Touch to retry</string>
     <string name="eddystone">Eddystone</string>
@@ -49,7 +49,7 @@
     <string name="enable_bluetooth_to_start_scanning">Enable bluetooth to start scanning</string>
     <string name="bluetooth_control">Bluetooth control</string>
     <string name="feature_bluetooth_content">Make sure the bluetooth is enabled before you start scanning</string>
-    <string name="feature_scan_title">See what\'s arround</string>
+    <string name="feature_scan_title">See what\'s around</string>
     <string name="feature_scan_content">Tap to start and stop scanning for nearby beacons!</string>
     <string name="feature_clear_title">Need a fresh start ?</string>
     <string name="feature_clear_content">Hit this to clear your previous scans</string>
@@ -71,4 +71,36 @@
     <string name="by_nicolas_bridoux">by Nicolas Bridoux</string>
     <string name="delete_all">Delete all</string>
     <string name="are_you_sure_delete_all">Are you sure you want to delete all the previous scans ?</string>
+
+    <!-- Play Icon -->
+    <string name="play_icon_upper_path_data">M 44 32 L 44 64 L 100 64 L 100 64 Z</string>
+    <string name="play_icon_bottom_path_data">M 44 96 L 44 64 L 100 64 L 100 64 Z</string>
+
+    <!-- Pause Icon -->
+    <string name="pause_icon_upper_path_data">M 32 40 L 32 56  L 96 56 L 96 40 Z</string>
+    <string name="pause_icon_bottom_path_data">M 32 88 L 32 72 L 96 72 L 96 88 Z</string>
+
+    <!-- Stop Icon -->
+    <string name="stop_icon_upper_path_data">M 32 32 L 32 64 L 96 64 L 96 32 Z</string>
+    <string name="stop_icon_bottom_path_data">M 32 96 L 32 64 L 96 64 L 96 96 Z</string>
+
+    <!-- Groups -->
+    <string name="play_icon_group_top">upperpart</string>
+    <string name="play_icon_group_bottom">bottompart</string>
+    <string name="play_icon_group_parts">parts</string>
+
+    <!-- Path Name -->
+    <string name="play_icon_top_path_name">upper</string>
+    <string name="play_icon_bottom_path_name">bottom</string>
+
+    <!-- Waves -->
+    <string name="wave_1_path_data">M 17.502 3.5 L 14.701 3.5 C 10.99 3.5 8 5.675 8 9.455 L 8 127.75 L 24 127.75 L 24 9.455 C 24 5.675 21.213 3.5 17.502 3.5 Z</string>
+    <string name="wave_2_path_data">M 49.502 3.5 L 46.701 3.5 C 42.99 3.5 40 5.675 40 9.455 L 40 127.75 L 56 127.75 L 56 9.455 C 56 5.675 53.213 3.5 49.502 3.5 Z</string>
+    <string name="wave_3_path_data">M 81.502 3.5 L 78.701 3.5 C 74.99 3.5 72 5.675 72 9.455 L 72 127.75 L 88 127.75 L 88 9.455 C 88 5.675 85.213 3.5 81.502 3.5 Z</string>
+    <string name="wave_4_path_data">M 113.502 3.5 L 110.701 3.5 C 106.99 3.5 104 5.675 104 9.455 L 104 127.75 L 120 127.75 L 120 9.455 C 120 5.675 117.213 3.5 113.502 3.5 Z</string>
+
+    <string name="playing_identifier_group_wave_1">wave1</string>
+    <string name="playing_identifier_group_wave_2">wave2</string>
+    <string name="playing_identifier_group_wave_3">wave3</string>
+    <string name="playing_identifier_group_wave_4">wave4</string>
 </resources>

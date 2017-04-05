@@ -70,9 +70,6 @@ dependencies {
     // Easy permissions
     compile 'pub.devrel:easypermissions:0.2.0'
 
-    // Circular loader arround fab
-    compile 'com.dmitrymalkovich.android:progress-fab:1.6'
-
     // Tap target view, discovery feature
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.3.0'
 

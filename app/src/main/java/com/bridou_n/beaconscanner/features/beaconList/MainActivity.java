@@ -1,9 +1,14 @@
 package com.bridou_n.beaconscanner.features.beaconList;
 
 import android.Manifest;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.provider.Settings;
@@ -19,14 +24,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.airbnb.lottie.LottieAnimationView;
 import com.bridou_n.beaconscanner.AppSingleton;
+import com.bridou_n.beaconscanner.BuildConfig;
 import com.bridou_n.beaconscanner.R;
 import com.bridou_n.beaconscanner.events.Events;
 import com.bridou_n.beaconscanner.events.RxBus;
@@ -73,21 +79,24 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     private CompositeSubscription subs = new CompositeSubscription();
     private MaterialDialog dialog;
 
-    @Inject @Named("fab_search") Animation rotate;
     @Inject BluetoothManager bluetooth;
     @Inject BeaconManager beaconManager;
     @Inject RxBus rxBus;
     @Inject Realm realm;
     @Inject PreferencesHelper prefs;
 
+    @Inject @Named("play_to_pause") AnimatedVectorDrawable playToPause;
+    @Inject @Named("pause_to_play") AnimatedVectorDrawable pauseToPlay;
+
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.progress) ProgressBar progress;
     @BindView(R.id.activity_main) CoordinatorLayout rootView;
     @BindView(R.id.bluetooth_state) TextView bluetoothState;
 
     @BindView(R.id.empty_view) RelativeLayout emptyView;
     @BindView(R.id.beacons_rv) RecyclerView beaconsRv;
+
     @BindView(R.id.scan_fab) FloatingActionButton scanFab;
-    @BindView(R.id.scan_progress) ProgressBar scanProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.main_menu);
+        progress.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.progressColor),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
 
         RealmResults<BeaconSaved> beaconResults = realm.where(BeaconSaved.class).findAllSortedAsync(new String[]{"lastMinuteSeen", "distance"}, new Sort[]{Sort.DESCENDING, Sort.ASCENDING});
 
@@ -149,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                     public void onTargetClick(TapTargetView view) {
                         super.onTargetClick(view);
                         bluetooth.enable();
-                        TapTargetView.showFor(_this,
+                        /*TapTargetView.showFor(_this,
                                 TapTarget.forView(scanFab, getString(R.string.feature_scan_title), getString(R.string.feature_scan_content)).tintTarget(false).cancelable(false).dimColor(R.color.primaryText).drawShadow(true),
                                 new TapTargetView.Listener() {
                                     @Override
@@ -166,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                                                     }
                                                 });
                                     }
-                                });
+                                });*/
                     }
                 });
     }
@@ -251,7 +262,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                 bluetoothState.setTextColor(ContextCompat.getColor(this, R.color.bluetoothTurningOffLight));
                 bluetoothState.setBackgroundColor(ContextCompat.getColor(this, R.color.bluetoothTurningOff));
                 bluetoothState.setText(getString(R.string.turning_bluetooth_off));
-                stopScan();
                 break;
             case BluetoothAdapter.STATE_ON:
                 bluetoothState.setVisibility(View.GONE); // If the bluetooth is ON, we don't warn the user
@@ -293,17 +303,32 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
     public void startScan() {
         bindBeaconManager();
-        rotate.setRepeatCount(Animation.INFINITE);
-        scanFab.startAnimation(rotate);
-        scanProgress.setVisibility(View.VISIBLE);
         toolbar.setTitle(getString(R.string.scanning_for_beacons));
+        progress.setVisibility(View.VISIBLE);
+        scanFab.setBackgroundTintList(ColorStateList.valueOf(
+                ContextCompat.getColor(this, R.color.colorPauseFab)));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            scanFab.setImageDrawable(playToPause);
+            playToPause.start();
+        } else {
+            scanFab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.pause_icon));
+        }
     }
 
     public void stopScan() {
         beaconManager.unbind(this);
-        rotate.setRepeatCount(0);
-        scanProgress.setVisibility(View.INVISIBLE);
         toolbar.setTitle(getString(R.string.app_name));
+        progress.setVisibility(View.GONE);
+        scanFab.setBackgroundTintList(ColorStateList.valueOf(
+                ContextCompat.getColor(this, R.color.colorAccent)));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            scanFab.setImageDrawable(pauseToPlay);
+            pauseToPlay.start();
+        } else {
+            scanFab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.play_icon));
+        }
     }
 
     @Override

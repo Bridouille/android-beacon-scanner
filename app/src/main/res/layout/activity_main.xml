@@ -18,7 +18,16 @@
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/keyline_16"
+                android:visibility="gone"
+                style="?android:attr/progressBarStyleSmallInverse"/>
+        </android.support.v7.widget.Toolbar>
 
         <!-- Header with bluetooth state -->
         <TextView
@@ -30,10 +39,10 @@
             android:paddingStart="@dimen/keyline_16"
             android:paddingEnd="@dimen/keyline_16"
             android:gravity="center_vertical"
-            android:background="@color/bluetoothDisabledLight"
-            android:textColor="@color/bluetoothDisabled"
             android:elevation="@dimen/keyline_4"
-            tools:text="Bluetooth disabled" />
+            tools:text="Bluetooth disabled"
+            tools:background="@color/bluetoothDisabledLight"
+            tools:textColor="@color/bluetoothDisabled" />
 
         <!-- Actual content -->
         <android.support.v7.widget.RecyclerView
@@ -87,31 +96,14 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <com.dmitrymalkovich.android.ProgressFloatingActionButton
-        android:id="@+id/scan_fab_container"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/scan_fab"
+        android:layout_gravity="bottom|center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:clickable="true">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/scan_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/keyline_16"
-            android:tint="@android:color/white"
-            app:srcCompat="@drawable/ic_sync_black_24dp"
-            app:fabSize="normal" />
-
-        <ProgressBar
-            android:visibility="invisible"
-            android:id="@+id/scan_progress"
-            android:layout_margin="@dimen/keyline_4"
-            android:indeterminateTint="@color/colorScanProgress"
-            android:indeterminateTintMode="src_in"
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </com.dmitrymalkovich.android.ProgressFloatingActionButton>
+        android:layout_margin="@dimen/keyline_16"
+        android:tint="@android:color/white"
+        app:srcCompat="@drawable/play_icon"
+        app:fabSize="normal" />
 
 </android.support.design.widget.CoordinatorLayout>
