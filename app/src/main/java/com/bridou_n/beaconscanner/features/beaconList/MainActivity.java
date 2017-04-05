@@ -73,11 +73,10 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     private static final String[] perms = {Manifest.permission.ACCESS_COARSE_LOCATION};
     private static final int RC_COARSE_LOCATION = 1;
     private static final int RC_SETTINGS_SCREEN = 2;
-    private static final String PREF_TUTO_KEY = "PREF_TUTO_KEY";
-    private static final String STATE_SCANNING = "scanState";
 
     private CompositeSubscription subs = new CompositeSubscription();
     private MaterialDialog dialog;
+    private RealmResults<BeaconSaved> beaconResults;
 
     @Inject BluetoothManager bluetooth;
     @Inject BeaconManager beaconManager;
@@ -110,23 +109,46 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
         progress.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.progressColor),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
-        RealmResults<BeaconSaved> beaconResults = realm.where(BeaconSaved.class).findAllSortedAsync(new String[]{"lastMinuteSeen", "distance"}, new Sort[]{Sort.DESCENDING, Sort.ASCENDING});
-
-        beaconResults.addChangeListener(results -> {
-            if (results.size() == 0 && emptyView.getVisibility() != View.VISIBLE) {
-                beaconsRv.setVisibility(View.GONE);
-                emptyView.setVisibility(View.VISIBLE);
-            } else if (results.size() > 0 && beaconsRv.getVisibility() != View.VISIBLE) {
-                beaconsRv.setVisibility(View.VISIBLE);
-                emptyView.setVisibility(View.GONE);
-            }
-        });
+        beaconResults = realm.where(BeaconSaved.class).findAllSortedAsync(new String[]{"lastMinuteSeen", "distance"}, new Sort[]{Sort.DESCENDING, Sort.ASCENDING});
 
         beaconsRv.setHasFixedSize(true);
         beaconsRv.setLayoutManager(new LinearLayoutManager(this));
         beaconsRv.addItemDecoration(new DividerItemDecoration(this, null));
         beaconsRv.setAdapter(new BeaconsRecyclerViewAdapter(this, beaconResults, true));
+    }
 
+    public void showTutorial() {
+        TapTargetView.showFor(this,
+                TapTarget.forToolbarMenuItem(toolbar, R.id.action_bluetooth, getString(R.string.bluetooth_control), getString(R.string.feature_bluetooth_content)).cancelable(false).dimColor(R.color.primaryText).drawShadow(true),
+                new TapTargetView.Listener() {
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);
+                        bluetooth.enable();
+                        TapTargetView.showFor(MainActivity.this,
+                                TapTarget.forView(scanFab, getString(R.string.feature_scan_title), getString(R.string.feature_scan_content)).tintTarget(false).cancelable(false).dimColor(R.color.primaryText).drawShadow(true),
+                                new TapTargetView.Listener() {
+                                    @Override
+                                    public void onTargetClick(TapTargetView view) {
+                                        super.onTargetClick(view);
+                                        startScan();  // We start scanning for beacons
+                                        TapTargetView.showFor(MainActivity.this,
+                                                TapTarget.forToolbarMenuItem(toolbar, R.id.action_clear, getString(R.string.feature_clear_title), getString(R.string.feature_clear_content)).cancelable(false).dimColor(R.color.primaryText).drawShadow(true),
+                                                new TapTargetView.Listener() {
+                                                    @Override
+                                                    public void onTargetClick(TapTargetView view) {
+                                                        super.onTargetClick(view);
+                                                        prefs.setHasSeenTutorial(true);
+                                                    }
+                                                });
+                                    }
+                                });
+                    }
+                });
+    }
+
+    @Override
+    protected void onResume() {
         // Set our event handler
         subs.add(rxBus.toObserverable()
                 .observeOn(AndroidSchedulers.mainThread()) // We use this so we use the realm on the good thread & we can make UI changes
@@ -145,51 +167,22 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                     }
                 }));
 
-        if (savedInstanceState != null && savedInstanceState.getBoolean(STATE_SCANNING)) {
-            startScan();
-        }
-    }
+        beaconResults.addChangeListener(results -> {
+            if (results.size() == 0 && emptyView.getVisibility() != View.VISIBLE) {
+                beaconsRv.setVisibility(View.GONE);
+                emptyView.setVisibility(View.VISIBLE);
+            } else if (results.size() > 0 && beaconsRv.getVisibility() != View.VISIBLE) {
+                beaconsRv.setVisibility(View.VISIBLE);
+                emptyView.setVisibility(View.GONE);
+            }
+        });
 
-    public void showTutorial() {
-        AppCompatActivity _this = this;
-
-        TapTargetView.showFor(this,
-                TapTarget.forToolbarMenuItem(toolbar, R.id.action_bluetooth, getString(R.string.bluetooth_control), getString(R.string.feature_bluetooth_content)).cancelable(false).dimColor(R.color.primaryText).drawShadow(true),
-                new TapTargetView.Listener() {
-                    @Override
-                    public void onTargetClick(TapTargetView view) {
-                        super.onTargetClick(view);
-                        bluetooth.enable();
-                        /*TapTargetView.showFor(_this,
-                                TapTarget.forView(scanFab, getString(R.string.feature_scan_title), getString(R.string.feature_scan_content)).tintTarget(false).cancelable(false).dimColor(R.color.primaryText).drawShadow(true),
-                                new TapTargetView.Listener() {
-                                    @Override
-                                    public void onTargetClick(TapTargetView view) {
-                                        super.onTargetClick(view);
-                                        startStopScan(); // We start scanning for beacons
-                                        TapTargetView.showFor(_this,
-                                                TapTarget.forToolbarMenuItem(toolbar, R.id.action_clear, getString(R.string.feature_clear_title), getString(R.string.feature_clear_content)).cancelable(false).dimColor(R.color.primaryText).drawShadow(true),
-                                                new TapTargetView.Listener() {
-                                                    @Override
-                                                    public void onTargetClick(TapTargetView view) {
-                                                        super.onTargetClick(view);
-                                                        prefs.setHasSeenTutorial(true);
-                                                    }
-                                                });
-                                    }
-                                });*/
-                    }
-                });
-    }
-
-    @Override
-    protected void onResume() {
         if (!prefs.hasSeenTutorial()) {
             showTutorial();
         }
 
         // Start scanning if the scan on open is activated
-        if (prefs.isScanOnOpen() && !isScanning()) {
+        if ((prefs.isScanOnOpen() && !isScanning()) || prefs.wasScanning()) {
             bluetooth.enable();
             startScan();
         }
@@ -276,12 +269,14 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
         }
     }
 
-    public void bindBeaconManager() {
+    public boolean bindBeaconManager() {
         if (EasyPermissions.hasPermissions(this, perms)) {
             beaconManager.bind(this);
+            return true;
         } else {
             ActivityCompat.requestPermissions(MainActivity.this, perms, RC_COARSE_LOCATION);
         }
+        return false;
     }
 
     @OnClick(R.id.scan_fab)
@@ -302,32 +297,35 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     }
 
     public void startScan() {
-        bindBeaconManager();
-        toolbar.setTitle(getString(R.string.scanning_for_beacons));
-        progress.setVisibility(View.VISIBLE);
-        scanFab.setBackgroundTintList(ColorStateList.valueOf(
-                ContextCompat.getColor(this, R.color.colorPauseFab)));
+        if (!isScanning() && bindBeaconManager()) {
+            toolbar.setTitle(getString(R.string.scanning_for_beacons));
+            progress.setVisibility(View.VISIBLE);
+            scanFab.setBackgroundTintList(ColorStateList.valueOf(
+                    ContextCompat.getColor(this, R.color.colorPauseFab)));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            scanFab.setImageDrawable(playToPause);
-            playToPause.start();
-        } else {
-            scanFab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.pause_icon));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                scanFab.setImageDrawable(playToPause);
+                playToPause.start();
+            } else {
+                scanFab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.pause_icon));
+            }
         }
     }
 
     public void stopScan() {
-        beaconManager.unbind(this);
-        toolbar.setTitle(getString(R.string.app_name));
-        progress.setVisibility(View.GONE);
-        scanFab.setBackgroundTintList(ColorStateList.valueOf(
-                ContextCompat.getColor(this, R.color.colorAccent)));
+        if (isScanning()) {
+            beaconManager.unbind(this);
+            toolbar.setTitle(getString(R.string.app_name));
+            progress.setVisibility(View.GONE);
+            scanFab.setBackgroundTintList(ColorStateList.valueOf(
+                    ContextCompat.getColor(this, R.color.colorAccent)));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            scanFab.setImageDrawable(pauseToPlay);
-            pauseToPlay.start();
-        } else {
-            scanFab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.play_icon));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                scanFab.setImageDrawable(pauseToPlay);
+                pauseToPlay.start();
+            } else {
+                scanFab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.play_icon));
+            }
         }
     }
 
@@ -346,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-        bindBeaconManager();
+        startScan();
     }
 
     @Override
@@ -419,19 +417,17 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putBoolean(STATE_SCANNING, isScanning()); // save the scanning state
-        super.onSaveInstanceState(savedInstanceState);
+    protected void onPause() {
+        subs.unsubscribe();
+        prefs.setScanningState(isScanning());
+        stopScan();
+        super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        subs.unsubscribe();
         if (dialog != null) {
             dialog.dismiss();
-        }
-        if (beaconManager.isBound(this)) {
-            beaconManager.unbind(this);
         }
         realm.close();
         super.onDestroy();

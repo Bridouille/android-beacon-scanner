@@ -14,6 +14,7 @@ public class PreferencesHelper {
 
     private static final String TUTO_KEY = "tutoKey";
     private static final String SCAN_ON_OPEN_KEY = "scanOnOpenKey";
+    private static final String SCANNING_STATE = "scanningState";
 
     public PreferencesHelper(Context ctx) {
         prefs = ctx.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE);
@@ -33,5 +34,13 @@ public class PreferencesHelper {
 
     public boolean isScanOnOpen() {
         return prefs.getBoolean(SCAN_ON_OPEN_KEY, false);
+    }
+
+    public void setScanningState(boolean state) {
+        prefs.edit().putBoolean(SCANNING_STATE, state).apply();
+    }
+
+    public boolean wasScanning() {
+        return prefs.getBoolean(SCANNING_STATE, false);
     }
 }
