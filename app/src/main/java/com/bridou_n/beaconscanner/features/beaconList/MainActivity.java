@@ -1,8 +1,6 @@
 package com.bridou_n.beaconscanner.features.beaconList;
 
 import android.Manifest;
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -30,9 +28,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.airbnb.lottie.LottieAnimationView;
 import com.bridou_n.beaconscanner.AppSingleton;
-import com.bridou_n.beaconscanner.BuildConfig;
 import com.bridou_n.beaconscanner.R;
 import com.bridou_n.beaconscanner.events.Events;
 import com.bridou_n.beaconscanner.events.RxBus;
@@ -65,8 +61,8 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import pub.devrel.easypermissions.EasyPermissions;
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.subscriptions.CompositeSubscription;
 
 public class MainActivity extends AppCompatActivity implements BeaconConsumer, EasyPermissions.PermissionCallbacks {
     protected static final String TAG = "MAIN_ACTIVITY";
@@ -74,9 +70,11 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     private static final int RC_COARSE_LOCATION = 1;
     private static final int RC_SETTINGS_SCREEN = 2;
 
-    private CompositeSubscription subs = new CompositeSubscription();
+    private Subscription bluetoothStateSub;
+    private Subscription rangeSub;
     private MaterialDialog dialog;
     private RealmResults<BeaconSaved> beaconResults;
+    private boolean hasStartedTutorial = false;
 
     @Inject BluetoothManager bluetooth;
     @Inject BeaconManager beaconManager;
@@ -115,6 +113,15 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
         beaconsRv.setLayoutManager(new LinearLayoutManager(this));
         beaconsRv.addItemDecoration(new DividerItemDecoration(this, null));
         beaconsRv.setAdapter(new BeaconsRecyclerViewAdapter(this, beaconResults, true));
+
+        // Setup an observable on the bluetooth changes
+        bluetoothStateSub = bluetooth.observe()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(e -> {
+                    if (e instanceof Events.BluetoothState) {
+                        bluetoothStateChanged(((Events.BluetoothState) e).getState());
+                    }
+                });
     }
 
     public void showTutorial() {
@@ -137,8 +144,9 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                                                 new TapTargetView.Listener() {
                                                     @Override
                                                     public void onTargetClick(TapTargetView view) {
-                                                        super.onTargetClick(view);
                                                         prefs.setHasSeenTutorial(true);
+                                                        hasStartedTutorial = false;
+                                                        super.onTargetClick(view);
                                                     }
                                                 });
                                     }
@@ -149,24 +157,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
     @Override
     protected void onResume() {
-        // Set our event handler
-        subs.add(rxBus.toObserverable()
-                .observeOn(AndroidSchedulers.mainThread()) // We use this so we use the realm on the good thread & we can make UI changes
-                .subscribe(e -> {
-                    if (e instanceof Events.RangeBeacon) {
-                        updateUiWithBeaconsArround(((Events.RangeBeacon) e).getBeacons());
-                    }
-                }));
-
-        // Setup an observable on the bluetooth changes
-        subs.add(bluetooth.observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(e -> {
-                    if (e instanceof Events.BluetoothState) {
-                        bluetoothStateChanged(((Events.BluetoothState) e).getState());
-                    }
-                }));
-
         beaconResults.addChangeListener(results -> {
             if (results.size() == 0 && emptyView.getVisibility() != View.VISIBLE) {
                 beaconsRv.setVisibility(View.GONE);
@@ -177,14 +167,16 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
             }
         });
 
-        if (!prefs.hasSeenTutorial()) {
+        if (!prefs.hasSeenTutorial() && !hasStartedTutorial) {
+            hasStartedTutorial = true;
             showTutorial();
         }
 
-        // Start scanning if the scan on open is activated
+        // Start scanning if the scan on open is activated or if we were previously scanning
         if ((prefs.isScanOnOpen() && !isScanning()) || prefs.wasScanning()) {
-            bluetooth.enable();
-            startScan();
+            if (bluetooth.isEnabled()) {
+                startScan();
+            }
         }
         super.onResume();
     }
@@ -270,8 +262,10 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     }
 
     public boolean bindBeaconManager() {
-        if (EasyPermissions.hasPermissions(this, perms)) {
-            beaconManager.bind(this);
+        if (EasyPermissions.hasPermissions(this, perms)) { // Ask permission and bind the beacon manager
+            if (!beaconManager.isBound(this)) {
+                beaconManager.bind(this);
+            }
             return true;
         } else {
             ActivityCompat.requestPermissions(MainActivity.this, perms, RC_COARSE_LOCATION);
@@ -293,11 +287,19 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     }
 
     public boolean isScanning() {
-        return beaconManager.isBound(this);
+        return rangeSub != null && !rangeSub.isUnsubscribed();
     }
 
     public void startScan() {
         if (!isScanning() && bindBeaconManager()) {
+            rangeSub = rxBus.toObserverable() // Listen for range events
+                    .observeOn(AndroidSchedulers.mainThread()) // We use this so we use the realm on the good thread & we can make UI changes
+                    .subscribe(e -> {
+                        if (e instanceof Events.RangeBeacon) {
+                            updateUiWithBeaconsArround(((Events.RangeBeacon) e).getBeacons());
+                        }
+                    });
+
             toolbar.setTitle(getString(R.string.scanning_for_beacons));
             progress.setVisibility(View.VISIBLE);
             scanFab.setBackgroundTintList(ColorStateList.valueOf(
@@ -314,7 +316,8 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
     public void stopScan() {
         if (isScanning()) {
-            beaconManager.unbind(this);
+            rangeSub.unsubscribe(); // Stop listening for range events
+
             toolbar.setTitle(getString(R.string.app_name));
             progress.setVisibility(View.GONE);
             scanFab.setBackgroundTintList(ColorStateList.valueOf(
@@ -331,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
     @Override
     public void onBeaconServiceConnect() {
-        beaconManager.setRangeNotifier((beacons, region) -> {
+        beaconManager.addRangeNotifier((beacons, region) -> {
             rxBus.send(new Events.RangeBeacon(beacons, region));
         });
 
@@ -418,7 +421,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
     @Override
     protected void onPause() {
-        subs.unsubscribe();
         prefs.setScanningState(isScanning());
         stopScan();
         super.onPause();
@@ -428,6 +430,14 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     protected void onDestroy() {
         if (dialog != null) {
             dialog.dismiss();
+        }
+        if (beaconManager.isBound(this)) {
+            // Only do this in onDestroy() not onPause()
+            // Can't be bind() & unbind() several times
+            beaconManager.unbind(this);
+        }
+        if (bluetoothStateSub != null && !bluetoothStateSub.isUnsubscribed()) {
+            bluetoothStateSub.unsubscribe();
         }
         realm.close();
         super.onDestroy();

@@ -65,7 +65,7 @@ dependencies {
     compile 'io.realm:android-adapters:1.3.0'
 
     // ALT Beacon library
-    compile 'org.altbeacon:android-beacon-library:2.9.1'
+    compile 'org.altbeacon:android-beacon-library:2.9.2'
 
     // Easy permissions
     compile 'pub.devrel:easypermissions:0.2.0'
