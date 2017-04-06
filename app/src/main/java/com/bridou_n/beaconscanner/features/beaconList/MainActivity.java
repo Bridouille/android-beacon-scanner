@@ -39,6 +39,7 @@ import com.bridou_n.beaconscanner.utils.DividerItemDecoration;
 import com.bridou_n.beaconscanner.utils.PreferencesHelper;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     @Inject RxBus rxBus;
     @Inject Realm realm;
     @Inject PreferencesHelper prefs;
+    @Inject FirebaseAnalytics tracker;
 
     @Inject @Named("play_to_pause") AnimatedVectorDrawable playToPause;
     @Inject @Named("pause_to_play") AnimatedVectorDrawable pauseToPlay;
@@ -228,6 +230,14 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                             beacon.setMajor(b.getId2().toString());
                             beacon.setMinor(b.getId3().toString());
                         }
+
+                        Bundle infos = new Bundle();
+
+                        infos.putInt("manufacturer", beacon.getManufacturer());
+                        infos.putInt("type", beacon.getBeaconType());
+                        infos.putDouble("distance", beacon.getDistance());
+
+                        tracker.logEvent("adding_or_updating_beacon", infos);
                         tRealm.copyToRealmOrUpdate(beacon);
                     });
         });
@@ -276,12 +286,14 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     @OnClick(R.id.scan_fab)
     public void startStopScan() {
         if (!isScanning()) {
+            tracker.logEvent("start_scanning_clicked", null);
             if (!bluetooth.isEnabled()) {
                 Snackbar.make(rootView, getString(R.string.enable_bluetooth_to_start_scanning), Snackbar.LENGTH_LONG).show();
                 return ;
             }
             startScan();
         } else {
+            tracker.logEvent("stop_scanning_clicked", null);
             stopScan();
         }
     }
@@ -347,13 +359,16 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
+        tracker.logEvent("permission_granted", null);
         startScan();
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> permList) {
         if (requestCode == RC_COARSE_LOCATION) {
+            tracker.logEvent("permission_denied", null);
             if (EasyPermissions.somePermissionPermanentlyDenied(this, permList)) {
+                tracker.logEvent("permission_denied_permanently", null);
                 showPermissionSnackbar();
             } else {
                 ActivityCompat.requestPermissions(MainActivity.this, perms, RC_COARSE_LOCATION);
@@ -392,14 +407,17 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
         switch (item.getItemId()) {
             case R.id.action_bluetooth:
                 bluetooth.toggle();
+                tracker.logEvent("action_bluetooth", null);
                 break ;
             case R.id.action_clear:
+                tracker.logEvent("action_clear", null);
                 dialog = new MaterialDialog.Builder(this)
                         .theme(Theme.LIGHT)
                         .title(R.string.delete_all)
                         .content(R.string.are_you_sure_delete_all)
                         .autoDismiss(true)
                         .onPositive((dialog, which) -> {
+                            tracker.logEvent("action_clear_accepted", null);
                             realm.executeTransactionAsync(tRealm -> {
                                 tRealm.where(BeaconSaved.class).findAll().deleteAllFromRealm();
                             });
@@ -410,6 +428,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                 dialog.show();
                 break ;
             case R.id.action_settings:
+                tracker.logEvent("action_settings", null);
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
             default:

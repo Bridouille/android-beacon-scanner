@@ -6,3 +6,9 @@
 /build
 /captures
 .externalNativeBuild
+
+# Google play services
+app/google-services.json
+
+# Release APKs
+app/*.apk

@@ -15,6 +15,7 @@ import com.bridou_n.beaconscanner.AppSingleton;
 import com.bridou_n.beaconscanner.BuildConfig;
 import com.bridou_n.beaconscanner.R;
 import com.bridou_n.beaconscanner.utils.PreferencesHelper;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import javax.inject.Inject;
 
@@ -26,6 +27,7 @@ import butterknife.OnClick;
 public class SettingsActivity extends AppCompatActivity {
 
     @Inject PreferencesHelper prefs;
+    @Inject FirebaseAnalytics tracker;
 
     @BindView(R.id.content) ScrollView content;
     @BindView(R.id.scan_open) SwitchCompat scanOpen;
@@ -51,11 +53,16 @@ public class SettingsActivity extends AppCompatActivity {
 
     @OnCheckedChanged(R.id.scan_open)
     public void onScanOpenChanged(boolean status) {
+        Bundle b = new Bundle();
+
+        b.putBoolean("status", status);
+        tracker.logEvent("scan_open_changed", b);
         prefs.setScanOnOpen(status);
     }
 
     @OnClick(R.id.rate)
     public void onRateClicked() {
+        tracker.logEvent("rate_clicked", null);
         final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
 
         try {
@@ -76,6 +83,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @OnClick(R.id.tutorial)
     public void onTutorialClicked() {
+        tracker.logEvent("tutorial_reset_clicked", null);
         prefs.setHasSeenTutorial(false);
         Snackbar.make(content, getString(R.string.the_tutorial_has_been_reset), Snackbar.LENGTH_LONG).show();
     }

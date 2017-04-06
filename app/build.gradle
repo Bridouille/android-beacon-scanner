@@ -1,18 +1,16 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'realm-android'
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '25.0.3'
     defaultConfig {
         applicationId "com.bridou_n.beaconscanner"
         minSdkVersion 18
         targetSdkVersion 25
-        versionCode 4
-        versionName "1.2.0"
+        versionCode 5
+        versionName "1.2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -22,8 +20,9 @@ android {
             buildConfigField "String", "CONTACT_EMAIL", "\"nicobr65@gmail.com\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
         debug {
-            minifyEnabled false
+            minifyEnabled true
             buildConfigField "String", "CONTACT_EMAIL", "\"nicobr65@gmail.com\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -35,7 +34,7 @@ android {
 }
 
 ext {
-    supportLibraryVersion = '25.3.0'
+    supportLibraryVersion = '25.3.1'
 }
 
 dependencies {
@@ -50,12 +49,12 @@ dependencies {
     compile "com.android.support:recyclerview-v7:${supportLibraryVersion}"
 
     // ButterKnife
-    compile 'com.jakewharton:butterknife:8.4.0'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.jakewharton:butterknife:8.6.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 
     // Dagger 2
-    apt 'com.google.dagger:dagger-compiler:2.7'
-    compile 'com.google.dagger:dagger:2.7'
+    compile 'com.google.dagger:dagger:2.10'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
 
     // RxJava & RxAndroid
     compile 'io.reactivex.rxjava2:rxjava:2.0.8'
@@ -78,11 +77,13 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     // Lottie, animations
-    compile 'com.airbnb.android:lottie:2.0.0-beta3'
+    compile 'com.airbnb.android:lottie:2.0.0-rc1'
 
     // Material dialog
-    compile 'com.afollestad.material-dialogs:core:0.9.4.2'
+    compile 'com.afollestad.material-dialogs:core:0.9.4.5'
 
     // Firebase Analytics
-    compile 'com.google.firebase:firebase-core:10.2.1'
+    compile 'com.google.firebase:firebase-core:10.2.6'
 }
+
+apply plugin: 'com.google.gms.google-services'

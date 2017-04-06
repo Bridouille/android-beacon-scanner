@@ -9,6 +9,7 @@ import com.bridou_n.beaconscanner.dagger.modules.EventModule;
 import com.bridou_n.beaconscanner.dagger.modules.PreferencesModule;
 import com.bridou_n.beaconscanner.events.RxBus;
 import com.bridou_n.beaconscanner.utils.PreferencesHelper;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import javax.inject.Singleton;
 
@@ -31,4 +32,5 @@ public interface AppComponent {
     Realm realm();
     RxBus rxBus();
     PreferencesHelper prefs();
+    FirebaseAnalytics tracker();
 }
