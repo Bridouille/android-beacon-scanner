@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'realm-android'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 25
@@ -57,9 +58,9 @@ dependencies {
     compile 'com.google.dagger:dagger:2.7'
 
     // RxJava & RxAndroid
-    compile 'io.reactivex:rxjava:1.2.5'
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'com.artemzin.rxjava:proguard-rules:1.2.5.0'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.8'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 
     // Realm adapters
     compile 'io.realm:android-adapters:1.3.0'
@@ -81,4 +82,7 @@ dependencies {
 
     // Material dialog
     compile 'com.afollestad.material-dialogs:core:0.9.4.2'
+
+    // Firebase Analytics
+    compile 'com.google.firebase:firebase-core:10.2.1'
 }

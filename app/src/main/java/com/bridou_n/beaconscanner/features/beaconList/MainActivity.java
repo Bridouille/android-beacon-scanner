@@ -56,13 +56,13 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import pub.devrel.easypermissions.EasyPermissions;
-import rx.Observable;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 
 public class MainActivity extends AppCompatActivity implements BeaconConsumer, EasyPermissions.PermissionCallbacks {
     protected static final String TAG = "MAIN_ACTIVITY";
@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     private static final int RC_COARSE_LOCATION = 1;
     private static final int RC_SETTINGS_SCREEN = 2;
 
-    private Subscription bluetoothStateSub;
-    private Subscription rangeSub;
+    private Disposable bluetoothStateDisposable;
+    private Disposable rangeDisposable;
     private MaterialDialog dialog;
     private RealmResults<BeaconSaved> beaconResults;
     private boolean hasStartedTutorial = false;
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
         beaconsRv.setAdapter(new BeaconsRecyclerViewAdapter(this, beaconResults, true));
 
         // Setup an observable on the bluetooth changes
-        bluetoothStateSub = bluetooth.observe()
+        bluetoothStateDisposable = bluetooth.asFlowable()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(e -> {
                     if (e instanceof Events.BluetoothState) {
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
     private void updateUiWithBeaconsArround(Collection<Beacon> beacons) {
         realm.executeTransactionAsync(tRealm -> {
-            Observable.from(beacons)
+            Observable.fromIterable(beacons)
                     .subscribe(b -> {
                         BeaconSaved beacon = new BeaconSaved();
 
@@ -287,12 +287,12 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     }
 
     public boolean isScanning() {
-        return rangeSub != null && !rangeSub.isUnsubscribed();
+        return rangeDisposable != null && !rangeDisposable.isDisposed();
     }
 
     public void startScan() {
         if (!isScanning() && bindBeaconManager()) {
-            rangeSub = rxBus.toObserverable() // Listen for range events
+            rangeDisposable = rxBus.asFlowable() // Listen for range events
                     .observeOn(AndroidSchedulers.mainThread()) // We use this so we use the realm on the good thread & we can make UI changes
                     .subscribe(e -> {
                         if (e instanceof Events.RangeBeacon) {
@@ -316,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
 
     public void stopScan() {
         if (isScanning()) {
-            rangeSub.unsubscribe(); // Stop listening for range events
+            rangeDisposable.dispose(); // Stop listening for range events
 
             toolbar.setTitle(getString(R.string.app_name));
             progress.setVisibility(View.GONE);
@@ -341,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
         try {
             beaconManager.startRangingBeaconsInRegion(new Region("com.bridou_n.beaconscanner", null, null, null));
         } catch (RemoteException e) {
-            rxBus.sendError(e);
+            e.printStackTrace();
         }
     }
 
@@ -436,8 +436,8 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
             // Can't be bind() & unbind() several times
             beaconManager.unbind(this);
         }
-        if (bluetoothStateSub != null && !bluetoothStateSub.isUnsubscribed()) {
-            bluetoothStateSub.unsubscribe();
+        if (bluetoothStateDisposable != null && !bluetoothStateDisposable.isDisposed()) {
+            bluetoothStateDisposable.dispose();
         }
         realm.close();
         super.onDestroy();

@@ -2,6 +2,7 @@ package com.bridou_n.beaconscanner.dagger.components;
 
 import android.content.Context;
 
+import com.bridou_n.beaconscanner.dagger.modules.AnalyticsModule;
 import com.bridou_n.beaconscanner.dagger.modules.ContextModule;
 import com.bridou_n.beaconscanner.dagger.modules.DatabaseModule;
 import com.bridou_n.beaconscanner.dagger.modules.EventModule;
@@ -23,6 +24,7 @@ import io.realm.Realm;
         DatabaseModule.class,
         EventModule.class,
         PreferencesModule.class,
+        AnalyticsModule.class
 })
 public interface AppComponent {
     Context context();

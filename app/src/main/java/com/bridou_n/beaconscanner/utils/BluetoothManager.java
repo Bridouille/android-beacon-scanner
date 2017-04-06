@@ -11,19 +11,19 @@ import com.bridou_n.beaconscanner.events.Events;
 
 import javax.inject.Inject;
 
-import rx.Observable;
-import rx.subjects.BehaviorSubject;
+import io.reactivex.Flowable;
+import io.reactivex.processors.BehaviorProcessor;
 
 public class BluetoothManager {
 
     private final BluetoothAdapter adapter;
 
-    private final BehaviorSubject<Object> subject;
+    private final BehaviorProcessor<Object> subject;
 
     @Inject
     public BluetoothManager(@Nullable BluetoothAdapter adapter, Context context) {
         this.adapter = adapter;
-        this.subject = BehaviorSubject.create(new Events.BluetoothState(adapter != null ? adapter.getState() : BluetoothAdapter.STATE_OFF));
+        this.subject = BehaviorProcessor.createDefault(new Events.BluetoothState(adapter != null ? adapter.getState() : BluetoothAdapter.STATE_OFF));
 
         BroadcastReceiver receiver = new BroadcastReceiver() {
             @Override
@@ -54,7 +54,7 @@ public class BluetoothManager {
         return (adapter != null) && adapter.isEnabled();
     }
 
-    public Observable<Object> observe() {
+    public Flowable<Object> asFlowable() {
         return subject;
     }
 
