@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
         beaconsRv.setHasFixedSize(true);
         beaconsRv.setLayoutManager(new LinearLayoutManager(this));
         beaconsRv.addItemDecoration(new DividerItemDecoration(this, null));
-        beaconsRv.setAdapter(new BeaconsRecyclerViewAdapter(this, beaconResults, true));
+        beaconsRv.setAdapter(new BeaconsRecyclerViewAdapter(beaconResults));
 
         // Setup an observable on the bluetooth changes
         bluetoothStateDisposable = bluetooth.asFlowable()
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                         beacon.setLastSeen(new Date());
                         beacon.setLastMinuteSeen(new Date().getTime() / 1000 / 60);
                         beacon.setBeaconAddress(b.getBluetoothAddress());
-                        beacon.setRSSI(b.getRssi());
+                        beacon.setRssi(b.getRssi());
                         beacon.setManufacturer(b.getManufacturer());
                         beacon.setTxPower(b.getTxPower());
                         beacon.setDistance(b.getDistance());
@@ -218,12 +218,12 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                                 case 0x10:
                                     beacon.setBeaconType(BeaconSaved.TYPE_EDDYSTONE_URL);
                                     // This is a Eddystone-URL frame
-                                    beacon.setURL(UrlBeaconUrlCompressor.uncompress(b.getId1().toByteArray()));
+                                    beacon.setUrl(UrlBeaconUrlCompressor.uncompress(b.getId1().toByteArray()));
                                     break;
                             }
                         } else { // This is an iBeacon or ALTBeacon
                             beacon.setBeaconType(b.getBeaconTypeCode() == 0xbeac? BeaconSaved.TYPE_ALTBEACON : BeaconSaved.TYPE_IBEACON); // 0x4c000215 is iBeacon
-                            beacon.setUUID(b.getId1().toString());
+                            beacon.setUuid(b.getId1().toString());
                             beacon.setMajor(b.getId2().toString());
                             beacon.setMinor(b.getId3().toString());
                         }

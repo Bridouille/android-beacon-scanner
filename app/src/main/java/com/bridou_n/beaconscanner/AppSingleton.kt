@@ -33,7 +33,11 @@ class AppSingleton : Application() {
                 .build()
 
         Realm.init(this)
-        val config = RealmConfiguration.Builder().build()
-        Realm.setDefaultConfiguration(config)
+
+        val realmConfig = RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build()
+
+        Realm.setDefaultConfiguration(realmConfig)
     }
 }
