@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -171,53 +170,5 @@
                 android:textSize="16sp"
                 android:textColor="@color/secondaryText" />
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:background="@color/divider" />
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
-
-            <TextView
-                android:id="@+id/about_begin"
-                android:text="@string/made_with"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/secondaryText"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_marginTop="8dp" />
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/about_heart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:lottie_fileName="TwitterHeart.json"
-                app:lottie_loop="true"
-                app:lottie_autoPlay="true"
-                app:layout_constraintLeft_toRightOf="@+id/about_begin"
-                app:layout_constraintTop_toTopOf="@+id/about_begin"
-                app:layout_constraintBottom_toBottomOf="@id/about_begin"/>
-
-            <TextView
-                android:id="@+id/about_end"
-                android:text="@string/by_nicolas_bridoux"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/secondaryText"
-                app:layout_constraintTop_toTopOf="@+id/about_heart"
-                app:layout_constraintBottom_toBottomOf="@+id/about_heart"
-                app:layout_constraintLeft_toRightOf="@id/about_heart" />
-        </android.support.constraint.ConstraintLayout>
-
     </LinearLayout>
 </ScrollView>

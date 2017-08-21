@@ -40,7 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
-        AppSingleton.activityComponent().inject(this);
+        AppSingleton.Companion.getActivityComponent().inject(this);
 
         if ((ab = getSupportActionBar()) != null) {
             ab.setTitle(getString(R.string.settings));

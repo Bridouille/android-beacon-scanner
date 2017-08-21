@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        AppSingleton.activityComponent().inject(this);
+        AppSingleton.Companion.getActivityComponent().inject(this);
 
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.main_menu);
