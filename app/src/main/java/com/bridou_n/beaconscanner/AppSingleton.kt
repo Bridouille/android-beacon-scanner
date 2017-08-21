@@ -30,7 +30,6 @@ class AppSingleton : Application() {
         activityComponent = DaggerActivityComponent.builder()
                 .appComponent(appComponent)
                 .bluetoothModule(BluetoothModule())
-                .animationModule(AnimationModule())
                 .build()
 
         Realm.init(this)

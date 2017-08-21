@@ -84,9 +84,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
     @Inject PreferencesHelper prefs;
     @Inject FirebaseAnalytics tracker;
 
-    @Inject @Named("play_to_pause") AnimatedVectorDrawable playToPause;
-    @Inject @Named("pause_to_play") AnimatedVectorDrawable pauseToPlay;
-
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.progress) ProgressBar progress;
     @BindView(R.id.activity_main) CoordinatorLayout rootView;
@@ -318,6 +315,8 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                     ContextCompat.getColor(this, R.color.colorPauseFab)));
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                AnimatedVectorDrawable playToPause = (AnimatedVectorDrawable) ContextCompat.getDrawable(this, R.drawable.play_to_pause_animation);
+
                 scanFab.setImageDrawable(playToPause);
                 playToPause.start();
             } else {
@@ -336,6 +335,8 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer, E
                     ContextCompat.getColor(this, R.color.colorAccent)));
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                AnimatedVectorDrawable pauseToPlay = (AnimatedVectorDrawable) ContextCompat.getDrawable(this, R.drawable.pause_to_play_animation);
+
                 scanFab.setImageDrawable(pauseToPlay);
                 pauseToPlay.start();
             } else {
