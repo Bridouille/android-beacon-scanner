@@ -47,7 +47,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
         @BindView(R.id.last_seen) lateinit var lastSeen: TextView
 
         @OnClick(R.id.beacon_container)
-        fun expandCollapseInfo(v: View) {
+        fun expandCollapseInfo() {
 
             // Check for an expanded view, collapse if you find one
             if (adapter.expandedPosition >= 0) {
@@ -175,7 +175,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder {
-        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false);
+        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
 
         when (viewType) {
             R.layout.eddystone_uid_item -> return EddystoneUidHolder(view, this)

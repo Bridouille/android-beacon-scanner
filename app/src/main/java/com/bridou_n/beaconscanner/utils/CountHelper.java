@@ -24,7 +24,7 @@ public class CountHelper {
         }
 
         return (d < 1000? //this determines the class, i.e. 'k', 'm' etc
-                ((d > 99.9 || isRound || (!isRound && d > 9.99)? //this decides whether to trim the decimals
+                ((d > 99.9 || isRound || (d > 9.99)? //this decides whether to trim the decimals
                         (int) d * 10 / 10 : d + "" // (int) d * 10 / 10 drops the decimal
                 ) + "" + c[iteration])
                 : coolFormat(d, iteration+1));
