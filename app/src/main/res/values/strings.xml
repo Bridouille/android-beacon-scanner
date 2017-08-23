@@ -2,7 +2,7 @@
     <string name="app_name">Beacon Scanner</string>
     <string name="settings">Settings</string>
     <string name="enable">Enable</string>
-    <string name="enable_permission_from_settings">Enable permission from settings</string>
+    <string name="enable_permission_from_settings">Please enable location permission from settings to use the bluetooth</string>
     <string name="we_do_need_this_permission_to_scan_for_beacons">We need this permission to scan for beacons</string>
     <string name="bluetooth_disabled">Bluetooth disabled</string>
     <string name="turning_bluetooth_off">Turning bluetooth off …</string>

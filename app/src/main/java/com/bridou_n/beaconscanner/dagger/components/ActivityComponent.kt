@@ -2,10 +2,11 @@ package com.bridou_n.beaconscanner.dagger.components
 
 import com.bridou_n.beaconscanner.dagger.PerActivity
 import com.bridou_n.beaconscanner.dagger.modules.BluetoothModule
-import com.bridou_n.beaconscanner.features.beaconList.MainActivity
+import com.bridou_n.beaconscanner.features.beaconList.BeaconListActivity
 import com.bridou_n.beaconscanner.features.settings.SettingsActivity
 
 import dagger.Component
+import org.altbeacon.beacon.BeaconManager
 
 /**
  * Created by bridou_n on 08/10/2016.
@@ -16,6 +17,8 @@ import dagger.Component
         modules = arrayOf(BluetoothModule::class)
 )
 interface ActivityComponent {
-    fun inject(activity: MainActivity)
+    fun providesBeaconManager() : BeaconManager
+
+    fun inject(activity: BeaconListActivity)
     fun inject(activity: SettingsActivity)
 }

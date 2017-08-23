@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".features.beaconList.MainActivity"
+            android:name=".features.beaconList.BeaconListActivity"
             android:theme="@style/AppThemeNoActionBar">
 
             <intent-filter>

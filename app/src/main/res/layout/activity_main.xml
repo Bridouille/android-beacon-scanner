@@ -5,7 +5,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bridou_n.beaconscanner.features.beaconList.MainActivity">
+    tools:context="com.bridou_n.beaconscanner.features.beaconList.BeaconListActivity">
 
     <RelativeLayout
         android:layout_height="match_parent"

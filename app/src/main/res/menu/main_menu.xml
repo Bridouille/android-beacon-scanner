@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".features.beaconList.MainActivity">
+    tools:context=".features.beaconList.BeaconListActivity">
     <item
         android:icon="@drawable/ic_clear_all_white_24dp"
         android:id="@+id/action_clear"

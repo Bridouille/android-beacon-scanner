@@ -12,6 +12,7 @@ import javax.inject.Singleton
 
 import dagger.Module
 import dagger.Provides
+import org.altbeacon.beacon.Beacon
 
 /**
  * Created by bridou_n on 05/10/2016.
@@ -20,25 +21,29 @@ import dagger.Provides
 @Module
 class BluetoothModule {
 
+    companion object {
+        const val IBEACON_LAYOUT = "m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"
+        const val ALTBEACON_LAYOUT = BeaconParser.ALTBEACON_LAYOUT
+        const val EDDYSTONE_UID_LAYOUT = BeaconParser.EDDYSTONE_UID_LAYOUT
+        const val EDDYSTONE_URL_LAYOUT = BeaconParser.EDDYSTONE_URL_LAYOUT
+        const val EDDYSTONE_TLM_LAYOUT = BeaconParser.EDDYSTONE_TLM_LAYOUT
+    }
+
     @Provides
     @PerActivity
     fun providesBluetoothAdapter(): BluetoothAdapter? {
         return BluetoothAdapter.getDefaultAdapter()
     }
 
-    @Provides
-    @PerActivity
+    @Provides // Not a Singleton
     fun providesBeaconManager(ctx: Context): BeaconManager {
         val instance = BeaconManager.getInstanceForApplication(ctx)
 
-        // BeaconManager setup
-        instance.beaconParsers.add(BeaconParser().setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"))
-        // Detect the main identifier (UID) frame:
-        instance.beaconParsers.add(BeaconParser().setBeaconLayout("s:0-1=feaa,m:2-2=00,p:3-3:-41,i:4-13,i:14-19"))
-        // Detect the telemetry (TLM) frame:
-        instance.beaconParsers.add(BeaconParser().setBeaconLayout("x,s:0-1=feaa,m:2-2=20,d:3-3,d:4-5,d:6-7,d:8-11,d:12-15"))
-        // Detect the URL frame:
-        instance.beaconParsers.add(BeaconParser().setBeaconLayout("s:0-1=feaa,m:2-2=10,p:3-3:-41,i:4-21v"))
+        // Add all the beacon types we want to discover
+        instance.beaconParsers.add(BeaconParser().setBeaconLayout(IBEACON_LAYOUT))
+        instance.beaconParsers.add(BeaconParser().setBeaconLayout(EDDYSTONE_UID_LAYOUT))
+        instance.beaconParsers.add(BeaconParser().setBeaconLayout(EDDYSTONE_URL_LAYOUT))
+        instance.beaconParsers.add(BeaconParser().setBeaconLayout(EDDYSTONE_TLM_LAYOUT))
 
         return instance
     }
