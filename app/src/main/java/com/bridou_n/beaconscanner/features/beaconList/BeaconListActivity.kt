@@ -69,7 +69,8 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     @Inject lateinit var tracker: FirebaseAnalytics
 
     @BindView(R.id.toolbar) lateinit var toolbar: Toolbar
-    @BindView(R.id.progress) lateinit var progress: ProgressBar
+    @BindView(R.id.progress_1) lateinit var progressOne: ProgressBar
+    @BindView(R.id.progress_2) lateinit var progressTwo: ProgressBar
     @BindView(R.id.activity_main) lateinit var rootView: CoordinatorLayout
     @BindView(R.id.bluetooth_state) lateinit var bluetoothStateTv: TextView
     @BindView(R.id.empty_view) lateinit var emptyView: RelativeLayout
@@ -88,7 +89,8 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
         setSupportActionBar(toolbar)
         toolbar.inflateMenu(R.menu.main_menu)
-        progress.indeterminateDrawable.setColorFilter(ContextCompat.getColor(this, R.color.progressColor), PorterDuff.Mode.MULTIPLY)
+        progressOne.indeterminateDrawable.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimaryLight), PorterDuff.Mode.SRC_IN)
+        progressTwo.indeterminateDrawable.setColorFilter(ContextCompat.getColor(this, R.color.progressColor), PorterDuff.Mode.SRC_IN)
 
         beaconsRv.setHasFixedSize(true)
         beaconsRv.layoutManager = LinearLayoutManager(this)
@@ -196,7 +198,8 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
     override fun showScanningState(enabled: Boolean) {
         toolbar.title = getString(if (enabled) R.string.scanning_for_beacons else R.string.app_name)
-        progress.visibility = if (enabled) View.VISIBLE else View.GONE
+        progressOne.visibility = if (enabled) View.VISIBLE else View.GONE
+        progressTwo.visibility = if (enabled) View.VISIBLE else View.GONE
 
         scanFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, if (enabled) R.color.colorPauseFab else R.color.colorAccent))
 

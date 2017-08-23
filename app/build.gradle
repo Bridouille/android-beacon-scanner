@@ -78,9 +78,6 @@ dependencies {
     // Constraint Layout
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
-    // Lottie, animations
-    compile 'com.airbnb.android:lottie:2.2.0'
-
     // Material dialog
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
 

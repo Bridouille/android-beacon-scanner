@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
@@ -21,12 +22,13 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
             <ProgressBar
-                android:id="@+id/progress"
+                android:id="@+id/progress_1"
+                style="?android:attr/progressBarStyleSmallInverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/keyline_16"
                 android:visibility="gone"
-                style="?android:attr/progressBarStyleSmallInverse"/>
+                />
         </android.support.v7.widget.Toolbar>
 
         <!-- Header with bluetooth state -->
@@ -42,7 +44,23 @@
             android:elevation="@dimen/keyline_4"
             tools:text="Bluetooth disabled"
             tools:background="@color/bluetoothDisabledLight"
-            tools:textColor="@color/bluetoothDisabled" />
+            tools:textColor="@color/bluetoothDisabled"
+            tools:visibility="gone"
+            />
+
+        <!-- Progressbar -->
+        <ProgressBar
+            android:id="@+id/progress_2"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_below="@id/bluetooth_state"
+            android:layout_marginBottom="-6dp"
+            android:layout_marginTop="-6dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:visibility="visible"
+            />
 
         <!-- Actual content -->
         <android.support.v7.widget.RecyclerView
@@ -50,7 +68,7 @@
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/bluetooth_state"
+            android:layout_below="@+id/progress_2"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:scrollbars="vertical" />
 
