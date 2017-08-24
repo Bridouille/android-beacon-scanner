@@ -103,4 +103,13 @@
     <string name="playing_identifier_group_wave_2">wave2</string>
     <string name="playing_identifier_group_wave_3">wave3</string>
     <string name="playing_identifier_group_wave_4">wave4</string>
+    <string name="delay_in_between_each_scan">Delay in between each scan</string>
+    <string name="choose">Choose</string>
+    <string name="logging">Logging</string>
+    <string name="enable_logging">Enable logging</string>
+    <string name="logging_endpoint">Logging endpoint</string>
+    <string name="device_name">Device name</string>
+    <string name="logging_frequency">Logging frequency</string>
+    <string name="not_defined">Not defined</string>
+    <string name="logging_description">If you choose to enable the logging a POST http request will be made to the specified endpoint at the logging frequency. The data will be send as a JSON object in the body of the request. If provided, a device name will be included in the http headers so you know which device is sending the logs. Be aware this will drain the battery a lot. </string>
 </resources>

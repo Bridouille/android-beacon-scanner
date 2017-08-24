@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 
 import com.bridou_n.beaconscanner.dagger.PerActivity
+import com.bridou_n.beaconscanner.utils.PreferencesHelper
 
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.BeaconParser
@@ -36,8 +37,11 @@ class BluetoothModule {
     }
 
     @Provides // Not a Singleton
-    fun providesBeaconManager(ctx: Context): BeaconManager {
+    fun providesBeaconManager(ctx: Context, prefs: PreferencesHelper): BeaconManager {
         val instance = BeaconManager.getInstanceForApplication(ctx)
+
+        // Sets the delay between each scans according to the settings
+        instance.foregroundBetweenScanPeriod = prefs.getScanDelay()
 
         // Add all the beacon types we want to discover
         instance.beaconParsers.add(BeaconParser().setBeaconLayout(IBEACON_LAYOUT))

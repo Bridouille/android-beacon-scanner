@@ -7,7 +7,10 @@
     <color name="primaryText">#212121</color>
     <color name="secondaryText">#757575</color>
     <color name="icons">#FFFFFF</color>
-    <color name="divider">#BDBDBD</color>
+    <color name="divider">#E0E0E0</color>
+
+    <color name="primaryTextDisabled">#80212121</color>
+    <color name="secondaryTextDisabled">#80757575</color>
 
     <!-- Bluetooth State colors -->
     <color name="bluetoothDisabled">#F44336</color>
@@ -18,6 +21,7 @@
 
     <color name="bluetoothTurningOn">#8BC34A</color>
     <color name="bluetoothTurningOnLight">#DCEDC8</color>
+
 
     <color name="bgMoreInfo">#455A64</color>
     <color name="progressColor">#FFC107</color>

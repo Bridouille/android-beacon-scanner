@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Scan delays -->
+    <string-array name="scan_delays_names">
+        <item>No delay</item>
+        <item>2 seconds</item>
+        <item>5 seconds</item>
+        <item>10 seconds</item>
+        <item>30 seconds</item>
+        <item>1 minute</item>
+    </string-array>
+
+    <integer-array name="scan_delays">
+        <item>0</item>
+        <item>2000</item>
+        <item>5000</item>
+        <item>10000</item>
+        <item>30000</item>
+        <item>60000</item>
+    </integer-array>
+    <!-- / Scan delays -->
+
+    <!-- Logging frequency -->
+    <string-array name="logging_frequencies_names">
+        <item>Every scans</item>
+        <item>Every other scans</item>
+        <item>Every 5 scans</item>
+        <item>Every 10 scans</item>
+        <item>Every 30 scans</item>
+        <item>Every 60 scans</item>
+    </string-array>
+
+    <integer-array name="logging_frequencies">
+        <item>1</item>
+        <item>2</item>
+        <item>5</item>
+        <item>10</item>
+        <item>30</item>
+        <item>60</item>
+    </integer-array>
+    <!-- / Logging frequency -->
+</resources>
