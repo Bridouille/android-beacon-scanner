@@ -29,6 +29,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.bridou_n.beaconscanner.API.LoggingService
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.events.RxBus
 import com.bridou_n.beaconscanner.features.settings.SettingsActivity
@@ -65,6 +66,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     @Inject lateinit var bluetoothState: BluetoothManager
     @Inject lateinit var rxBus: RxBus
     @Inject lateinit var realm: Realm
+    @Inject lateinit var loggingService: LoggingService
     @Inject lateinit var prefs: PreferencesHelper
     @Inject lateinit var tracker: FirebaseAnalytics
 
@@ -96,7 +98,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         beaconsRv.layoutManager = LinearLayoutManager(this)
         beaconsRv.addItemDecoration(DividerItemDecoration(this, null))
 
-        presenter = BeaconListPresenter(this, rxBus, prefs, realm, bluetoothState, tracker)
+        presenter = BeaconListPresenter(this, rxBus, prefs, realm, loggingService, bluetoothState, tracker)
     }
 
     override fun showTutorial() {

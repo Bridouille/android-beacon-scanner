@@ -1,5 +1,6 @@
 package com.bridou_n.beaconscanner.models
 
+import com.google.gson.annotations.SerializedName
 import java.util.Date
 
 import io.realm.RealmObject
@@ -20,27 +21,28 @@ open class BeaconSaved : RealmObject() {
     }
 
     @PrimaryKey
-    var hashcode: Int = 0 // hashcode()
-    var beaconType: Int = 0 // Eddystone, altBeacon, iBeacon
-    var beaconAddress: String? = null // MAC address of the bluetooth emitter
-    var uuid: String? = null
-    var major: String? = null
-    var minor: String? = null
-    var txPower: Int = 0
-    var rssi: Int = 0
-    var distance: Double = 0.toDouble()
-    var lastSeen: Date? = null
-    var lastMinuteSeen: Long = 0
-    var manufacturer: Int = 0
-    var url: String? = null
-    var namespaceId: String? = null
-    var instanceId: String? = null
-    var isHasTelemetryData: Boolean = false
-    var telemetryVersion: Long = 0
-    var batteryMilliVolts: Long = 0
-    private var temperature: Float = 0F
-    var pduCount: Long = 0
-    var uptime: Long = 0
+    @SerializedName("hashcode") var hashcode: Int = 0 // hashcode()
+    @SerializedName("beaconType") var beaconType: Int = 0 // Eddystone, altBeacon, iBeacon
+    @SerializedName("beaconAddress") var beaconAddress: String? = null // MAC address of the bluetooth emitter
+    @SerializedName("uuid") var uuid: String? = null
+    @SerializedName("major") var major: String? = null
+    @SerializedName("minor") var minor: String? = null
+    @SerializedName("txPower") var txPower: Int = 0
+    @SerializedName("rssi") var rssi: Int = 0
+    @SerializedName("distance") var distance: Double = 0.toDouble()
+    @SerializedName("lastSeen") var lastSeen: Long = 0
+    @SerializedName("lastMinuteSeen") var lastMinuteSeen: Long = 0
+    @SerializedName("manufacturer") var manufacturer: Int = 0
+    @SerializedName("url") var url: String? = null
+    @SerializedName("namespaceId") var namespaceId: String? = null
+    @SerializedName("instanceId") var instanceId: String? = null
+    @SerializedName("hasTelemetryData") var hasTelemetryData: Boolean = false
+    @SerializedName("telemetryVersion") var telemetryVersion: Long = 0
+    @SerializedName("batteryMilliVolts") var batteryMilliVolts: Long = 0
+    @SerializedName("temperature") private var temperature: Float = 0F
+
+    @SerializedName("pduCount") var pduCount: Long = 0
+    @SerializedName("uptime") var uptime: Long = 0
 
     fun getTemperature(): Float {
         val tmp = temperature / 256F

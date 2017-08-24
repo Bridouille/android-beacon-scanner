@@ -23,6 +23,7 @@ class AppSingleton : Application() {
 
         val appComponent = DaggerAppComponent.builder()
                 .contextModule(ContextModule(this))
+                .networkModule(NetworkModule())
                 .databaseModule(DatabaseModule())
                 .eventModule(EventModule())
                 .build()

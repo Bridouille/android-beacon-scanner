@@ -71,9 +71,9 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
             rssi.text = String.format(Locale.getDefault(), "%d", beacon.rssi)
             tx.text = String.format(Locale.getDefault(), "%d", beacon.txPower)
             manufacturer.text = String.format(Locale.getDefault(), "0x%04X", beacon.manufacturer)
-            lastSeen.text = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, Locale.getDefault()).format(beacon.lastSeen)
+            lastSeen.text = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, Locale.getDefault()).format(Date(beacon.lastSeen))
 
-            if (beacon.isHasTelemetryData) {
+            if (beacon.hasTelemetryData) {
                 tlmData.visibility = View.VISIBLE
                 battery.text = String.format(Locale.getDefault(), "%d", beacon.batteryMilliVolts)
                 pduCount.text = CountHelper.coolFormat(beacon.pduCount.toDouble(), 0)
@@ -113,7 +113,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
             super.bindView(beacon)
             beaconType.text = String.format(Locale.getDefault(), "%s%s",
                     itemView.context.getString(R.string.eddystone_uid),
-                    if (beacon.isHasTelemetryData) itemView.context.getString(R.string.plus_tlm) else "")
+                    if (beacon.hasTelemetryData) itemView.context.getString(R.string.plus_tlm) else "")
             namespaceId.text = beacon.namespaceId
             instanceId.text = beacon.instanceId
         }
@@ -130,7 +130,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
             super.bindView(beacon)
             beaconType.text = String.format(Locale.getDefault(), "%s%s",
                     itemView.context.getString(R.string.eddystone_url),
-                    if (beacon.isHasTelemetryData) itemView.context.getString(R.string.plus_tlm) else "")
+                    if (beacon.hasTelemetryData) itemView.context.getString(R.string.plus_tlm) else "")
             address.text = beacon.beaconAddress
             url.text = beacon.url
         }

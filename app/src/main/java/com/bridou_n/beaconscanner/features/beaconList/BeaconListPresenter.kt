@@ -3,6 +3,7 @@ package com.bridou_n.beaconscanner.features.beaconList
 import android.os.Bundle
 import android.os.RemoteException
 import android.util.Log
+import com.bridou_n.beaconscanner.API.LoggingService
 import com.bridou_n.beaconscanner.events.Events
 import com.bridou_n.beaconscanner.events.RxBus
 import com.bridou_n.beaconscanner.models.BeaconSaved
@@ -11,6 +12,7 @@ import com.bridou_n.beaconscanner.utils.PreferencesHelper
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
@@ -28,6 +30,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
                           val rxBus: RxBus,
                           val prefs: PreferencesHelper,
                           val realm: Realm,
+                          val loggingService: LoggingService,
                           val bluetoothState: BluetoothManager,
                           val tracker: FirebaseAnalytics) : BeaconListContract.Presenter {
 
@@ -44,6 +47,11 @@ class BeaconListPresenter(val view: BeaconListContract.View,
     }
 
     override fun start() {
+        /*loggingService.postLogs("http://example.com/", BeaconSaved())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()*/
+
         // Setup an observable on the bluetooth changes
         bluetoothStateDisposable = bluetoothState.asFlowable()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -143,7 +151,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
 
                 // Common field to every beacon
                 beacon.hashcode = b.hashCode()
-                beacon.lastSeen = Date()
+                beacon.lastSeen = Date().time
                 beacon.lastMinuteSeen = Date().time / 1000 / 60
                 beacon.beaconAddress = b.bluetoothAddress
                 beacon.rssi = b.rssi
@@ -153,14 +161,14 @@ class BeaconListPresenter(val view: BeaconListContract.View,
                 if (b.serviceUuid == 0xfeaa) { // This is an Eddystone beacon
                     // Do we have telemetry data?
                     if (b.extraDataFields.size > 0) {
-                        beacon.isHasTelemetryData = true
+                        beacon.hasTelemetryData = true
                         beacon.telemetryVersion = b.extraDataFields[0]
                         beacon.batteryMilliVolts = b.extraDataFields[1]
                         beacon.setTemperature(b.extraDataFields[2].toFloat())
                         beacon.pduCount = b.extraDataFields[3]
                         beacon.uptime = b.extraDataFields[4]
                     } else {
-                        beacon.isHasTelemetryData = false
+                        beacon.hasTelemetryData = false
                     }
 
                     when (b.beaconTypeCode) {
