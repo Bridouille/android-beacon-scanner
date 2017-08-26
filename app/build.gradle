@@ -24,7 +24,7 @@ android {
         }
 
         debug {
-            minifyEnabled true
+            minifyEnabled false
             buildConfigField "String", "CONTACT_EMAIL", "\"nicobr65@gmail.com\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

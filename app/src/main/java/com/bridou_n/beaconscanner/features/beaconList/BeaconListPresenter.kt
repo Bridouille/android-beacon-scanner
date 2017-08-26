@@ -7,11 +7,15 @@ import com.bridou_n.beaconscanner.API.LoggingService
 import com.bridou_n.beaconscanner.events.Events
 import com.bridou_n.beaconscanner.events.RxBus
 import com.bridou_n.beaconscanner.models.BeaconSaved
+import com.bridou_n.beaconscanner.models.LoggingRequest
 import com.bridou_n.beaconscanner.utils.BluetoothManager
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
 import com.google.firebase.analytics.FirebaseAnalytics
+import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import io.realm.RealmResults
@@ -21,6 +25,8 @@ import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.Region
 import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor
 import java.util.*
+import java.util.concurrent.TimeUnit
+
 
 /**
  * Created by bridou_n on 22/08/2017.
@@ -42,15 +48,15 @@ class BeaconListPresenter(val view: BeaconListContract.View,
     private var rangeDisposable: Disposable? = null
     private var beaconManager: BeaconManager? = null
 
+    private var numberOfScansSinceLog = 0
+    private val MAX_RETRIES = 3
+    private var loggingRequests = CompositeDisposable()
+
     override fun setBeaconManager(bm: BeaconManager) {
         beaconManager = bm
     }
 
     override fun start() {
-        /*loggingService.postLogs("http://example.com/", BeaconSaved())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()*/
 
         // Setup an observable on the bluetooth changes
         bluetoothStateDisposable = bluetoothState.asFlowable()
@@ -111,7 +117,8 @@ class BeaconListPresenter(val view: BeaconListContract.View,
         rangeDisposable = rxBus.asFlowable() // Listen for range events
                 .observeOn(AndroidSchedulers.mainThread()) // We use this so we use the realm on the good thread & we can make UI changes
                 .subscribe { e ->
-                    if (e is Events.RangeBeacon) {
+                    if (e is Events.RangeBeacon && e.beacons.isNotEmpty()) {
+                        logToWebhookIfNeeded()
                         storeBeaconsAround(e.beacons)
                     }
                 }
@@ -203,6 +210,49 @@ class BeaconListPresenter(val view: BeaconListContract.View,
         }
     }
 
+    fun logToWebhookIfNeeded() {
+        if (prefs.isLoggingEnabled && prefs.loggingEndpoint != null &&
+                ++numberOfScansSinceLog == prefs.getLoggingFrequency()) {
+            val beaconToLog = realm.where(BeaconSaved::class.java).greaterThan("lastSeen", prefs.lasLoggingCall).findAllAsync()
+
+            beaconToLog.addChangeListener { results ->
+                if (results.isLoaded) {
+                    Log.d(TAG, "Result is loaded size : ${results.size} - lastLoggingCall : ${prefs.lasLoggingCall}")
+
+                    // Execute the network request
+                    prefs.lasLoggingCall = Date().time
+
+                    // We clone the objects
+                    val resultPlainObjects = results.map { it.clone() }
+                    val req = LoggingRequest(prefs.loggingDeviceName ?: "", resultPlainObjects)
+
+                    loggingRequests.add(loggingService.postLogs(prefs.loggingEndpoint ?: "", req)
+                            .retryWhen({ errors: Flowable<Throwable> ->
+                                errors.zipWith(Flowable.range(1, MAX_RETRIES + 1), BiFunction { error: Throwable, attempt: Int ->
+                                    Log.d(TAG, "attempt : $attempt")
+                                    if (attempt > MAX_RETRIES) {
+                                        view.showLoggingError()
+                                    }
+                                    attempt
+                                }).flatMap { attempt ->
+                                    if (attempt > MAX_RETRIES) {
+                                        Flowable.empty()
+                                    } else {
+                                        Flowable.timer(Math.pow(4.0, attempt.toDouble()).toLong(), TimeUnit.SECONDS)
+                                    }
+                                }
+                            })
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe())
+
+                    numberOfScansSinceLog = 0
+                    beaconToLog.removeAllChangeListeners()
+                }
+            }
+        }
+    }
+
     override fun stopScan() {
         unbindBeaconManager()
         rangeDisposable?.dispose()
@@ -235,6 +285,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
         prefs.setScanningState(isScanning())
         unbindBeaconManager()
         beaconResults.removeAllChangeListeners()
+        loggingRequests.clear()
         bluetoothStateDisposable?.dispose()
         rangeDisposable?.dispose()
 

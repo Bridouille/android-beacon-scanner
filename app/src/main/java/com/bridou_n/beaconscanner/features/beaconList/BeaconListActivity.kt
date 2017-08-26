@@ -198,6 +198,8 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
                 .show()
     }
 
+    override fun showLoggingError() = Snackbar.make(rootView, getString(R.string.logging_error_please_check), Snackbar.LENGTH_LONG).show()
+
     override fun showScanningState(enabled: Boolean) {
         toolbar.title = getString(if (enabled) R.string.scanning_for_beacons else R.string.app_name)
         progressOne.visibility = if (enabled) View.VISIBLE else View.GONE

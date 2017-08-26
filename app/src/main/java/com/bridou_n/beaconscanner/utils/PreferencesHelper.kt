@@ -21,6 +21,7 @@ class PreferencesHelper(ctx: Context) {
         private val LOGGING_ENDPOINT_KEY = "loggingEndpoint"
         private val LOGGING_DEVICE_NAME_KEY = "loggingDeviceName"
         private val LOGGING_FREQUENCY = "loggingFrequency"
+        private val LAST_LOGGING_CALL = "lastLoggingCall"
     }
 
     private val prefs: SharedPreferences
@@ -105,4 +106,9 @@ class PreferencesHelper(ctx: Context) {
         }
         return loggingFrequencies[0]
     }
+
+    var lasLoggingCall: Long
+        get() = prefs.getLong(LAST_LOGGING_CALL, 0)
+        set(timestamp) = prefs.edit().putLong(LAST_LOGGING_CALL, timestamp).apply()
+
 }

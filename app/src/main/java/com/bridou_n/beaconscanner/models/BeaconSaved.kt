@@ -56,4 +56,32 @@ open class BeaconSaved : RealmObject() {
     fun setTemperature(temperature: Float) {
         this.temperature = temperature
     }
+
+    fun clone() : BeaconSaved {
+        val ret = BeaconSaved()
+
+        ret.hashcode = hashcode
+        ret.beaconType = beaconType
+        ret.beaconAddress = beaconAddress
+        ret.uuid = uuid
+        ret.major = major
+        ret.minor = minor
+        ret.txPower = txPower
+        ret.rssi = rssi
+        ret.distance = distance
+        ret.lastSeen = lastSeen
+        ret.lastMinuteSeen = lastMinuteSeen
+        ret.manufacturer = manufacturer
+        ret.url = url
+        ret.namespaceId = namespaceId
+        ret.instanceId = instanceId
+        ret.hasTelemetryData = hasTelemetryData
+        ret.telemetryVersion = telemetryVersion
+        ret.batteryMilliVolts = batteryMilliVolts
+        ret.setTemperature(temperature)
+        ret.pduCount = pduCount
+        ret.uptime = uptime
+
+        return ret
+    }
 }

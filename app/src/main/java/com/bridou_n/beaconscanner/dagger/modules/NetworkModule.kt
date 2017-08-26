@@ -1,6 +1,5 @@
 package com.bridou_n.beaconscanner.dagger.modules
 
-import android.util.Log
 import com.bridou_n.beaconscanner.API.LoggingService
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
 import com.google.gson.Gson
@@ -9,13 +8,13 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
+
 
 /**
  * Created by bridou_n on 24/08/2017.
@@ -61,7 +60,6 @@ import javax.inject.Singleton
 
     @Provides @Singleton
     fun provideGson() = GsonBuilder().create()
-
 
     @Provides @Singleton
     fun provideRetrofit(httpClient: OkHttpClient, gson: Gson) : Retrofit {

@@ -30,6 +30,8 @@ interface BeaconListContract {
 
         fun showClearDialog()
         fun startSettingsActivity()
+
+        fun showLoggingError()
     }
 
     interface Presenter : BasePresenter {
