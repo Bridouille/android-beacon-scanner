@@ -5,15 +5,19 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.graphics.drawable.AnimatedVectorDrawable
+import android.media.Rating
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.support.constraint.ConstraintLayout
+import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -37,6 +41,7 @@ import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.utils.BluetoothManager
 import com.bridou_n.beaconscanner.utils.DividerItemDecoration
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
+import com.bridou_n.beaconscanner.utils.RatingHelper
 import com.bridou_n.beaconscanner.utils.extensionFunctions.component
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
@@ -68,6 +73,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     @Inject lateinit var realm: Realm
     @Inject lateinit var loggingService: LoggingService
     @Inject lateinit var prefs: PreferencesHelper
+    @Inject lateinit var ratingHelper: RatingHelper
     @Inject lateinit var tracker: FirebaseAnalytics
 
     @BindView(R.id.toolbar) lateinit var toolbar: Toolbar
@@ -77,10 +83,15 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     @BindView(R.id.bluetooth_state) lateinit var bluetoothStateTv: TextView
     @BindView(R.id.empty_view) lateinit var emptyView: RelativeLayout
     @BindView(R.id.beacons_rv) lateinit var beaconsRv: RecyclerView
+
+    @BindView(R.id.bottom_sheet) lateinit var bottomSheet: NestedScrollView
+    @BindView(R.id.rating_step_1) lateinit var ratingStep1: ConstraintLayout
+    @BindView(R.id.rating_step_2) lateinit var ratingStep2: ConstraintLayout
     @BindView(R.id.scan_fab) lateinit var scanFab: FloatingActionButton
 
     private var dialog: MaterialDialog? = null
     private var menu: Menu? = null
+    private var bsBehavior: BottomSheetBehavior<NestedScrollView>? = null
     private lateinit var presenter: BeaconListContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,7 +109,12 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         beaconsRv.layoutManager = LinearLayoutManager(this)
         beaconsRv.addItemDecoration(DividerItemDecoration(this, null))
 
-        presenter = BeaconListPresenter(this, rxBus, prefs, realm, loggingService, bluetoothState, tracker)
+        bsBehavior = BottomSheetBehavior.from(bottomSheet)
+
+        // Hide the bottomSheet uppon creation
+        bsBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+
+        presenter = BeaconListPresenter(this, rxBus, prefs, realm, loggingService, bluetoothState, ratingHelper, tracker)
     }
 
     override fun showTutorial() {
@@ -218,6 +234,51 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     }
 
     override fun onBeaconServiceConnect() = presenter.onBeaconServiceConnect()
+
+    override fun showRating(step: Int, show: Boolean) {
+        if (!show) {
+            bsBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+            return
+        }
+
+        when (step) {
+            RatingHelper.STEP_ONE -> {
+                bsBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+                ratingStep1.visibility = View.VISIBLE
+                ratingStep2.visibility = View.GONE
+            }
+            RatingHelper.STEP_TWO -> {
+                bsBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+                ratingStep1.visibility = View.GONE
+                ratingStep2.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    override fun redirectToStorePage() {
+        val appPackageName = packageName // getPackageName() from Context or Activity object
+
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)))
+        } catch (anfe: android.content.ActivityNotFoundException) {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)))
+        }
+    }
+
+    @OnClick(R.id.positive_btn_step_1, R.id.negative_btn_step_1, R.id.positive_btn_step_2, R.id.negative_btn_step_2)
+    fun onRatingInteraction(view: View) {
+        val step = when (view.id) {
+            R.id.positive_btn_step_1, R.id.negative_btn_step_1 -> RatingHelper.STEP_ONE
+            R.id.positive_btn_step_2, R.id.negative_btn_step_2 -> RatingHelper.STEP_TWO
+            else -> RatingHelper.STEP_ONE
+        }
+        val answer = when (view.id) {
+            R.id.positive_btn_step_1, R.id.positive_btn_step_2 -> true
+            else -> false
+        }
+
+        presenter.onRatingInteraction(step, answer)
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)

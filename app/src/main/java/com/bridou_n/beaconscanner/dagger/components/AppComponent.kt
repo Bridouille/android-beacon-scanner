@@ -5,6 +5,7 @@ import com.bridou_n.beaconscanner.API.LoggingService
 import com.bridou_n.beaconscanner.dagger.modules.*
 import com.bridou_n.beaconscanner.events.RxBus
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
+import com.bridou_n.beaconscanner.utils.RatingHelper
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.Component
 import io.realm.Realm
@@ -29,5 +30,6 @@ interface AppComponent {
     fun loggingService(): LoggingService
     fun rxBus(): RxBus
     fun prefs(): PreferencesHelper
+    fun rating(): RatingHelper
     fun tracker(): FirebaseAnalytics
 }

@@ -5,8 +5,10 @@ import com.bridou_n.beaconscanner.dagger.components.ActivityComponent
 import com.bridou_n.beaconscanner.dagger.components.DaggerActivityComponent
 import com.bridou_n.beaconscanner.dagger.components.DaggerAppComponent
 import com.bridou_n.beaconscanner.dagger.modules.*
+import com.bridou_n.beaconscanner.utils.RatingHelper
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import javax.inject.Inject
 
 /**
  * Created by bridou_n on 30/09/2016.
@@ -17,6 +19,8 @@ class AppSingleton : Application() {
     companion object {
         lateinit var activityComponent: ActivityComponent
     }
+
+    @Inject lateinit var ratingHelper: RatingHelper
 
     override fun onCreate() {
         super.onCreate()
@@ -33,6 +37,8 @@ class AppSingleton : Application() {
                 .bluetoothModule(BluetoothModule())
                 .build()
 
+        activityComponent.inject(this)
+
         Realm.init(this)
 
         val realmConfig = RealmConfiguration.Builder()
@@ -40,5 +46,7 @@ class AppSingleton : Application() {
                 .build()
 
         Realm.setDefaultConfiguration(realmConfig)
+
+        ratingHelper.incrementAppOpens()
     }
 }

@@ -26,4 +26,6 @@
     <color name="bgMoreInfo">#455A64</color>
     <color name="progressColor">#FFC107</color>
     <color name="colorPauseFab">#EF5350 </color>
+
+    <color name="rating_background">#00BCD4</color>
 </resources>

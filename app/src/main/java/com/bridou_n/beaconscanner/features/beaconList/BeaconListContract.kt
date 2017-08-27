@@ -28,6 +28,9 @@ interface BeaconListContract {
         fun askForCoarseLocationPermission()
         fun showEnablePermissionSnackbar()
 
+        fun showRating(step: Int, show: Boolean = true)
+        fun redirectToStorePage()
+
         fun showClearDialog()
         fun startSettingsActivity()
 
@@ -51,6 +54,8 @@ interface BeaconListContract {
         fun onSettingsClicked()
         fun onClearClicked()
         fun onClearAccepted()
+
+        fun onRatingInteraction(step: Int, answer: Boolean)
 
         fun clear()
     }

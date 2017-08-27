@@ -114,13 +114,27 @@
         </RelativeLayout>
     </RelativeLayout>
 
+    <!-- Bottom Sheet -->
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="true"
+        android:background="@android:color/white"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+        app:behavior_hideable="true">
+
+        <include layout="@layout/rating_bottom_sheet" />
+    </android.support.v4.widget.NestedScrollView>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/scan_fab"
-        android:layout_gravity="bottom|center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/keyline_16"
         android:tint="@android:color/white"
+        app:layout_anchor="@id/bottom_sheet"
+        app:layout_anchorGravity="top|end"
         app:srcCompat="@drawable/play_icon"
         app:fabSize="normal" />
 

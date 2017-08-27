@@ -113,4 +113,10 @@
     <string name="not_defined">Not defined</string>
     <string name="logging_description">If you choose to enable the logging a POST http request will be made to the specified endpoint at the logging frequency. The data will be send as a JSON object in the body of the request. If provided, a device name will be included in the http headers so you know which device is sending the logs. Be aware this will drain the battery a lot. </string>
     <string name="logging_error_please_check">The logging request didn\'t work. Please check the endpoint and your connectivity.</string>
+    <string name="positive_btn_step_1">Yes!</string>
+    <string name="enjoying_the_app">Enjoying the app?</string>
+    <string name="negative_btn_step_1">Not really</string>
+    <string name="how_about_a_rating_on_the_play_store">How about a rating on the Play Store, then?</string>
+    <string name="positive_btn_step_2">Ok, sure</string>
+    <string name="negative_btn_step_2">No, thanks</string>
 </resources>

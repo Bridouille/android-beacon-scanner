@@ -1,7 +1,10 @@
 package com.bridou_n.beaconscanner.features.beaconList
 
+import android.media.Rating
 import android.os.Bundle
 import android.os.RemoteException
+import android.support.design.widget.BottomSheetBehavior
+import android.support.v4.widget.NestedScrollView
 import android.util.Log
 import com.bridou_n.beaconscanner.API.LoggingService
 import com.bridou_n.beaconscanner.events.Events
@@ -10,6 +13,7 @@ import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.models.LoggingRequest
 import com.bridou_n.beaconscanner.utils.BluetoothManager
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
+import com.bridou_n.beaconscanner.utils.RatingHelper
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -38,6 +42,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
                           val realm: Realm,
                           val loggingService: LoggingService,
                           val bluetoothState: BluetoothManager,
+                          val ratingHelper: RatingHelper,
                           val tracker: FirebaseAnalytics) : BeaconListContract.Presenter {
 
     private val TAG = "BeaconListPresenter"
@@ -57,7 +62,6 @@ class BeaconListPresenter(val view: BeaconListContract.View,
     }
 
     override fun start() {
-
         // Setup an observable on the bluetooth changes
         bluetoothStateDisposable = bluetoothState.asFlowable()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -119,6 +123,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
                 .subscribe { e ->
                     if (e is Events.RangeBeacon && e.beacons.isNotEmpty()) {
                         logToWebhookIfNeeded()
+                        handleRating()
                         storeBeaconsAround(e.beacons)
                     }
                 }
@@ -148,6 +153,29 @@ class BeaconListPresenter(val view: BeaconListContract.View,
         if (view.hasSomePermissionPermanentlyDenied(permList)) {
             tracker.logEvent("permission_denied_permanently", null)
             view.showEnablePermissionSnackbar()
+        }
+    }
+
+    fun handleRating() {
+        if (ratingHelper.shouldShowRatingRationale()) {
+            ratingHelper.setRatingOngoing()
+            view.showRating(RatingHelper.STEP_ONE)
+        }
+    }
+
+    override fun onRatingInteraction(step: Int, answer: Boolean) {
+        Log.d(TAG, "step: $step -- answer : $answer")
+        if (!answer) { // The user answered "no" to any question
+            ratingHelper.setPopupSeen()
+            return view.showRating(step, false)
+        }
+
+        when (step) {
+            RatingHelper.STEP_ONE -> view.showRating(RatingHelper.STEP_TWO)
+            RatingHelper.STEP_TWO -> {
+                view.redirectToStorePage()
+                view.showRating(step, false)
+            }
         }
     }
 
