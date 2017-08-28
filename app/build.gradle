@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'realm-android'
 
 android {
@@ -25,18 +24,16 @@ android {
 
         debug {
             minifyEnabled false
+            applicationIdSuffix = ".debug"
             buildConfigField "String", "CONTACT_EMAIL", "\"nicobr65@gmail.com\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 ext {
     supportLibraryVersion = '25.3.1'
+    firebaseVersion = '11.2.0'
 }
 
 dependencies {
@@ -49,6 +46,9 @@ dependencies {
     compile "com.android.support:support-v4:${supportLibraryVersion}"
     compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
     compile "com.android.support:recyclerview-v7:${supportLibraryVersion}"
+
+    // Kotlin
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
     // ButterKnife
     compile 'com.jakewharton:butterknife:8.8.1'
@@ -89,9 +89,9 @@ dependencies {
     // Material dialog
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
 
-    // Firebase Analytics
-    compile 'com.google.firebase:firebase-core:10.2.6'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    // Firebase Analytics & Crash reporting
+    compile "com.google.firebase:firebase-core:${firebaseVersion}"
+    compile "com.google.firebase:firebase-crash:${firebaseVersion}"
 }
 
 apply plugin: 'com.google.gms.google-services'

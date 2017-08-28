@@ -47,6 +47,7 @@ import com.bridou_n.beaconscanner.utils.extensionFunctions.component
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crash.FirebaseCrash
 import io.realm.Realm
 import io.realm.RealmResults
 import org.altbeacon.beacon.BeaconConsumer
