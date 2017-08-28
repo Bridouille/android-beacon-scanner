@@ -19,6 +19,7 @@ interface BeaconListContract {
         fun setAdapter(beaconResults: RealmResults<BeaconSaved>)
 
         fun updateBluetoothState(state: BeaconListActivity.BluetoothState, isEnabled: Boolean)
+        fun keepScreenOn(status: Boolean)
 
         fun showBluetoothNotEnabledError()
         fun showScanningState(state: Boolean)

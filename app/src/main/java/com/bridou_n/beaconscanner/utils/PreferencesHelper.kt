@@ -17,6 +17,7 @@ class PreferencesHelper(ctx: Context) {
         private val SCAN_ON_OPEN_KEY = "scanOnOpenKey"
         private val SCANNING_STATE_KEY = "scanningState"
         private val SCAN_DELAY_KEY = "scanDelay"
+        private val PREVENT_SLEEP_KEY = "preventSleep"
         private val LOGGING_ENABLED_KEY = "loggingEnabled"
         private val LOGGING_ENDPOINT_KEY = "loggingEndpoint"
         private val LOGGING_DEVICE_NAME_KEY = "loggingDeviceName"
@@ -35,6 +36,10 @@ class PreferencesHelper(ctx: Context) {
     var isScanOnOpen: Boolean
         get() = prefs.getBoolean(SCAN_ON_OPEN_KEY, false)
         set(status) = prefs.edit().putBoolean(SCAN_ON_OPEN_KEY, status).apply()
+
+    var preventSleep: Boolean
+        get() = prefs.getBoolean(PREVENT_SLEEP_KEY, false)
+        set(status) = prefs.edit().putBoolean(PREVENT_SLEEP_KEY, status).apply()
 
     fun setHasSeenTutorial(status: Boolean) = prefs.edit().putBoolean(TUTO_KEY, status).apply()
 

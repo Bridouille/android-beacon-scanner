@@ -39,6 +39,7 @@ class SettingsActivity : AppCompatActivity() {
     @BindView(R.id.content) lateinit var content: ScrollView
     @BindView(R.id.scan_open) lateinit var scanOpen: SwitchCompat
     @BindView(R.id.scan_delay) lateinit var scanDelay: TextView
+    @BindView(R.id.prevent_sleep) lateinit var preventSleep: SwitchCompat
 
     @BindView(R.id.logging_enabled) lateinit var loggingEnabled: SwitchCompat
     @BindView(R.id.logging_endpoint) lateinit var loggingEndpoint: TextView
@@ -65,6 +66,7 @@ class SettingsActivity : AppCompatActivity() {
 
         scanOpen.isChecked = prefs.isScanOnOpen
         scanDelay.text = prefs.getScanDelayName()
+        preventSleep.isChecked = prefs.preventSleep
         loggingEnabled.isChecked = prefs.isLoggingEnabled
         loggingEndpoint.text = prefs.loggingEndpoint ?: getString(R.string.not_defined)
         loggingDeviceName.text = prefs.loggingDeviceName ?: getString(R.string.not_defined)
@@ -110,6 +112,15 @@ class SettingsActivity : AppCompatActivity() {
                 }
                 .positiveText(R.string.choose)
                 .show()
+    }
+
+    @OnCheckedChanged(R.id.prevent_sleep)
+    fun onPreventSleepChanged(status: Boolean) {
+        val b = Bundle()
+
+        b.putBoolean("status", status)
+        tracker.logEvent("prevent_sleep_changed", b)
+        prefs.preventSleep = status
     }
 
     @OnCheckedChanged(R.id.logging_enabled)

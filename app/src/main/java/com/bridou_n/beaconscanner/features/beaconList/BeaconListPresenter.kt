@@ -116,6 +116,10 @@ class BeaconListPresenter(val view: BeaconListContract.View,
             beaconManager?.bind(view)
         }
 
+        if (prefs.preventSleep) {
+            view.keepScreenOn(true)
+        }
+
         view.showScanningState(true)
         rangeDisposable?.dispose() // clear the previous subscription if any
         rangeDisposable = rxBus.asFlowable() // Listen for range events
@@ -256,7 +260,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
 
                     loggingRequests.add(loggingService.postLogs(prefs.loggingEndpoint ?: "", req)
                             .retryWhen({ errors: Flowable<Throwable> ->
-                                errors.zipWith(Flowable.range(1, MAX_RETRIES + 1), BiFunction { error: Throwable, attempt: Int ->
+                                errors.zipWith(Flowable.range(1, MAX_RETRIES + 1), BiFunction { _: Throwable, attempt: Int ->
                                     Log.d(TAG, "attempt : $attempt")
                                     if (attempt > MAX_RETRIES) {
                                         view.showLoggingError()
@@ -285,6 +289,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
         unbindBeaconManager()
         rangeDisposable?.dispose()
         view.showScanningState(false)
+        view.keepScreenOn(false)
     }
 
     override fun onBluetoothToggle() {
@@ -316,7 +321,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
         loggingRequests.clear()
         bluetoothStateDisposable?.dispose()
         rangeDisposable?.dispose()
-
+        view.keepScreenOn(false)
     }
 
     fun unbindBeaconManager() {

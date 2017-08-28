@@ -65,6 +65,20 @@
                 />
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:background="@color/divider" />
+
+        <!-- "Prevent sleep" while scanning -->
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/prevent_sleep"
+            android:text="@string/prevent_sleep_while_scanning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"/>
+
         <!-- Logging title-->
         <TextView
             android:text="@string/logging"

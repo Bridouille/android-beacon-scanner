@@ -25,6 +25,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -142,6 +143,14 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         super.onResume()
         presenter.setBeaconManager(component().providesBeaconManager())
         presenter.start()
+    }
+
+    override fun keepScreenOn(status: Boolean) {
+        if (status) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
     }
 
     override fun setAdapter(beaconResults: RealmResults<BeaconSaved>) {
