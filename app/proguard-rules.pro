@@ -38,3 +38,15 @@
 -keepattributes Signature
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
+
+-dontwarn okio.**
+
+-keep public class com.google.android.gms.* { public *; }
+-dontwarn com.google.android.gms.**
+
+# This rule will properly ProGuard all the model classes in
+# the package com.yourcompany.models. Modify to fit the structure
+# of your app.
+-keepclassmembers class com.bridou_n.beaconscanner.models.** {
+    *;
+}
