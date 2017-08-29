@@ -4,27 +4,26 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SwitchCompat
+import android.text.InputType
+import android.util.Log
+import android.util.Patterns
 import android.view.MenuItem
+import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import butterknife.*
+import com.afollestad.materialdialogs.DialogAction
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bridou_n.beaconscanner.BuildConfig
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
 import com.bridou_n.beaconscanner.utils.extensionFunctions.component
 import com.google.firebase.analytics.FirebaseAnalytics
 import javax.inject.Inject
-import com.afollestad.materialdialogs.MaterialDialog
-import android.R.array
-import android.util.Log
-import android.view.View
-import android.text.InputType
-import android.R.id.input
-import android.support.v4.content.ContextCompat
-import android.widget.LinearLayout
-import butterknife.*
-import com.afollestad.materialdialogs.Theme
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -140,16 +139,42 @@ class SettingsActivity : AppCompatActivity() {
                 .title(R.string.logging_endpoint)
                 .inputRangeRes(7, -1, R.color.colorPauseFab)
                 .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI)
-                .input(getString(R.string.logging_endpoint), prefs.loggingEndpoint ?: "http://example.com/logging", { _, input ->
-                    Log.d(TAG, "$input")
+                .input(getString(R.string.logging_endpoint), prefs.loggingEndpoint ?: "http://example.com/logging", { dialog, input ->
+                    var endpoint = input.toString()
 
-                    val endpoint = input.toString()
                     if (endpoint.isNotEmpty()) {
-                        loggingEndpoint.text = endpoint
-                        prefs.loggingEndpoint = endpoint
+                        // If we just entered the IP address or 'example.com' for example
+                        if (!endpoint.startsWith("http")) {
+                            endpoint = "http://$endpoint"
+                        }
+
+                        Log.d(TAG, "endpoint: $endpoint - valid : " + Patterns.WEB_URL.matcher(endpoint).matches())
+
+                        if (Patterns.WEB_URL.matcher(endpoint).matches()) { // The URL is a valid endpoint
+                            dialog.getActionButton(DialogAction.POSITIVE).isEnabled = true
+                            return@input
+                        }
                     }
+                    dialog.getActionButton(DialogAction.POSITIVE).isEnabled = false
                 })
+                .onPositive { dialog, which ->
+                    // From here the input should be valid
+                    var newEndpoint = dialog.inputEditText?.text?.toString() ?: return@onPositive
+
+                    if (newEndpoint.isNotEmpty()) {
+                        // If we just entered the IP address or 'example.com' for example
+                        if (!newEndpoint.startsWith("http")) {
+                            newEndpoint = "http://$newEndpoint"
+                        }
+
+                        Log.d(TAG, "newEndpoint: " + newEndpoint)
+
+                        loggingEndpoint.text = newEndpoint
+                        prefs.loggingEndpoint = newEndpoint
+                    }
+                }
                 .negativeText(android.R.string.cancel)
+                .alwaysCallInputCallback()
                 .show()
     }
 
