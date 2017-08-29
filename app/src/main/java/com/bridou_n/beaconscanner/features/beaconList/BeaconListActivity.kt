@@ -19,6 +19,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
@@ -234,12 +235,12 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         scanFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, if (enabled) R.color.colorPauseFab else R.color.colorAccent))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val anim = ContextCompat.getDrawable(this, if (enabled) R.drawable.play_to_pause_animation else R.drawable.pause_to_play_animation) as AnimatedVectorDrawable
+            val anim = AppCompatResources.getDrawable(this, if (enabled) R.drawable.play_to_pause_animation else R.drawable.pause_to_play_animation) as AnimatedVectorDrawable
 
             scanFab.setImageDrawable(anim)
             anim.start()
         } else {
-            scanFab.setImageDrawable(ContextCompat.getDrawable(this, if (enabled) R.drawable.pause_icon else R.drawable.play_icon))
+            scanFab.setImageDrawable(AppCompatResources.getDrawable(this, if (enabled) R.drawable.pause_icon else R.drawable.play_icon))
         }
     }
 
