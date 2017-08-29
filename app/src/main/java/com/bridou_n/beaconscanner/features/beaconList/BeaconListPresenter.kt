@@ -177,6 +177,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
         when (step) {
             RatingHelper.STEP_ONE -> view.showRating(RatingHelper.STEP_TWO)
             RatingHelper.STEP_TWO -> {
+                ratingHelper.setPopupSeen()
                 view.redirectToStorePage()
                 view.showRating(step, false)
             }
