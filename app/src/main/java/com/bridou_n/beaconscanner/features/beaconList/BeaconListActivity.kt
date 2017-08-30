@@ -235,7 +235,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         scanFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, if (enabled) R.color.colorPauseFab else R.color.colorAccent))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val anim = AppCompatResources.getDrawable(this, if (enabled) R.drawable.play_to_pause_animation else R.drawable.pause_to_play_animation) as AnimatedVectorDrawable
+            val anim = ContextCompat.getDrawable(this, if (enabled) R.drawable.play_to_pause_animation else R.drawable.pause_to_play_animation) as AnimatedVectorDrawable
 
             scanFab.setImageDrawable(anim)
             anim.start()
