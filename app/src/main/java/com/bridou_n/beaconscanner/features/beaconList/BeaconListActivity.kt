@@ -15,6 +15,7 @@ import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.NestedScrollView
@@ -235,7 +236,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         scanFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, if (enabled) R.color.colorPauseFab else R.color.colorAccent))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val anim = AppCompatResources.getDrawable(this, if (enabled) R.drawable.play_to_pause_animation else R.drawable.pause_to_play_animation) as AnimatedVectorDrawable
+            val anim = AnimatedVectorDrawableCompat.create(this, if (enabled) R.drawable.play_to_pause else R.drawable.pause_to_play) as AnimatedVectorDrawableCompat
 
             scanFab.setImageDrawable(anim)
             anim.start()

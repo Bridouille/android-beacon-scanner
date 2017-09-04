@@ -78,7 +78,7 @@ dependencies {
     compile 'org.altbeacon:android-beacon-library:2.12.1'
 
     // Easy permissions
-    compile 'pub.devrel:easypermissions:0.2.0'
+    compile 'pub.devrel:easypermissions:0.4.3'
 
     // Tap target view, discovery feature
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.9.1'
