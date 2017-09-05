@@ -1,10 +1,7 @@
 package com.bridou_n.beaconscanner.features.beaconList
 
-import android.media.Rating
 import android.os.Bundle
 import android.os.RemoteException
-import android.support.design.widget.BottomSheetBehavior
-import android.support.v4.widget.NestedScrollView
 import android.util.Log
 import com.bridou_n.beaconscanner.API.LoggingService
 import com.bridou_n.beaconscanner.events.Events
