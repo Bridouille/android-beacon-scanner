@@ -228,20 +228,20 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
     override fun showLoggingError() = Snackbar.make(rootView, getString(R.string.logging_error_please_check), Snackbar.LENGTH_LONG).show()
 
-    override fun showScanningState(enabled: Boolean) {
-        toolbar.title = getString(if (enabled) R.string.scanning_for_beacons else R.string.app_name)
-        progressOne.visibility = if (enabled) View.VISIBLE else View.GONE
-        progressTwo.visibility = if (enabled) View.VISIBLE else View.GONE
+    override fun showScanningState(state: Boolean) {
+        toolbar.title = getString(if (state) R.string.scanning_for_beacons else R.string.app_name)
+        progressOne.visibility = if (state) View.VISIBLE else View.GONE
+        progressTwo.visibility = if (state) View.VISIBLE else View.GONE
 
-        scanFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, if (enabled) R.color.colorPauseFab else R.color.colorAccent))
+        scanFab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, if (state) R.color.colorPauseFab else R.color.colorAccent))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val anim = AnimatedVectorDrawableCompat.create(this, if (enabled) R.drawable.play_to_pause else R.drawable.pause_to_play) as AnimatedVectorDrawableCompat
+            val anim = AnimatedVectorDrawableCompat.create(this, if (state) R.drawable.play_to_pause else R.drawable.pause_to_play) as AnimatedVectorDrawableCompat
 
             scanFab.setImageDrawable(anim)
             anim.start()
         } else {
-            scanFab.setImageDrawable(AppCompatResources.getDrawable(this, if (enabled) R.drawable.pause_icon else R.drawable.play_icon))
+            scanFab.setImageDrawable(AppCompatResources.getDrawable(this, if (state) R.drawable.pause_icon else R.drawable.play_icon))
         }
     }
 

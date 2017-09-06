@@ -24,7 +24,6 @@ import io.realm.Sort
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.Region
-import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -184,54 +183,12 @@ class BeaconListPresenter(val view: BeaconListContract.View,
     override fun storeBeaconsAround(beacons: Collection<Beacon>) {
         realm.executeTransactionAsync { tRealm ->
             for (b: Beacon in beacons) {
-                val beacon = BeaconSaved()
-
-                // Common field to every beacon
-                beacon.hashcode = b.hashCode()
-                beacon.lastSeen = Date().time
-                beacon.lastMinuteSeen = Date().time / 1000 / 60
-                beacon.beaconAddress = b.bluetoothAddress
-                beacon.rssi = b.rssi
-                beacon.manufacturer = b.manufacturer
-                beacon.txPower = b.txPower
-                beacon.distance = b.distance
-                if (b.serviceUuid == 0xfeaa) { // This is an Eddystone beacon
-                    // Do we have telemetry data?
-                    if (b.extraDataFields.size > 0) {
-                        beacon.hasTelemetryData = true
-                        beacon.telemetryVersion = b.extraDataFields[0]
-                        beacon.batteryMilliVolts = b.extraDataFields[1]
-                        beacon.setTemperature(b.extraDataFields[2].toFloat())
-                        beacon.pduCount = b.extraDataFields[3]
-                        beacon.uptime = b.extraDataFields[4]
-                    } else {
-                        beacon.hasTelemetryData = false
-                    }
-
-                    when (b.beaconTypeCode) {
-                        0x00 -> {
-                            beacon.beaconType = BeaconSaved.TYPE_EDDYSTONE_UID
-                            // This is a Eddystone-UID frame
-                            beacon.namespaceId = b.id1.toString()
-                            beacon.instanceId = b.id2.toString()
-                        }
-                        0x10 -> {
-                            beacon.beaconType = BeaconSaved.TYPE_EDDYSTONE_URL
-                            // This is a Eddystone-URL frame
-                            beacon.url = UrlBeaconUrlCompressor.uncompress(b.id1.toByteArray())
-                        }
-                    }
-                } else { // This is an iBeacon or ALTBeacon
-                    beacon.beaconType = if (b.beaconTypeCode == 0xbeac) BeaconSaved.TYPE_ALTBEACON else BeaconSaved.TYPE_IBEACON // 0x4c000215 is iBeacon
-                    beacon.uuid = b.id1.toString()
-                    beacon.major = b.id2.toString()
-                    beacon.minor = b.id3.toString()
-                }
+                val beacon = BeaconSaved(b)
 
                 val infos = Bundle()
 
                 infos.putInt("manufacturer", beacon.manufacturer)
-                infos.putInt("type", beacon.beaconType)
+                infos.putString("type", beacon.beaconType)
                 infos.putDouble("distance", beacon.distance)
 
                 tracker.logEvent("adding_or_updating_beacon", infos)
@@ -247,7 +204,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
 
             numberOfScansSinceLog = 0 // Reset the counter before we get the results
             beaconToLog.addChangeListener { results ->
-                if (results.isLoaded) {
+                if (results.isLoaded && results.isNotEmpty()) {
                     Log.d(TAG, "Result is loaded size : ${results.size} - lastLoggingCall : ${Date(prefs.lasLoggingCall)}")
 
                     // Execute the network request

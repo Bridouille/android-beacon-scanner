@@ -73,12 +73,13 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
             manufacturer.text = String.format(Locale.getDefault(), "0x%04X", beacon.manufacturer)
             lastSeen.text = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, Locale.getDefault()).format(Date(beacon.lastSeen))
 
-            if (beacon.hasTelemetryData) {
+            val telemetry = beacon.telemetryData
+            if (telemetry != null) {
                 tlmData.visibility = View.VISIBLE
-                battery.text = String.format(Locale.getDefault(), "%d", beacon.batteryMilliVolts)
-                pduCount.text = CountHelper.coolFormat(beacon.pduCount.toDouble(), 0)
-                uptime.text = CountHelper.coolFormat(beacon.uptime.toDouble(), 0)
-                temperature.text = String.format(Locale.getDefault(), "%.1f", beacon.getTemperature())
+                battery.text = String.format(Locale.getDefault(), "%d", telemetry.batteryMilliVolts)
+                pduCount.text = CountHelper.coolFormat(telemetry.pduCount.toDouble(), 0)
+                uptime.text = CountHelper.coolFormat(telemetry.uptime.toDouble(), 0)
+                temperature.text = String.format(Locale.getDefault(), "%.1f", telemetry.temperature)
             } else {
                 tlmData.visibility = View.GONE
             }
@@ -113,7 +114,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
             super.bindView(beacon)
             beaconType.text = String.format(Locale.getDefault(), "%s%s",
                     itemView.context.getString(R.string.eddystone_uid),
-                    if (beacon.hasTelemetryData) itemView.context.getString(R.string.plus_tlm) else "")
+                    if (beacon.telemetryData != null) itemView.context.getString(R.string.plus_tlm) else "")
             namespaceId.text = beacon.namespaceId
             instanceId.text = beacon.instanceId
         }
@@ -130,7 +131,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
             super.bindView(beacon)
             beaconType.text = String.format(Locale.getDefault(), "%s%s",
                     itemView.context.getString(R.string.eddystone_url),
-                    if (beacon.hasTelemetryData) itemView.context.getString(R.string.plus_tlm) else "")
+                    if (beacon.telemetryData != null) itemView.context.getString(R.string.plus_tlm) else "")
             address.text = beacon.beaconAddress
             url.text = beacon.url
         }
@@ -168,7 +169,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
 
         when (b?.beaconType) {
             BeaconSaved.TYPE_EDDYSTONE_UID -> return R.layout.eddystone_uid_item
-            BeaconSaved.TYPE_EDDYSTONE_URL -> return R.layout.eddystone_url_item
+            BeaconSaved.TYPE_EDDYSTONE_URL, BeaconSaved.TYPE_RUUVITAG -> return R.layout.eddystone_url_item
             BeaconSaved.TYPE_ALTBEACON, BeaconSaved.TYPE_IBEACON -> return R.layout.ibeacon_altbeacon_item
             else -> return R.layout.ibeacon_altbeacon_item
         }

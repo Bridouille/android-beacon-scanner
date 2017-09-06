@@ -157,7 +157,7 @@ class SettingsActivity : AppCompatActivity() {
                     }
                     dialog.getActionButton(DialogAction.POSITIVE).isEnabled = false
                 })
-                .onPositive { dialog, which ->
+                .onPositive { dialog, _ ->
                     // From here the input should be valid
                     var newEndpoint = dialog.inputEditText?.text?.toString() ?: return@onPositive
 
