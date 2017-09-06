@@ -242,12 +242,13 @@ class BeaconListPresenter(val view: BeaconListContract.View,
 
     fun logToWebhookIfNeeded() {
         if (prefs.isLoggingEnabled && prefs.loggingEndpoint != null &&
-                ++numberOfScansSinceLog == prefs.getLoggingFrequency()) {
+                ++numberOfScansSinceLog >= prefs.getLoggingFrequency()) {
             val beaconToLog = realm.where(BeaconSaved::class.java).greaterThan("lastSeen", prefs.lasLoggingCall).findAllAsync()
 
+            numberOfScansSinceLog = 0 // Reset the counter before we get the results
             beaconToLog.addChangeListener { results ->
                 if (results.isLoaded) {
-                    Log.d(TAG, "Result is loaded size : ${results.size} - lastLoggingCall : ${prefs.lasLoggingCall}")
+                    Log.d(TAG, "Result is loaded size : ${results.size} - lastLoggingCall : ${Date(prefs.lasLoggingCall)}")
 
                     // Execute the network request
                     prefs.lasLoggingCall = Date().time
@@ -276,7 +277,6 @@ class BeaconListPresenter(val view: BeaconListContract.View,
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe())
 
-                    numberOfScansSinceLog = 0
                     beaconToLog.removeAllChangeListeners()
                 }
             }
