@@ -15,34 +15,11 @@
     <string name="eddystone">Eddystone</string>
     <string name="altbeacon">ALTbeacon</string>
     <string name="ibeacon">iBeacon</string>
-    <string name="major">Major</string>
-    <string name="minor">Minor</string>
-    <string name="rssi">RSSI</string>
-    <string name="tx">TX</string>
-    <string name="dbm">dBm</string>
-    <string name="last_seen">Last seen</string>
-    <string name="distance">Distance</string>
     <string name="metters_abbreviation">m</string>
-    <string name="uuid">uuid </string>
-    <string name="immediate">Immediate</string>
-    <string name="near">Near</string>
-    <string name="far">Far</string>
-    <string name="unknown">Unknown</string>
-    <string name="instance_id">InstanceID</string>
-    <string name="namespace_id">NamespaceID</string>
-    <string name="uptime">Uptime</string>
+
     <string name="eddystone_uid">Eddystone-UID</string>
-    <string name="celcius_abbreviation">°C</string>
-    <string name="tlm_data">TLM data</string>
     <string name="plus_tlm"><![CDATA[&TLM]]></string>
-    <string name="url">URL</string>
     <string name="eddystone_url">Eddystone-URL</string>
-    <string name="millivolts_abbreviation">mV</string>
-    <string name="battery">Battery</string>
-    <string name="pdu_count">Pdu sent</string>
-    <string name="seconds_abbreviation">s</string>
-    <string name="temperature">Temperature</string>
-    <string name="manufacturer">Manufacturer</string>
     <string name="clear">Clear</string>
     <string name="no_scanned_beacons_yet">No scanned beacons yet!</string>
     <string name="empty_state_content">To start scanning for nearby beacons just press the scan button. You\'ll see the scan results appear here.</string>
@@ -67,8 +44,6 @@
     <string name="start_scanning_when_app_opens">Start scanning when the app opens</string>
     <string name="send_email">Send email</string>
     <string name="the_tutorial_has_been_reset">The tutorial has been reset</string>
-    <string name="made_with">Made with</string>
-    <string name="by_nicolas_bridoux">by Nicolas Bridoux</string>
     <string name="delete_all">Delete all</string>
     <string name="are_you_sure_delete_all">Are you sure you want to delete all the previous scans ?</string>
 
@@ -90,4 +65,16 @@
     <string name="negative_btn_step_2">No, thanks</string>
     <string name="prevent_sleep_while_scanning">Prevent device sleep while scanning</string>
     <string name="visit_website">Visit website</string>
+    <string name="battery_x_mv">Battery %d mV</string>
+    <string name="x_seconds">%s seconds</string>
+    <string name="x_packets_sent">%s packets sent</string>
+    <string name="temperature_x_degres">Temperature %.1f °C</string>
+    <string name="rssi_x_dbm">RSSI %d dBm</string>
+    <string name="tx_x_dbm">TX %d dBm</string>
+    <string name="major_x">Major • %s</string>
+    <string name="minor_x">Minor • %s</string>
+    <string name="namespace_id_x">NamespaceId • %s</string>
+    <string name="instance_id_x">InstanceID • %s</string>
+    <string name="uuid_x">UUID • %s</string>
+    <string name="url_x">URL • %s</string>
 </resources>

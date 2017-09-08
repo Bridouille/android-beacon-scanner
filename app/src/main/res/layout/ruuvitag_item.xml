@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:background="@color/ibeaconBackground"
     >
 
     <!-- URL -->
@@ -17,7 +16,7 @@
         app:layout_constraintTop_toTopOf="@+id/visit_website_btn"
         app:layout_constraintBottom_toBottomOf="@+id/visit_website_btn"
         app:srcCompat="@drawable/ic_public_black_24dp"
-        android:tint="@color/iconColors"
+        android:tint="@color/colorAccent"
         />
 
     <TextView
@@ -29,7 +28,6 @@
         app:layout_constraintTop_toTopOf="@+id/visit_website_btn"
         app:layout_constraintBottom_toBottomOf="@+id/visit_website_btn"
         android:layout_marginStart="8dp"
-        android:textColor="@color/cardPropertyColor"
         tools:text="http://example.com/"
         />
 
@@ -39,7 +37,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        style="@style/Widget.AppCompat.Button.Borderless"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:text="@string/visit_website"
         />
 

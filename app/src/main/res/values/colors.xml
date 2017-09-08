@@ -28,4 +28,20 @@
     <color name="colorPauseFab">#EF5350 </color>
 
     <color name="rating_background">#00BCD4</color>
+
+    <!-- Cards background colors -->
+    <color name="ibeaconBackground">#81C784</color>
+    <color name="eddystoneUidBackground">#9575CD</color>
+    <color name='eddystoneUrlBackground'>#4DB6AC</color>
+
+
+    <color name="ruuvitagBackground">#00c59c</color>
+
+    <!-- Cards text colors -->
+    <color name="cardTitleColor">@android:color/white</color>
+    <color name="cardSubtitleColor">#CCFFFFFF</color>
+    <color name="cardPropertyColor">@android:color/white</color>
+
+    <!-- Cards icon colors ffca35 -->
+    <color name="iconColors">#FFD54F</color>
 </resources>

@@ -3,9 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="@android:color/white"
+    app:cardBackgroundColor="@color/ibeaconBackground"
     app:cardCornerRadius="3dp"
     app:cardElevation="4dp"
     android:layout_marginStart="8dp"
@@ -26,43 +27,46 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:textSize="18sp"
-            android:textColor="@color/primaryText"
+            android:textSize="24sp"
+            android:textColor="@color/cardTitleColor"
             tools:text="Eddystone-UID+TLM"
             />
 
         <!-- Distance -->
         <TextView
             android:id="@+id/distance"
-            android:textSize="18sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/distance_unit"
+            android:textSize="24sp"
+            android:textColor="@color/cardTitleColor"
             tools:text="12.56"
             />
 
         <TextView
             android:id="@+id/distance_unit"
             android:text="@string/metters_abbreviation"
-            android:textSize="12sp"
-            android:gravity="bottom"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="@+id/distance"
             app:layout_constraintBottom_toBottomOf="@+id/distance"
             app:layout_constraintRight_toRightOf="parent"
+            android:textSize="12sp"
+            android:gravity="bottom"
+            android:textColor="@color/cardSubtitleColor"
             android:paddingStart="4dp"
             />
 
         <!-- Address -->
         <TextView
             android:id="@+id/address"
-            android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/beacon_type"
             app:layout_constraintLeft_toLeftOf="parent"
+            android:textSize="12sp"
+            android:textColor="@color/cardSubtitleColor"
             tools:text="A5:09:FD:B7:C3:22"
             />
 
@@ -76,7 +80,7 @@
             android:gravity="center"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:textColor="@color/primaryText"
+            android:textColor="@color/cardSubtitleColor"
             android:textSize="12sp"
             android:text="•"
             />
@@ -84,23 +88,27 @@
         <!-- Manufacturer -->
         <TextView
             android:id="@+id/manufacturer"
-            android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/beacon_type"
             app:layout_constraintLeft_toRightOf="@+id/separator"
+            android:textSize="12sp"
+            android:textColor="@color/cardSubtitleColor"
             tools:text="0X0118"
             />
 
         <!-- Last seen -->
         <TextView
             android:id="@+id/last_seen"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="end"
             app:layout_constraintTop_toBottomOf="@id/distance"
             app:layout_constraintRight_toRightOf="parent"
-            tools:text="seen 28 août 2017 22:07:38"
+            app:layout_constraintLeft_toRightOf="@+id/manufacturer"
+            android:textSize="12sp"
+            android:textColor="@color/cardSubtitleColor"
+            tools:text="08/09/2017 22:07:38"
             />
 
         <!-- Beacon specifics layout -->
@@ -152,14 +160,14 @@
             app:layout_constraintTop_toBottomOf="@+id/beacon_container"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/middle_horizontal"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             >
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_network_check_black_24dp"
-                android:tint="@color/colorAccent"
+                android:tint="@color/iconColors"
                 />
 
             <TextView
@@ -169,6 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="8dp"
+                android:textColor="@color/cardPropertyColor"
                 tools:text="RSSI -56 dBm"
                 />
         </LinearLayout>
@@ -179,17 +188,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/beacon_container"
+            app:layout_constraintTop_toTopOf="@+id/rssi_container"
             app:layout_constraintLeft_toRightOf="@+id/middle_horizontal"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="8dp"
             >
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_wifi_black_24dp"
-                android:tint="@color/colorAccent"
+                android:tint="@color/iconColors"
                 />
 
             <TextView
@@ -199,6 +207,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="8dp"
+                android:textColor="@color/cardPropertyColor"
                 tools:text="TX -66 dBm"
                 />
         </LinearLayout>
@@ -213,14 +222,14 @@
             app:layout_constraintTop_toBottomOf="@+id/rssi_container"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/middle_horizontal"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             >
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_battery_std_black_24dp"
-                android:tint="@color/colorAccent"
+                android:tint="@color/iconColors"
                 />
 
             <TextView
@@ -230,6 +239,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="8dp"
+                android:textColor="@color/cardPropertyColor"
                 tools:text="Battery 500 mV"
                 />
         </LinearLayout>
@@ -240,17 +250,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/rssi_container"
+            app:layout_constraintTop_toTopOf="@+id/battery_container"
             app:layout_constraintLeft_toRightOf="@+id/middle_horizontal"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="16dp"
             >
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_whatshot_black_24dp"
-                android:tint="@color/colorAccent"
+                android:tint="@color/iconColors"
                 />
 
             <TextView
@@ -260,6 +269,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="8dp"
+                android:textColor="@color/cardPropertyColor"
                 tools:text="Temperature 42,0 °C"
                 />
         </LinearLayout>
@@ -280,7 +290,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_access_time_black_24dp"
-                android:tint="@color/colorAccent"
+                android:tint="@color/iconColors"
                 />
 
             <TextView
@@ -290,6 +300,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="8dp"
+                android:textColor="@color/cardPropertyColor"
                 tools:text="Uptime 72k seconds"
                 />
         </LinearLayout>
@@ -300,17 +311,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/battery_container"
+            app:layout_constraintTop_toTopOf="@+id/uptime_container"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/middle_horizontal"
-            android:layout_marginTop="8dp"
             >
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_timeline_black_24dp"
-                android:tint="@color/colorAccent"
+                android:tint="@color/iconColors"
                 />
 
             <TextView
@@ -320,6 +330,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="8dp"
+                android:textColor="@color/cardPropertyColor"
                 tools:text="54k packets sent"
                 />
         </LinearLayout>

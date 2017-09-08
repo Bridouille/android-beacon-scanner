@@ -111,7 +111,6 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
         beaconsRv.setHasFixedSize(true)
         beaconsRv.layoutManager = LinearLayoutManager(this)
-        beaconsRv.addItemDecoration(DividerItemDecoration(this, null))
 
         bsBehavior = BottomSheetBehavior.from(bottomSheet)
 
@@ -157,7 +156,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     }
 
     override fun setAdapter(beaconResults: RealmResults<BeaconSaved>) {
-        beaconsRv.adapter = BeaconsRecyclerViewAdapter(beaconResults)
+        beaconsRv.adapter = BeaconsRecyclerViewAdapter(beaconResults, this)
     }
 
     override fun showEmptyView(show: Boolean) {
