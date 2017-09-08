@@ -1,9 +1,12 @@
 package com.bridou_n.beaconscanner.features.beaconList
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +15,7 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.BindViews
 import butterknife.ButterKnife
+import butterknife.OnClick
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.utils.CountHelper
@@ -54,8 +58,13 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
         @BindView(R.id.ibeacon_altbeacon_item) lateinit var iBeaconLayout: View
         @BindView(R.id.eddystone_uid_item) lateinit var eddystoneUidLayout: View
         @BindView(R.id.eddystone_url_item) lateinit var eddystoneUrlLayout: View
+        @BindView(R.id.ruuvitag_item) lateinit var ruuviTagLayout: View
+
+        protected var beaconDisplayed: BeaconSaved? = null
 
         open fun bindView(beacon: BeaconSaved) {
+            beaconDisplayed = beacon
+
             address.text = beacon.beaconAddress
             distance.text = String.format(Locale.getDefault(), "%.2f", beacon.distance)
             manufacturer.text = String.format(Locale.getDefault(), "0x%04X", beacon.manufacturer)
@@ -80,6 +89,16 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
             iBeaconLayout.visibility = View.GONE
             eddystoneUidLayout.visibility = View.GONE
             eddystoneUrlLayout.visibility = View.GONE
+            ruuviTagLayout.visibility = View.GONE
+        }
+
+        @OnClick(R.id.visit_website_btn, R.id.ruuvi_visit_website_btn)
+        fun onUrlClicked() {
+            val url = beaconDisplayed?.url
+            try {
+                val uri = Uri.parse(url)
+                ctx.startActivity(Intent(Intent.ACTION_VIEW, uri))
+            } catch (e: Exception) { }
         }
     }
 
@@ -152,6 +171,35 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
         }
     }
 
+    class RuuviTagHolder(itemView: View, ctx: Context) : BaseHolder(itemView, ctx) {
+        @BindView(R.id.ruuvi_url) lateinit var ruuviUrl: TextView
+        @BindView(R.id.ruuvi_air_pressure) lateinit var ruuviAirPressure: TextView
+        @BindView(R.id.ruuvi_temperature) lateinit var ruuviTemperature: TextView
+        @BindView(R.id.ruuvi_humidity) lateinit var ruuviHumidity: TextView
+
+        init {
+            ButterKnife.bind(this, itemView)
+        }
+
+        override fun bindView(beacon: BeaconSaved) {
+            super.bindView(beacon)
+
+            cardView.setCardBackgroundColor(ContextCompat.getColor(ctx, R.color.ruuvitagBackground))
+            hideAllLayouts()
+            ruuviTagLayout.visibility = View.VISIBLE
+
+            beaconType.text = String.format(Locale.getDefault(), "%s", itemView.context.getString(R.string.ruuvitag))
+            ruuviUrl.text = String.format(ctx.getString(R.string.url_x), beacon.url)
+
+            val ruuviData = beacon.ruuviData
+            if (ruuviData != null) {
+                ruuviAirPressure.text = String.format(ctx.getString(R.string.air_pressure_x_hpa), ruuviData.airPressure)
+                ruuviTemperature.text = String.format(ctx.getString(R.string.temperature_d_degres), ruuviData.temperatue)
+                ruuviHumidity.text = String.format(ctx.getString(R.string.humidity_x_percent), ruuviData.humidity)
+            }
+        }
+    }
+
     override fun getItemCount(): Int {
         return super.getItemCount() + 1
     }
@@ -164,7 +212,8 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
 
         when (b?.beaconType) {
             BeaconSaved.TYPE_EDDYSTONE_UID -> return R.layout.eddystone_uid_item
-            BeaconSaved.TYPE_EDDYSTONE_URL, BeaconSaved.TYPE_RUUVITAG -> return R.layout.eddystone_url_item
+            BeaconSaved.TYPE_EDDYSTONE_URL -> return R.layout.eddystone_url_item
+            BeaconSaved.TYPE_RUUVITAG -> return R.layout.ruuvitag_item
             BeaconSaved.TYPE_ALTBEACON, BeaconSaved.TYPE_IBEACON -> return R.layout.ibeacon_altbeacon_item
             else -> return R.layout.ibeacon_altbeacon_item
         }
@@ -178,6 +227,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
         when (viewType) {
             R.layout.eddystone_uid_item -> return EddystoneUidHolder(view, ctx)
             R.layout.eddystone_url_item -> return EddystoneUrlHolder(view, ctx)
+            R.layout.ruuvitag_item -> return RuuviTagHolder(view, ctx)
             R.layout.ibeacon_altbeacon_item -> return IBeaconAltBeaconHolder(view, ctx)
             else -> return BaseHolder(view, ctx)
         }

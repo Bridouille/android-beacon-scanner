@@ -141,6 +141,13 @@
                 android:id="@+id/eddystone_url_item"
                 android:visibility="gone"
                 />
+
+            <!-- RuuviTag -->
+            <include
+                layout="@layout/ruuvitag_item"
+                android:id="@+id/ruuvitag_item"
+                android:visibility="gone"
+                />
         </FrameLayout>
 
         <android.support.constraint.Guideline

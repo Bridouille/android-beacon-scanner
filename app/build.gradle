@@ -10,8 +10,8 @@ android {
         applicationId "com.bridou_n.beaconscanner"
         minSdkVersion 18
         targetSdkVersion 25
-        versionCode 9
-        versionName "1.4.2"
+        versionCode 10
+        versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -33,7 +33,7 @@ android {
 
 ext {
     supportLibraryVersion = '25.3.1'
-    firebaseVersion = '11.2.0'
+    firebaseVersion = '11.2.2'
 }
 
 dependencies {
@@ -60,7 +60,7 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.11'
 
     // RxJava & RxAndroid
-    compile 'io.reactivex.rxjava2:rxjava:2.0.8'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.2'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 

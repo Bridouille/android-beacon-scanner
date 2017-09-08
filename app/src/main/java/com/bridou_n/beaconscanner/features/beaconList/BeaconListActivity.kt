@@ -23,6 +23,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SimpleItemAnimator
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
@@ -111,6 +112,10 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
         beaconsRv.setHasFixedSize(true)
         beaconsRv.layoutManager = LinearLayoutManager(this)
+        val rvAnimator = beaconsRv.itemAnimator
+        if (rvAnimator is SimpleItemAnimator) {
+            rvAnimator.supportsChangeAnimations = false
+        }
 
         bsBehavior = BottomSheetBehavior.from(bottomSheet)
 

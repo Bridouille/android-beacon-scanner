@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    tools:background="@color/ibeaconBackground"
     >
 
     <!-- URL -->
@@ -13,32 +14,130 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/visit_website_btn"
-        app:layout_constraintBottom_toBottomOf="@+id/visit_website_btn"
+        app:layout_constraintTop_toTopOf="@+id/ruuvi_visit_website_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/ruuvi_visit_website_btn"
         app:srcCompat="@drawable/ic_public_black_24dp"
-        android:tint="@color/colorAccent"
+        android:tint="@color/iconColors"
         />
 
     <TextView
-        android:id="@+id/url"
+        android:id="@+id/ruuvi_url"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@+id/url_icon"
-        app:layout_constraintRight_toLeftOf="@+id/visit_website_btn"
-        app:layout_constraintTop_toTopOf="@+id/visit_website_btn"
-        app:layout_constraintBottom_toBottomOf="@+id/visit_website_btn"
+        app:layout_constraintRight_toLeftOf="@+id/ruuvi_visit_website_btn"
+        app:layout_constraintTop_toTopOf="@+id/ruuvi_visit_website_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/ruuvi_visit_website_btn"
         android:layout_marginStart="8dp"
+        android:textColor="@color/cardPropertyColor"
         tools:text="http://example.com/"
         />
 
     <Button
-        android:id="@+id/visit_website_btn"
+        android:id="@+id/ruuvi_visit_website_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:text="@string/visit_website"
         />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/middle_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"
+        />
+
+    <!-- Air pressure -->
+    <LinearLayout
+        android:id="@+id/ruuvi_air_pressure_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/ruuvi_visit_website_btn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/middle_horizontal"
+        android:layout_marginTop="8dp"
+        >
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_satellite_black_24dp"
+            android:tint="@color/iconColors"
+            />
+
+        <TextView
+            android:id="@+id/ruuvi_air_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/cardPropertyColor"
+            tools:text="Air pressure 722 hPa"
+            />
+    </LinearLayout>
+
+    <!-- Temperature -->
+    <LinearLayout
+        android:id="@+id/ruuvi_temperature_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="@+id/ruuvi_air_pressure_container"
+        app:layout_constraintLeft_toRightOf="@id/middle_horizontal"
+        app:layout_constraintRight_toRightOf="parent"
+        >
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_wb_sunny_black_24dp"
+            android:tint="@color/iconColors"
+            />
+
+        <TextView
+            android:id="@+id/ruuvi_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/cardPropertyColor"
+            tools:text="Temperature 43.5 °C"
+            />
+    </LinearLayout>
+
+    <!-- Humidity -->
+    <LinearLayout
+        android:id="@+id/ruuvi_humidity_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/ruuvi_air_pressure_container"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/middle_horizontal"
+        android:layout_marginTop="8dp"
+        >
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_grain_black_24dp"
+            android:tint="@color/iconColors"
+            />
+
+        <TextView
+            android:id="@+id/ruuvi_humidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/cardPropertyColor"
+            tools:text="Humidity 66%"
+            />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

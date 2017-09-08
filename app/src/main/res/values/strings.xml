@@ -73,8 +73,12 @@
     <string name="tx_x_dbm">TX %d dBm</string>
     <string name="major_x">Major • %s</string>
     <string name="minor_x">Minor • %s</string>
-    <string name="namespace_id_x">NamespaceId • %s</string>
+    <string name="namespace_id_x">NamespaceID • %s</string>
     <string name="instance_id_x">InstanceID • %s</string>
     <string name="uuid_x">UUID • %s</string>
     <string name="url_x">URL • %s</string>
+    <string name="ruuvitag">RuuviTag</string>
+    <string name="air_pressure_x_hpa">Air pressure %d hPa</string>
+    <string name="temperature_d_degres">Temperature %d °C</string>
+    <string name="humidity_x_percent">Humidity %d %%</string>
 </resources>
