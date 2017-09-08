@@ -42,9 +42,9 @@
             android:paddingEnd="@dimen/keyline_16"
             android:gravity="center_vertical"
             android:elevation="@dimen/keyline_4"
+            android:textColor="@color/bluetoothStateTextcolor"
             tools:text="Bluetooth disabled"
-            tools:background="@color/bluetoothDisabledLight"
-            tools:textColor="@color/bluetoothDisabled"
+            tools:background="@color/bluetoothDisabled"
             tools:visibility="gone"
             />
 

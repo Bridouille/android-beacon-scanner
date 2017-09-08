@@ -13,14 +13,10 @@
     <color name="secondaryTextDisabled">#80757575</color>
 
     <!-- Bluetooth State colors -->
+    <color name="bluetoothStateTextcolor">#CCFFFFFF</color>
     <color name="bluetoothDisabled">#F44336</color>
-    <color name="bluetoothDisabledLight">#FFCDD2</color>
-
     <color name="bluetoothTurningOff">#FF9800</color>
-    <color name="bluetoothTurningOffLight">#FFE0B2</color>
-
     <color name="bluetoothTurningOn">#8BC34A</color>
-    <color name="bluetoothTurningOnLight">#DCEDC8</color>
 
 
     <color name="bgMoreInfo">#455A64</color>

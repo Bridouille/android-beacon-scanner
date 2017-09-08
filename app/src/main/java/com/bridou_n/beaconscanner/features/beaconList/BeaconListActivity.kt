@@ -4,8 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
-import android.graphics.drawable.AnimatedVectorDrawable
-import android.media.Rating
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -43,14 +41,12 @@ import com.bridou_n.beaconscanner.events.RxBus
 import com.bridou_n.beaconscanner.features.settings.SettingsActivity
 import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.utils.BluetoothManager
-import com.bridou_n.beaconscanner.utils.DividerItemDecoration
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
 import com.bridou_n.beaconscanner.utils.RatingHelper
 import com.bridou_n.beaconscanner.utils.extensionFunctions.component
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.crash.FirebaseCrash
 import io.realm.Realm
 import io.realm.RealmResults
 import org.altbeacon.beacon.BeaconConsumer
@@ -66,11 +62,11 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         val RC_SETTINGS_SCREEN = 2
     }
 
-    enum class BluetoothState(val textColor: Int, val bgColor: Int, val text: Int) {
-        STATE_OFF(R.color.bluetoothDisabledLight, R.color.bluetoothDisabled, R.string.bluetooth_disabled),
-        STATE_TURNING_OFF(R.color.bluetoothTurningOffLight, R.color.bluetoothTurningOff, R.string.turning_bluetooth_off),
-        STATE_ON(R.color.bluetoothTurningOnLight, R.color.bluetoothTurningOn, R.string.bluetooth_enabled),
-        STATE_TURNING_ON(R.color.bluetoothTurningOnLight, R.color.bluetoothTurningOn, R.string.turning_bluetooth_on)
+    enum class BluetoothState(val bgColor: Int, val text: Int) {
+        STATE_OFF(R.color.bluetoothDisabled, R.string.bluetooth_disabled),
+        STATE_TURNING_OFF(R.color.bluetoothTurningOff, R.string.turning_bluetooth_off),
+        STATE_ON(R.color.bluetoothTurningOn, R.string.bluetooth_enabled),
+        STATE_TURNING_ON(R.color.bluetoothTurningOn, R.string.turning_bluetooth_on)
     }
 
     @Inject lateinit var bluetoothState: BluetoothManager
@@ -171,7 +167,6 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
     override fun updateBluetoothState(state: BluetoothState, isEnabled: Boolean) {
         bluetoothStateTv.visibility = View.VISIBLE
-        bluetoothStateTv.setTextColor(ContextCompat.getColor(this, state.textColor))
         bluetoothStateTv.setBackgroundColor(ContextCompat.getColor(this, state.bgColor))
         bluetoothStateTv.text = getString(state.text)
 
