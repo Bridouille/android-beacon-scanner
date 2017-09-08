@@ -5,8 +5,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import butterknife.BindView
+import butterknife.BindViews
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.bridou_n.beaconscanner.R
@@ -28,46 +30,31 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
         private val TAG = "BEACONS_RV_ADAPTER"
     }
 
-    private var expandedPosition = -1
-
-    open class BaseHolder(itemView: View, internal var adapter: BeaconsRecyclerViewAdapter) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.more_info) lateinit var moreInfo: View
+    open class BaseHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @BindView(R.id.beacon_type) lateinit var beaconType: TextView
         @BindView(R.id.address) lateinit var address: TextView
-        @BindView(R.id.distance) lateinit var distance: TextView
-        @BindView(R.id.distance_qualifier) lateinit var distanceQualifier: TextView
-        @BindView(R.id.rssi) lateinit var rssi: TextView
-        @BindView(R.id.tx) lateinit var tx: TextView
         @BindView(R.id.manufacturer) lateinit var manufacturer: TextView
-        @BindView(R.id.tlm_data) lateinit var tlmData: ConstraintLayout
-        @BindView(R.id.battery) lateinit var battery: TextView
-        @BindView(R.id.ticks) lateinit var pduCount: TextView
-        @BindView(R.id.uptime) lateinit var uptime: TextView
-        @BindView(R.id.temperature) lateinit var temperature: TextView
+
+        @BindView(R.id.distance) lateinit var distance: TextView
         @BindView(R.id.last_seen) lateinit var lastSeen: TextView
 
-        @OnClick(R.id.beacon_container)
-        fun expandCollapseInfo() {
+        @BindView(R.id.rssi) lateinit var rssi: TextView
+        @BindView(R.id.tx) lateinit var tx: TextView
 
-            // Check for an expanded view, collapse if you find one
-            if (adapter.expandedPosition >= 0) {
-                adapter.notifyItemChanged(adapter.expandedPosition)
-            }
+        @BindViews(R.id.battery_container, R.id.temperature_container, R.id.uptime_container, R.id.pdu_sent_container) lateinit var tlmData: List<@JvmSuppressWildcards LinearLayout>
+        @BindView(R.id.battery) lateinit var battery: TextView
+        @BindView(R.id.temperature) lateinit var temperature: TextView
+        @BindView(R.id.uptime) lateinit var uptime: TextView
+        @BindView(R.id.pdu_sent) lateinit var pduSent: TextView
 
-            if (adapter.expandedPosition == adapterPosition) {
-                adapter.notifyItemChanged(adapter.expandedPosition)
-                adapter.expandedPosition = -1
-            } else {
-                // Set the current position to "expanded"
-                adapter.expandedPosition = adapterPosition
-                adapter.notifyItemChanged(adapterPosition)
-            }
-        }
+        // Included layouts
+        @BindView(R.id.ibeacon_altbeacon_item) lateinit var iBeaconLayout: View
+        @BindView(R.id.eddystone_uid_item) lateinit var eddystoneUidLayout: View
+        @BindView(R.id.eddystone_url_item) lateinit var eddystoneUrlLayout: View
 
         open fun bindView(beacon: BeaconSaved) {
             address.text = beacon.beaconAddress
             distance.text = String.format(Locale.getDefault(), "%.2f", beacon.distance)
-            distanceQualifier.text = getDistanceQualifier(beacon.distance)
             rssi.text = String.format(Locale.getDefault(), "%d", beacon.rssi)
             tx.text = String.format(Locale.getDefault(), "%d", beacon.txPower)
             manufacturer.text = String.format(Locale.getDefault(), "0x%04X", beacon.manufacturer)
@@ -75,34 +62,24 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
 
             val telemetry = beacon.telemetryData
             if (telemetry != null) {
-                tlmData.visibility = View.VISIBLE
+                tlmData.forEach { it.visibility = View.VISIBLE }
                 battery.text = String.format(Locale.getDefault(), "%d", telemetry.batteryMilliVolts)
-                pduCount.text = CountHelper.coolFormat(telemetry.pduCount.toDouble(), 0)
+                pduSent.text = CountHelper.coolFormat(telemetry.pduCount.toDouble(), 0)
                 uptime.text = CountHelper.coolFormat(telemetry.uptime.toDouble(), 0)
                 temperature.text = String.format(Locale.getDefault(), "%.1f", telemetry.temperature)
             } else {
-                tlmData.visibility = View.GONE
+                tlmData.forEach { it.visibility = View.GONE }
             }
         }
 
-        fun setExpanded(state: Boolean) {
-            moreInfo.visibility = if (state) View.VISIBLE else View.GONE
-        }
-
-        private fun getDistanceQualifier(distance: Double): String {
-            if (distance < 0.5) {
-                return itemView.context.getString(R.string.immediate)
-            } else if (distance < 5) {
-                return itemView.context.getString(R.string.near)
-            } else if (distance < 20) {
-                return itemView.context.getString(R.string.far)
-            } else {
-                return itemView.context.getString(R.string.unknown)
-            }
+        fun hideAllLayouts() {
+            iBeaconLayout.visibility = View.GONE
+            eddystoneUidLayout.visibility = View.GONE
+            eddystoneUrlLayout.visibility = View.GONE
         }
     }
 
-    class EddystoneUidHolder(itemView: View, adapter: BeaconsRecyclerViewAdapter) : BaseHolder(itemView, adapter) {
+    class EddystoneUidHolder(itemView: View) : BaseHolder(itemView) {
         @BindView(R.id.namespace_id) lateinit var namespaceId: TextView
         @BindView(R.id.instance_id) lateinit var instanceId: TextView
 
@@ -112,6 +89,10 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
 
         override fun bindView(beacon: BeaconSaved) {
             super.bindView(beacon)
+
+            hideAllLayouts()
+            eddystoneUidLayout.visibility = View.VISIBLE
+
             beaconType.text = String.format(Locale.getDefault(), "%s%s",
                     itemView.context.getString(R.string.eddystone_uid),
                     if (beacon.telemetryData != null) itemView.context.getString(R.string.plus_tlm) else "")
@@ -120,7 +101,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
         }
     }
 
-    class EddystoneUrlHolder(itemView: View, adapter: BeaconsRecyclerViewAdapter) : BaseHolder(itemView, adapter) {
+    class EddystoneUrlHolder(itemView: View) : BaseHolder(itemView) {
         @BindView(R.id.url) lateinit var url: TextView
 
         init {
@@ -129,6 +110,10 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
 
         override fun bindView(beacon: BeaconSaved) {
             super.bindView(beacon)
+
+            hideAllLayouts()
+            eddystoneUrlLayout.visibility = View.VISIBLE
+
             beaconType.text = String.format(Locale.getDefault(), "%s%s",
                     itemView.context.getString(R.string.eddystone_url),
                     if (beacon.telemetryData != null) itemView.context.getString(R.string.plus_tlm) else "")
@@ -137,7 +122,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
         }
     }
 
-    class IBeaconAltBeaconHolder(itemView: View, adapter: BeaconsRecyclerViewAdapter) : BaseHolder(itemView, adapter) {
+    class IBeaconAltBeaconHolder(itemView: View) : BaseHolder(itemView) {
         @BindView(R.id.proximity_uuid) lateinit var proximityUUID: TextView
         @BindView(R.id.major) lateinit var major: TextView
         @BindView(R.id.minor) lateinit var minor: TextView
@@ -148,6 +133,10 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
 
         override fun bindView(beacon: BeaconSaved) {
             super.bindView(beacon)
+
+            hideAllLayouts()
+            iBeaconLayout.visibility = View.VISIBLE
+
             beaconType.text = String.format(Locale.getDefault(), "%s",
                     if (beacon.beaconType == BeaconSaved.TYPE_IBEACON) itemView.context.getString(R.string.ibeacon)
                     else itemView.context.getString(R.string.altbeacon))
@@ -176,13 +165,15 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder {
-        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
+        // The actual layout file to inflate
+        val layout = if (viewType == R.layout.footer_item) viewType else R.layout.beacon_item
+        val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
 
         when (viewType) {
-            R.layout.eddystone_uid_item -> return EddystoneUidHolder(view, this)
-            R.layout.eddystone_url_item -> return EddystoneUrlHolder(view, this)
-            R.layout.ibeacon_altbeacon_item -> return IBeaconAltBeaconHolder(view, this)
-            else -> return BaseHolder(view, this)
+            R.layout.eddystone_uid_item -> return EddystoneUidHolder(view)
+            R.layout.eddystone_url_item -> return EddystoneUrlHolder(view)
+            R.layout.ibeacon_altbeacon_item -> return IBeaconAltBeaconHolder(view)
+            else -> return BaseHolder(view)
         }
     }
 
@@ -192,7 +183,6 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>) :
 
             if (beacon != null) {
                 holder.bindView(beacon)
-                holder.setExpanded(expandedPosition == position)
             }
         }
     }

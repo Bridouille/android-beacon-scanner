@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="4dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="8dp"
+    >
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        >
+
+        <!-- Type -->
+        <TextView
+            android:id="@+id/beacon_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:textSize="18sp"
+            android:textColor="@color/primaryText"
+            tools:text="Eddystone-UID+TLM"
+            />
+
+        <!-- Distance -->
+        <TextView
+            android:id="@+id/distance"
+            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/distance_unit"
+            tools:text="12.56"
+            />
+
+        <TextView
+            android:id="@+id/distance_unit"
+            android:text="@string/metters_abbreviation"
+            android:textSize="12sp"
+            android:gravity="bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/distance"
+            app:layout_constraintBottom_toBottomOf="@+id/distance"
+            app:layout_constraintRight_toRightOf="parent"
+            android:paddingStart="4dp"
+            />
+
+        <!-- Address -->
+        <TextView
+            android:id="@+id/address"
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/beacon_type"
+            app:layout_constraintLeft_toLeftOf="parent"
+            tools:text="A5:09:FD:B7:C3:22"
+            />
+
+        <TextView
+            android:id="@+id/separator"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toRightOf="@+id/address"
+            app:layout_constraintTop_toTopOf="@+id/address"
+            app:layout_constraintBottom_toBottomOf="@+id/address"
+            android:gravity="center"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textColor="@color/primaryText"
+            android:textSize="12sp"
+            android:text="•"
+            />
+
+        <!-- Manufacturer -->
+        <TextView
+            android:id="@+id/manufacturer"
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/beacon_type"
+            app:layout_constraintLeft_toRightOf="@+id/separator"
+            tools:text="0X0118"
+            />
+
+        <!-- Last seen -->
+        <TextView
+            android:id="@+id/last_seen"
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/distance"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="seen 28 août 2017 22:07:38"
+            />
+
+        <!-- Beacon specifics layout -->
+        <FrameLayout
+            android:id="@+id/beacon_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/address"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="8dp"
+            >
+
+            <!-- IBeaon + AltBeacon -->
+            <include
+                layout="@layout/ibeacon_altbeacon_item"
+                android:id="@+id/ibeacon_altbeacon_item"
+                android:visibility="gone"
+                />
+
+            <!-- Eddystone UID -->
+            <include
+                layout="@layout/eddystone_uid_item"
+                android:id="@+id/eddystone_uid_item"
+                android:visibility="visible"
+                />
+
+            <!-- Eddystone URL -->
+            <include
+                layout="@layout/eddystone_url_item"
+                android:id="@+id/eddystone_url_item"
+                android:visibility="gone"
+                />
+        </FrameLayout>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/middle_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"
+            />
+
+        <!-- RSSI -->
+        <LinearLayout
+            android:id="@+id/rssi_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/beacon_container"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/middle_horizontal"
+            android:layout_marginTop="8dp"
+            >
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_network_check_black_24dp"
+                android:tint="@color/colorAccent"
+                />
+
+            <TextView
+                android:id="@+id/rssi"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                tools:text="RSSI -56 dBm"
+                />
+        </LinearLayout>
+
+        <!-- TX -->
+        <LinearLayout
+            android:id="@+id/tx_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/beacon_container"
+            app:layout_constraintLeft_toRightOf="@+id/middle_horizontal"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            >
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_wifi_black_24dp"
+                android:tint="@color/colorAccent"
+                />
+
+            <TextView
+                android:id="@+id/tx"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                tools:text="TX -66 dBm"
+                />
+        </LinearLayout>
+
+        <!-- TLM DATA -->
+        <!-- Battery -->
+        <LinearLayout
+            android:id="@+id/battery_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/rssi_container"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/middle_horizontal"
+            android:layout_marginTop="16dp"
+            >
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_battery_std_black_24dp"
+                android:tint="@color/colorAccent"
+                />
+
+            <TextView
+                android:id="@+id/battery"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                tools:text="Battery 500 mV"
+                />
+        </LinearLayout>
+
+        <!-- Temperature -->
+        <LinearLayout
+            android:id="@+id/temperature_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/rssi_container"
+            app:layout_constraintLeft_toRightOf="@+id/middle_horizontal"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="16dp"
+            >
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_whatshot_black_24dp"
+                android:tint="@color/colorAccent"
+                />
+
+            <TextView
+                android:id="@+id/temperature"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                tools:text="Temperature 42,0 °C"
+                />
+        </LinearLayout>
+
+        <!-- Uptime -->
+        <LinearLayout
+            android:id="@+id/uptime_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/battery_container"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/middle_horizontal"
+            android:layout_marginTop="8dp"
+            >
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_access_time_black_24dp"
+                android:tint="@color/colorAccent"
+                />
+
+            <TextView
+                android:id="@+id/uptime"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                tools:text="Uptime 72k seconds"
+                />
+        </LinearLayout>
+
+        <!-- Pdu sent -->
+        <LinearLayout
+            android:id="@+id/pdu_sent_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/battery_container"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/middle_horizontal"
+            android:layout_marginTop="8dp"
+            >
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_timeline_black_24dp"
+                android:tint="@color/colorAccent"
+                />
+
+            <TextView
+                android:id="@+id/pdu_sent"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                tools:text="54k packets sent"
+                />
+        </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

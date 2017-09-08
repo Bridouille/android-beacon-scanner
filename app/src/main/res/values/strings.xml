@@ -89,4 +89,5 @@
     <string name="positive_btn_step_2">Ok, sure</string>
     <string name="negative_btn_step_2">No, thanks</string>
     <string name="prevent_sleep_while_scanning">Prevent device sleep while scanning</string>
+    <string name="visit_website">Visit website</string>
 </resources>

@@ -1,138 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/beacon_container"
-    android:orientation="vertical"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:background="?selectableItemBackground"
-    android:clipToPadding="false"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    >
 
-    <android.support.constraint.ConstraintLayout
-        android:background="@android:color/white"
-        android:elevation="6dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <!-- Namespace ID -->
+    <ImageView
+        android:id="@+id/namespace_id_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_bookmark_border_black_24dp"
+        android:tint="@color/colorAccent"
+        />
 
-        <!-- Distance & distance qualifier -->
-        <TextView
-            android:text="@string/distance"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:id="@+id/textView" />
+    <TextView
+        android:id="@+id/namespace_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/namespace_id_icon"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp"
+        tools:text="Namesapace ID • 0001020304050607080902"
+        />
 
-        <TextView
-            android:id="@+id/distance"
-            tools:text="12.56"
-            android:textStyle="bold"
-            android:textSize="22sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toLeftOf="parent" />
+    <!-- Instance ID -->
+    <ImageView
+        android:id="@+id/instance_id_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/namespace_id_icon"
+        app:srcCompat="@drawable/ic_bookmark_border_black_24dp"
+        android:tint="@color/colorAccent"
+        />
 
-        <TextView
-            android:text="@string/metters_abbreviation"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toRightOf="@+id/distance"
-            app:layout_constraintBottom_toBottomOf="@+id/distance"
-            android:id="@+id/textView3"
-            android:layout_marginStart="4dp" />
-
-        <TextView
-            android:id="@+id/distance_qualifier"
-            tools:text="Near"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/distance"
-            android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Type and address -->
-        <TextView
-            android:id="@+id/beacon_type"
-            tools:text="ALTbeacon"
-            android:textSize="14sp"
-            android:textColor="@color/colorPrimary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toRightOf="@+id/textView3"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/address"
-            tools:text="A5:09:FD:B7:C3:22"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- NamespaceID -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="12sp"
-            android:text="@string/namespace_id"
-            android:id="@+id/textView6"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/beacon_type"
-            app:layout_constraintLeft_toLeftOf="@+id/beacon_type" />
-        <TextView
-            android:id="@+id/namespace_id"
-            tools:text="0001020304050607080902"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintLeft_toRightOf="@+id/textView6"
-            app:layout_constraintTop_toTopOf="@+id/textView6"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintRight_toRightOf="parent" />
-
-        <!-- InstanceID -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="12sp"
-            android:text="@string/instance_id"
-            app:layout_constraintLeft_toLeftOf="@+id/beacon_type"
-            app:layout_constraintTop_toBottomOf="@+id/namespace_id"
-            android:id="@+id/textView7"
-            android:layout_marginTop="8dp" />
-        <TextView
-            android:id="@+id/instance_id"
-            tools:text="aabbccddeeff"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toRightOf="@+id/textView7"
-            app:layout_constraintTop_toTopOf="@+id/textView7"
-            android:layout_marginStart="8dp" />
-    </android.support.constraint.ConstraintLayout>
-
-    <include layout="@layout/beacon_more_info" android:id="@+id/more_info" />
-</LinearLayout>
+    <TextView
+        android:id="@+id/instance_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/namespace_id_icon"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/namespace_id_icon"
+        android:layout_marginStart="8dp"
+        tools:text="Instance ID • aabbccddeeff"
+        />
+</android.support.constraint.ConstraintLayout>

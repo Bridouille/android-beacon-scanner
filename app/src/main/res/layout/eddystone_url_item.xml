@@ -1,122 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/beacon_container"
-    android:clickable="true"
-    android:background="?selectableItemBackground"
-    android:clipToPadding="false"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
 
-    <android.support.constraint.ConstraintLayout
-        android:background="@android:color/white"
-        android:elevation="6dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <!-- URL -->
+    <ImageView
+        android:id="@+id/url_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_bookmark_border_black_24dp"
+        android:tint="@color/colorAccent"
+        />
 
-        <!-- Distance & distance qualifier -->
-        <TextView
-            android:text="@string/distance"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:id="@+id/textView" />
+    <TextView
+        android:id="@+id/url"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/url_icon"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp"
+        tools:text="http://example.com/test"
+        />
 
-        <TextView
-            android:id="@+id/distance"
-            tools:text="12.56"
-            android:textStyle="bold"
-            android:textSize="22sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toLeftOf="parent" />
+    <Button
+        android:id="@+id/visit_website_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/url"
+        app:layout_constraintLeft_toLeftOf="parent"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:text="@string/visit_website"
+        />
 
-        <TextView
-            android:text="@string/metters_abbreviation"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toRightOf="@+id/distance"
-            app:layout_constraintBottom_toBottomOf="@+id/distance"
-            android:id="@+id/textView3"
-            android:layout_marginStart="4dp" />
-
-        <TextView
-            android:id="@+id/distance_qualifier"
-            tools:text="Near"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/distance"
-            android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Type and address -->
-        <TextView
-            android:id="@+id/beacon_type"
-            tools:text="ALTbeacon"
-            android:textSize="14sp"
-            android:textColor="@color/colorPrimary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toRightOf="@+id/textView3"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/address"
-            tools:text="A5:09:FD:B7:C3:22"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- URL -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="14sp"
-            android:text="@string/url"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/beacon_type"
-            app:layout_constraintLeft_toLeftOf="@+id/beacon_type"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="16dp"
-            android:id="@+id/textView8" />
-
-        <TextView
-            android:id="@+id/url"
-            tools:text="http://example.com/oklmzer"
-            android:textSize="22sp"
-            android:autoLink="web"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintLeft_toRightOf="@+id/textView8"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/beacon_type"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintRight_toRightOf="parent" />
-    </android.support.constraint.ConstraintLayout>
-
-    <include layout="@layout/beacon_more_info" android:id="@+id/more_info" />
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
