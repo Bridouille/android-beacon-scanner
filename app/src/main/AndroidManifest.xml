@@ -28,7 +28,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".features.settings.SettingsActivity"/>
+        <activity
+            android:name=".features.settings.SettingsActivity"
+            android:theme="@style/AppThemeNoActionBar"
+            />
     </application>
 
 </manifest>

@@ -1,356 +1,374 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.bridou_n.beaconscanner.features.settings.SettingsActivity">
 
-    <LinearLayout
+    <!-- Toolbar -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="?actionBarSize"
+        android:background="@color/toolbarColor"
+        android:elevation="4dp"
+        app:titleTextColor="@color/toolbarTextColor"
+        app:theme="@style/Widget.MyApp.Toolbar.Solid"
+        />
 
-        <!-- Scanner title-->
-        <TextView
-            android:text="@string/scanner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:paddingTop="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/colorAccent"/>
+    <ScrollView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <!-- Scan on open toggle -->
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/scan_open"
-            android:text="@string/start_scanning_when_app_opens"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:background="@color/divider" />
-
-        <!-- Scan delay -->
         <LinearLayout
-            android:id="@+id/scan_delay_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:clickable="true"
-            android:background="?attr/selectableItemBackground">
+            android:orientation="vertical">
 
+            <!-- Scanner title-->
             <TextView
-                android:text="@string/delay_in_between_each_scan"
+                android:text="@string/scanner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:textColor="@color/primaryText" />
+                android:textStyle="bold"
+                android:paddingTop="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="@color/colorAccent"/>
 
+            <!-- Scan on open toggle -->
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/scan_open"
+                android:text="@string/start_scanning_when_app_opens"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/divider" />
+
+            <!-- Scan delay -->
+            <LinearLayout
+                android:id="@+id/scan_delay_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:text="@string/delay_in_between_each_scan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/primaryText" />
+
+                <TextView
+                    android:id="@+id/scan_delay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/secondaryText"
+                    tools:text="5 seconds"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/divider" />
+
+            <!-- "Prevent sleep" while scanning -->
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/prevent_sleep"
+                android:text="@string/prevent_sleep_while_scanning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"/>
+
+            <!-- Logging title-->
             <TextView
-                android:id="@+id/scan_delay"
+                android:text="@string/logging"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:textColor="@color/secondaryText"
-                tools:text="5 seconds"
-                />
-        </LinearLayout>
+                android:textStyle="bold"
+                android:paddingTop="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="@color/colorAccent"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:background="@color/divider" />
-
-        <!-- "Prevent sleep" while scanning -->
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/prevent_sleep"
-            android:text="@string/prevent_sleep_while_scanning"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"/>
-
-        <!-- Logging title-->
-        <TextView
-            android:text="@string/logging"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:paddingTop="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/colorAccent"/>
-
-        <!-- Logging toggle -->
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/logging_enabled"
-            android:text="@string/enable_logging"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"/>
-
-        <!-- Logging description -->
-        <TextView
-            android:id="@+id/logging_description"
-            android:text="@string/logging_description"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/secondaryText" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:background="@color/divider" />
-
-        <!-- Logging endpoint -->
-        <LinearLayout
-            android:id="@+id/logging_endpoint_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:clickable="true"
-            android:background="?attr/selectableItemBackground">
-
-            <TextView
-                android:id="@+id/logging_endpoint_title"
-                android:text="@string/logging_endpoint"
-                android:layout_width="wrap_content"
+            <!-- Logging toggle -->
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/logging_enabled"
+                android:text="@string/enable_logging"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/primaryText" />
+                android:padding="16dp"/>
 
+            <!-- Logging description -->
             <TextView
-                android:id="@+id/logging_endpoint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/secondaryText"
-                tools:text="http://example.com/logging"
-                />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:background="@color/divider" />
-
-        <!-- Device name -->
-        <LinearLayout
-            android:id="@+id/device_name_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:clickable="true"
-            android:background="?attr/selectableItemBackground">
-
-            <TextView
-                android:id="@+id/device_name_title"
-                android:text="@string/device_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/primaryText" />
-
-            <TextView
-                android:id="@+id/device_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/secondaryText"
-                tools:text="Red beacon"
-                />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:background="@color/divider" />
-
-        <!-- Logging frequency -->
-        <LinearLayout
-            android:id="@+id/logging_frequency_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:clickable="true"
-            android:background="?attr/selectableItemBackground">
-
-            <TextView
-                android:id="@+id/logging_frequency_title"
-                android:text="@string/logging_frequency"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/primaryText" />
-
-            <TextView
-                android:id="@+id/logging_frequency"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/secondaryText"
-                tools:text="Every scan"
-                />
-        </LinearLayout>
-
-        <!-- Feedback and Rating title-->
-        <TextView
-            android:text="@string/feedback"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:paddingTop="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/colorAccent"/>
-
-        <!-- Rate the app -->
-        <LinearLayout
-            android:id="@+id/rate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:clickable="true"
-            android:background="?attr/selectableItemBackground">
-
-            <TextView
-                android:text="@string/rate_the_app"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/primaryText" />
-
-            <TextView
-                android:text="@string/enjoying_the_app_let_us_know"
-                android:layout_width="wrap_content"
+                android:id="@+id/logging_description"
+                android:text="@string/logging_description"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textColor="@color/secondaryText" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/divider" />
+
+            <!-- Logging endpoint -->
+            <LinearLayout
+                android:id="@+id/logging_endpoint_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/logging_endpoint_title"
+                    android:text="@string/logging_endpoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/primaryText" />
+
+                <TextView
+                    android:id="@+id/logging_endpoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/secondaryText"
+                    tools:text="http://example.com/logging"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/divider" />
+
+            <!-- Device name -->
+            <LinearLayout
+                android:id="@+id/device_name_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/device_name_title"
+                    android:text="@string/device_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/primaryText" />
+
+                <TextView
+                    android:id="@+id/device_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/secondaryText"
+                    tools:text="Red beacon"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/divider" />
+
+            <!-- Logging frequency -->
+            <LinearLayout
+                android:id="@+id/logging_frequency_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/logging_frequency_title"
+                    android:text="@string/logging_frequency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/primaryText" />
+
+                <TextView
+                    android:id="@+id/logging_frequency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/secondaryText"
+                    tools:text="Every scan"
+                    />
+            </LinearLayout>
+
+            <!-- Feedback and Rating title-->
+            <TextView
+                android:text="@string/feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingTop="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="@color/colorAccent"/>
+
+            <!-- Rate the app -->
+            <LinearLayout
+                android:id="@+id/rate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:text="@string/rate_the_app"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/primaryText" />
+
+                <TextView
+                    android:text="@string/enjoying_the_app_let_us_know"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/secondaryText" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/divider" />
+
+            <!-- Feature request -->
+            <LinearLayout
+                android:id="@+id/feature_request"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground">
+                <TextView
+                    android:text="@string/feature_request"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/primaryText" />
+
+                <TextView
+                    android:text="@string/ask_for_a_feature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/secondaryText" />
+            </LinearLayout>
+
+            <!-- Tutorial Title -->
+            <TextView
+                android:text="@string/tutorial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="16dp"
+                android:textColor="@color/colorAccent" />
+
+            <!-- Activate tutorial -->
+            <LinearLayout
+                android:id="@+id/tutorial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground">
+                <TextView
+                    android:text="@string/activate_tutorial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/primaryText" />
+
+                <TextView
+                    android:text="@string/need_some_hints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/secondaryText" />
+            </LinearLayout>
+
+            <!-- About Title -->
+            <TextView
+                android:text="@string/about"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="16dp"
+                android:textColor="@color/colorAccent"/>
+
+            <!-- Version of the app -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:text="@string/version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/primaryText" />
+
+                <TextView
+                    android:id="@+id/version"
+                    tools:text="1.0.4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/secondaryText" />
+            </LinearLayout>
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:background="@color/divider" />
-
-        <!-- Feature request -->
-        <LinearLayout
-            android:id="@+id/feature_request"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:clickable="true"
-            android:background="?attr/selectableItemBackground">
-            <TextView
-                android:text="@string/feature_request"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/primaryText" />
-
-            <TextView
-                android:text="@string/ask_for_a_feature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/secondaryText" />
-        </LinearLayout>
-
-        <!-- Tutorial Title -->
-        <TextView
-            android:text="@string/tutorial"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="16dp"
-            android:textColor="@color/colorAccent" />
-
-        <!-- Activate tutorial -->
-        <LinearLayout
-            android:id="@+id/tutorial"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:clickable="true"
-            android:background="?attr/selectableItemBackground">
-            <TextView
-                android:text="@string/activate_tutorial"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/primaryText" />
-
-            <TextView
-                android:text="@string/need_some_hints"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/secondaryText" />
-        </LinearLayout>
-
-        <!-- About Title -->
-        <TextView
-            android:text="@string/about"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="16dp"
-            android:textColor="@color/colorAccent"/>
-
-        <!-- Version of the app -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:clickable="true"
-            android:orientation="vertical"
-            android:background="?attr/selectableItemBackground">
-
-            <TextView
-                android:text="@string/version"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/primaryText" />
-
-            <TextView
-                android:id="@+id/version"
-                tools:text="1.0.4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/secondaryText" />
-        </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

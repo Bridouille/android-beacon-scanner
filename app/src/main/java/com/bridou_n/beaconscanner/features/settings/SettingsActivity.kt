@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SwitchCompat
+import android.support.v7.widget.Toolbar
 import android.text.InputType
 import android.util.Log
 import android.util.Patterns
@@ -35,6 +36,7 @@ class SettingsActivity : AppCompatActivity() {
     @Inject lateinit var prefs: PreferencesHelper
     @Inject lateinit var tracker: FirebaseAnalytics
 
+    @BindView(R.id.toolbar) lateinit var toolbar: Toolbar
     @BindView(R.id.content) lateinit var content: ScrollView
     @BindView(R.id.scan_open) lateinit var scanOpen: SwitchCompat
     @BindView(R.id.scan_delay) lateinit var scanDelay: TextView
@@ -60,6 +62,7 @@ class SettingsActivity : AppCompatActivity() {
         ButterKnife.bind(this)
         component().inject(this)
 
+        setSupportActionBar(toolbar)
         supportActionBar?.title = getString(R.string.settings)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

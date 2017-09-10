@@ -103,8 +103,6 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
         setSupportActionBar(toolbar)
         toolbar.inflateMenu(R.menu.main_menu)
-        progressOne.indeterminateDrawable.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimaryLight), PorterDuff.Mode.SRC_IN)
-        progressTwo.indeterminateDrawable.setColorFilter(ContextCompat.getColor(this, R.color.progressColor), PorterDuff.Mode.SRC_IN)
 
         beaconsRv.setHasFixedSize(true)
         beaconsRv.layoutManager = LinearLayoutManager(this)

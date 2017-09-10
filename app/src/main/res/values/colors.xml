@@ -9,6 +9,10 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#E0E0E0</color>
 
+    <color name="statusBarColor">#F5F5F5</color>
+    <color name="toolbarColor">#FFFFFF</color>
+    <color name="toolbarTextColor">#424242</color>
+
     <color name="primaryTextDisabled">#80212121</color>
     <color name="secondaryTextDisabled">#80757575</color>
 

@@ -16,10 +16,11 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/toolbarColor"
             android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            app:titleTextColor="@color/toolbarTextColor"
+            app:theme="@style/Widget.MyApp.Toolbar.Solid"
+            >
 
             <ProgressBar
                 android:id="@+id/progress_1"
