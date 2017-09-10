@@ -30,13 +30,10 @@
     <color name="rating_background">#00BCD4</color>
 
     <!-- Cards background colors -->
-    <color name="ibeaconBackground">#81C784</color>
-    <color name="eddystoneUidBackground">#9575CD</color>
+    <color name="ibeaconBackground">#64B5F6</color>
+    <color name="eddystoneUidBackground">#7986CB</color>
     <color name='eddystoneUrlBackground'>#4DB6AC</color>
-
-    <!-- 00c59c -->
-
-    <color name="ruuvitagBackground">#64B5F6</color>
+    <color name="ruuvitagBackground">#A1887F</color>
 
     <!-- Cards text colors -->
     <color name="cardTitleColor">@android:color/white</color>
