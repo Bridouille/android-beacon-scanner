@@ -21,7 +21,7 @@
 
         <activity
             android:name=".features.beaconList.BeaconListActivity"
-            android:theme="@style/AppThemeNoActionBar">
+            android:theme="@style/SplashTheme">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -18,7 +18,7 @@
         <item name="divider">@color/divider</item>
     </style>
 
-
+    <!-- No action bar theme -->
     <style name="AppThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -36,7 +36,12 @@
         <item name="divider">@color/divider</item>
     </style>
 
+    <!-- Splash theme -->
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
 
+    <!-- Toolbar style -->
     <style name="Widget.MyApp.Toolbar.Solid" parent="Widget.AppCompat.ActionBar">
         <item name="android:colorControlNormal">@color/toolbarTextColor</item>
 

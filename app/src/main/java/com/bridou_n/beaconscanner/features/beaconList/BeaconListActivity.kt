@@ -96,6 +96,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     private lateinit var presenter: BeaconListContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppThemeNoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
