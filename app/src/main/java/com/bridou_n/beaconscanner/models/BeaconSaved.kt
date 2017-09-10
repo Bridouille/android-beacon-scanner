@@ -35,14 +35,12 @@ open class BeaconSaved() : RealmObject() {
     @SerializedName("lastSeen") var lastSeen: Long = 0
     @SerializedName("lastMinuteSeen") var lastMinuteSeen: Long = 0
 
-    @SerializedName("uuid") var uuid: String? = null
-    @SerializedName("major") var major: String? = null
-    @SerializedName("minor") var minor: String? = null
-
-    @SerializedName("url") var url: String? = null
-    @SerializedName("namespaceId") var namespaceId: String? = null
-    @SerializedName("instanceId") var instanceId: String? = null
-
+    /**
+     * Specialized field for every beacon type
+     */
+    @SerializedName("ibeaconData") var ibeaconData: IbeaconData? = null
+    @SerializedName("eddystoneUrlData") var eddystoneUrlData: EddystoneUrlData? = null
+    @SerializedName("eddystoneUidData") var eddystoneUidData: EddystoneUidData? = null
     @SerializedName("telemetryData") var telemetryData: TelemetryData? = null
     @SerializedName("ruuviData") var ruuviData: RuuviData? = null
 
@@ -71,12 +69,12 @@ open class BeaconSaved() : RealmObject() {
             when (beacon.beaconTypeCode) {
                 0x00 -> { // This is a Eddystone-UID frame
                     beaconType = BeaconSaved.TYPE_EDDYSTONE_UID
-                    namespaceId = beacon.id1.toString()
-                    instanceId = beacon.id2.toString()
+                    eddystoneUidData = EddystoneUidData(beacon.id1.toString(), beacon.id2.toString())
                 }
                 0x10 -> { // This is a Eddystone-URL frame
                     beaconType = BeaconSaved.TYPE_EDDYSTONE_URL
-                    url = UrlBeaconUrlCompressor.uncompress(beacon.id1.toByteArray())
+                    val url = UrlBeaconUrlCompressor.uncompress(beacon.id1.toByteArray())
+                    eddystoneUrlData = EddystoneUrlData(url)
 
                     if (url?.startsWith("https://ruu.vi/#") ?: false) { // This is a RuuviTag
                         val hash = url?.split("#")?.get(1)
@@ -92,9 +90,7 @@ open class BeaconSaved() : RealmObject() {
             }
         } else { // This is an iBeacon or ALTBeacon
             beaconType = if (beacon.beaconTypeCode == 0xBEAC) BeaconSaved.TYPE_ALTBEACON else BeaconSaved.TYPE_IBEACON // 0x4c000215 is iBeacon
-            uuid = beacon.id1.toString()
-            major = beacon.id2.toString()
-            minor = beacon.id3.toString()
+            ibeaconData = IbeaconData(beacon.id1.toString(), beacon.id2.toString(), beacon.id3.toString())
         }
     }
 
@@ -111,14 +107,9 @@ open class BeaconSaved() : RealmObject() {
         ret.lastSeen = lastSeen
         ret.lastMinuteSeen = lastMinuteSeen
 
-        ret.uuid = uuid
-        ret.major = major
-        ret.minor = minor
-
-        ret.url = url
-        ret.namespaceId = namespaceId
-        ret.instanceId = instanceId
-
+        ret.ibeaconData = ibeaconData?.clone()
+        ret.eddystoneUrlData = eddystoneUrlData?.clone()
+        ret.eddystoneUidData = eddystoneUidData?.clone()
         ret.telemetryData = telemetryData?.clone()
         ret.ruuviData = ruuviData?.clone()
 

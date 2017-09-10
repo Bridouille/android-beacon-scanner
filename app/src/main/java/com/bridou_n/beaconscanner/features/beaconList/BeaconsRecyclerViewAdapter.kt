@@ -78,7 +78,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
                 tlmData.forEach { it.visibility = View.VISIBLE }
                 battery.text = String.format(ctx.getString(R.string.battery_x_mv), telemetry.batteryMilliVolts)
                 temperature.text = String.format(ctx.getString(R.string.temperature_x_degres), telemetry.temperature) // %.1f
-                uptime.text = String.format(ctx.getString(R.string.x_seconds), CountHelper.coolFormat(telemetry.uptime.toDouble(), 0))
+                uptime.text = String.format(ctx.getString(R.string.uptime_x_seconds), CountHelper.coolFormat(telemetry.uptime.toDouble(), 0))
                 pduSent.text = String.format(ctx.getString(R.string.x_packets_sent), CountHelper.coolFormat(telemetry.pduCount.toDouble(), 0))
             } else {
                 tlmData.forEach { it.visibility = View.GONE }
@@ -94,7 +94,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
 
         @OnClick(R.id.visit_website_btn, R.id.ruuvi_visit_website_btn)
         fun onUrlClicked() {
-            val url = beaconDisplayed?.url
+            val url = beaconDisplayed?.eddystoneUrlData?.url
             try {
                 val uri = Uri.parse(url)
                 ctx.startActivity(Intent(Intent.ACTION_VIEW, uri))
@@ -121,9 +121,13 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
             beaconType.text = String.format(Locale.getDefault(), "%s",
                     if (beacon.beaconType == BeaconSaved.TYPE_IBEACON) itemView.context.getString(R.string.ibeacon)
                     else itemView.context.getString(R.string.altbeacon))
-            proximityUUID.text = String.format(ctx.getString(R.string.uuid_x), beacon.uuid)
-            major.text = String.format(ctx.getString(R.string.major_x), beacon.major)
-            minor.text = String.format(ctx.getString(R.string.minor_x), beacon.minor)
+
+            val ibeaconData = beacon.ibeaconData
+            if (ibeaconData != null) {
+                proximityUUID.text = String.format(ctx.getString(R.string.uuid_x), ibeaconData.uuid)
+                major.text = String.format(ctx.getString(R.string.major_x), ibeaconData.major)
+                minor.text = String.format(ctx.getString(R.string.minor_x), ibeaconData.minor)
+            }
         }
     }
 
@@ -145,8 +149,11 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
             beaconType.text = String.format(Locale.getDefault(), "%s%s",
                     itemView.context.getString(R.string.eddystone_uid),
                     if (beacon.telemetryData != null) itemView.context.getString(R.string.plus_tlm) else "")
-            namespaceId.text = String.format(ctx.getString(R.string.namespace_id_x), beacon.namespaceId)
-            instanceId.text = String.format(ctx.getString(R.string.instance_id_x), beacon.instanceId)
+            val eddystoneUidData = beacon.eddystoneUidData
+            if (eddystoneUidData != null) {
+                namespaceId.text = String.format(ctx.getString(R.string.namespace_id_x), eddystoneUidData.namespaceId)
+                instanceId.text = String.format(ctx.getString(R.string.instance_id_x), eddystoneUidData.instanceId)
+            }
         }
     }
 
@@ -167,7 +174,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
             beaconType.text = String.format(Locale.getDefault(), "%s%s",
                     itemView.context.getString(R.string.eddystone_url),
                     if (beacon.telemetryData != null) itemView.context.getString(R.string.plus_tlm) else "")
-            url.text = String.format(ctx.getString(R.string.url_x), beacon.url)
+            url.text = String.format(ctx.getString(R.string.url_x), beacon.eddystoneUrlData?.url)
         }
     }
 
@@ -189,7 +196,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
             ruuviTagLayout.visibility = View.VISIBLE
 
             beaconType.text = String.format(Locale.getDefault(), "%s", itemView.context.getString(R.string.ruuvitag))
-            ruuviUrl.text = String.format(ctx.getString(R.string.url_x), beacon.url)
+            ruuviUrl.text = String.format(ctx.getString(R.string.url_x), beacon.eddystoneUrlData?.url)
 
             val ruuviData = beacon.ruuviData
             if (ruuviData != null) {

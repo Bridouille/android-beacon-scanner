@@ -66,7 +66,7 @@
     <string name="prevent_sleep_while_scanning">Prevent device sleep while scanning</string>
     <string name="visit_website">Visit website</string>
     <string name="battery_x_mv">Battery %d mV</string>
-    <string name="x_seconds">%s seconds</string>
+    <string name="uptime_x_seconds">Uptime %s seconds</string>
     <string name="x_packets_sent">%s packets sent</string>
     <string name="temperature_x_degres">Temperature %.1f °C</string>
     <string name="rssi_x_dbm">RSSI %d dBm</string>
