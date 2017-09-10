@@ -1,9 +1,9 @@
 package com.bridou_n.beaconscanner.utils;
 
 import android.support.annotation.NonNull;
-import android.util.Base64;
 import android.util.Log;
 
+import com.bridou_n.beaconscanner.utils.copyPaste.Base64;
 import com.bridou_n.beaconscanner.utils.copyPaste.Base91;
 import com.bridou_n.beaconscanner.utils.extensionFunctions.IntArraysKt;
 
@@ -28,18 +28,19 @@ public class RuuviParser {
             return ;
         }
 
+        // Zero-pad URL if needed - example: AIgbAMLNs
         if (ruuviUrl.length() == 9) {
             ruuviUrl += "...";
         }
 
-        // Zero-pad URL if needed - example: AIgbAMLNs
         int[] decoded = getDecodedArray(ruuviUrl.getBytes(), BASE_91);
         int[] decoded64 = getDecodedArray(ruuviUrl.getBytes(), BASE_64);
 
+        int format = decoded64[0];
+
         Log.d(TAG, IntArraysKt.print(decoded));
         Log.d(TAG, IntArraysKt.print(decoded64));
-
-        int format = decoded64[0];
+        Log.d(TAG, "format: " + format);
 
         if (format != 2 && format != 4) {
             /*
@@ -79,7 +80,7 @@ public class RuuviParser {
     }
 
     private int[] getDecodedArray(byte[] ruuviUrl, int decodingType) {
-        byte[] decodedTmp = decodingType == BASE_64 ? Base64.decode(ruuviUrl, Base64.NO_WRAP) : Base91.decode(ruuviUrl);
+        byte[] decodedTmp = decodingType == BASE_64 ? Base64.decode(ruuviUrl) : Base91.decode(ruuviUrl);
         int[] decoded = new int[decodedTmp.length];
 
         for (int i = 0; i < decodedTmp.length; i++) {

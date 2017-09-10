@@ -80,6 +80,8 @@ open class BeaconSaved() : RealmObject() {
                         val hash = url?.split("#")?.get(1)
 
                         if (hash != null) {
+                            // We manually set the hashcode of the RuuviTag so it only appears once per address
+                            hashcode = beaconAddress?.hashCode() ?: -1
                             beaconType = BeaconSaved.TYPE_RUUVITAG
                             val ruuviParser = RuuviParser(hash)
 

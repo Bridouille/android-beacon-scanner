@@ -23,6 +23,7 @@ import org.altbeacon.beacon.Beacon
 class BluetoothModule {
 
     companion object {
+        const val RUUVI_LAYOUT = "m:0-2=0499,i:4-19,i:20-21,i:22-23,p:24-24" // TBD
         const val IBEACON_LAYOUT = "m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"
         const val ALTBEACON_LAYOUT = BeaconParser.ALTBEACON_LAYOUT
         const val EDDYSTONE_UID_LAYOUT = BeaconParser.EDDYSTONE_UID_LAYOUT
