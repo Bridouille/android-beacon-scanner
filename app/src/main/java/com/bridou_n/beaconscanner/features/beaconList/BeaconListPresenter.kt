@@ -21,6 +21,7 @@ import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
+import io.realm.exceptions.RealmException
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.Region
@@ -79,8 +80,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
 
         // Show the tutorial if needed
         if (!prefs.hasSeenTutorial()) {
-            view.showTutorial()
-            prefs.setHasSeenTutorial(true)
+            prefs.setHasSeenTutorial(view.showTutorial())
         }
 
         // Start scanning if the scan on open is activated or if we were previously scanning
@@ -120,13 +120,16 @@ class BeaconListPresenter(val view: BeaconListContract.View,
         rangeDisposable?.dispose() // clear the previous subscription if any
         rangeDisposable = rxBus.asFlowable() // Listen for range events
                 .observeOn(AndroidSchedulers.mainThread()) // We use this so we use the realm on the good thread & we can make UI changes
-                .subscribe { e ->
-                    if (e is Events.RangeBeacon && e.beacons.isNotEmpty()) {
-                        logToWebhookIfNeeded()
-                        handleRating()
-                        storeBeaconsAround(e.beacons)
-                    }
-                }
+                .filter({ e -> e is Events.RangeBeacon && e.beacons.isNotEmpty() })
+                .subscribe({ e ->
+                    e as Events.RangeBeacon
+
+                    handleRating()
+                    storeBeaconsAround(e.beacons)
+                    logToWebhookIfNeeded()
+                }, { err ->
+                    view.showGenericError(err.message ?: "")
+                })
     }
 
     override fun onBeaconServiceConnect() {
@@ -181,7 +184,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
     }
 
     override fun storeBeaconsAround(beacons: Collection<Beacon>) {
-        realm.executeTransactionAsync { tRealm ->
+        realm.executeTransactionAsync({ tRealm ->
             for (b: Beacon in beacons) {
                 val beacon = BeaconSaved(b)
 
@@ -194,7 +197,9 @@ class BeaconListPresenter(val view: BeaconListContract.View,
                 tracker.logEvent("adding_or_updating_beacon", infos)
                 tRealm.copyToRealmOrUpdate(beacon)
             }
-        }
+        }, null, { error: Throwable? ->
+            view.showGenericError(error?.message ?: "")
+        })
     }
 
     fun logToWebhookIfNeeded() {

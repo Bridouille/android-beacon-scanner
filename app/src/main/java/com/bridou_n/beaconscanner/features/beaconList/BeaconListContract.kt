@@ -13,7 +13,7 @@ import org.altbeacon.beacon.BeaconManager
 
 interface BeaconListContract {
     interface View : BeaconConsumer {
-        fun showTutorial()
+        fun showTutorial() : Boolean
 
         fun showEmptyView(show: Boolean)
         fun setAdapter(beaconResults: RealmResults<BeaconSaved>)
@@ -36,6 +36,7 @@ interface BeaconListContract {
         fun startSettingsActivity()
 
         fun showLoggingError()
+        fun showGenericError(msg: String)
     }
 
     interface Presenter : BasePresenter {

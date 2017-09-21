@@ -120,7 +120,11 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         presenter = BeaconListPresenter(this, rxBus, prefs, realm, loggingService, bluetoothState, ratingHelper, tracker)
     }
 
-    override fun showTutorial() {
+    override fun showTutorial() : Boolean {
+        if (menu == null) { // If the menu is not inflated yet
+            return false
+        }
+
         TapTargetSequence(this)
                 .targets(
                         TapTarget.forToolbarMenuItem(toolbar, R.id.action_bluetooth, getString(R.string.bluetooth_control), getString(R.string.feature_bluetooth_content))
@@ -139,6 +143,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
                                 .drawShadow(true)
                 )
                 .start()
+        return true
     }
 
     override fun onResume() {
@@ -222,6 +227,10 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
                     presenter.onBluetoothToggle()
                 }
                 .show()
+    }
+
+    override fun showGenericError(msg: String) {
+        Snackbar.make(rootView, msg, Snackbar.LENGTH_LONG).show()
     }
 
     override fun showLoggingError() = Snackbar.make(rootView, getString(R.string.logging_error_please_check), Snackbar.LENGTH_LONG).show()

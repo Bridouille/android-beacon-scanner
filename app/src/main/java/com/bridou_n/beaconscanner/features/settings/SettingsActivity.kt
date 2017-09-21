@@ -22,6 +22,7 @@ import com.afollestad.materialdialogs.Theme
 import com.bridou_n.beaconscanner.BuildConfig
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
+import com.bridou_n.beaconscanner.utils.RatingHelper
 import com.bridou_n.beaconscanner.utils.extensionFunctions.component
 import com.google.firebase.analytics.FirebaseAnalytics
 import javax.inject.Inject
@@ -34,6 +35,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     @Inject lateinit var prefs: PreferencesHelper
+    @Inject lateinit var ratingHelper: RatingHelper
     @Inject lateinit var tracker: FirebaseAnalytics
 
     @BindView(R.id.toolbar) lateinit var toolbar: Toolbar
@@ -220,6 +222,7 @@ class SettingsActivity : AppCompatActivity() {
     @OnClick(R.id.rate)
     fun onRateClicked() {
         tracker.logEvent("rate_clicked", null)
+        ratingHelper.setPopupSeen()
         val appPackageName = packageName // getPackageName() from Context or Activity object
 
         try {
