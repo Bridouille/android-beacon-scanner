@@ -81,4 +81,7 @@
     <string name="air_pressure_x_hpa">Air pressure %d hPa</string>
     <string name="temperature_d_degres">Temperature %d °C</string>
     <string name="humidity_x_percent">Humidity %d %%</string>
+    <string name="remove_from_the_list">Remove from the list</string>
+    <string name="copy_infos_to_clipboard">Copy infos to clipboard</string>
+    <string name="add_to_the_blocked_list">Add to the blocked list</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.bridou_n.beaconscanner.models
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.bridou_n.beaconscanner.utils.RuuviParser
 import com.google.gson.annotations.SerializedName
 import java.util.Date
@@ -14,15 +16,7 @@ import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor
  * Created by bridou_n on 30/09/2016.
  */
 
-open class BeaconSaved() : RealmObject() {
-
-    companion object {
-        @Ignore const val TYPE_EDDYSTONE_UID = "eddystone_uid"
-        @Ignore const val TYPE_EDDYSTONE_URL = "eddystone_url"
-        @Ignore const val TYPE_ALTBEACON = "altbeacon"
-        @Ignore const val TYPE_IBEACON = "ibeacon"
-        @Ignore const val TYPE_RUUVITAG = "ruuvitag"
-    }
+open class BeaconSaved() : RealmObject(), Parcelable {
 
     @PrimaryKey
     @SerializedName("hashcode") var hashcode: Int = 0 // hashcode()
@@ -43,6 +37,23 @@ open class BeaconSaved() : RealmObject() {
     @SerializedName("eddystoneUidData") var eddystoneUidData: EddystoneUidData? = null
     @SerializedName("telemetryData") var telemetryData: TelemetryData? = null
     @SerializedName("ruuviData") var ruuviData: RuuviData? = null
+
+    /**
+     * Fields for the app logic
+     */
+    var isBlocked: Boolean = false
+
+    constructor(parcel: Parcel) : this() {
+        hashcode = parcel.readInt()
+        beaconType = parcel.readString()
+        beaconAddress = parcel.readString()
+        manufacturer = parcel.readInt()
+        txPower = parcel.readInt()
+        rssi = parcel.readInt()
+        distance = parcel.readDouble()
+        lastSeen = parcel.readLong()
+        lastMinuteSeen = parcel.readLong()
+    }
 
     constructor(beacon: Beacon) : this() {
         // Common fields to every beacons
@@ -76,17 +87,15 @@ open class BeaconSaved() : RealmObject() {
                     val url = UrlBeaconUrlCompressor.uncompress(beacon.id1.toByteArray())
                     eddystoneUrlData = EddystoneUrlData(url)
 
-                    if (url?.startsWith("https://ruu.vi/#") ?: false) { // This is a RuuviTag
-                        val hash = url?.split("#")?.get(1)
+                    if (url?.startsWith("https://ruu.vi/#") == true) { // This is a RuuviTag
+                        val hash = url.split("#").get(1)
 
-                        if (hash != null) {
-                            // We manually set the hashcode of the RuuviTag so it only appears once per address
-                            hashcode = beaconAddress?.hashCode() ?: -1
-                            beaconType = BeaconSaved.TYPE_RUUVITAG
-                            val ruuviParser = RuuviParser(hash)
+                        // We manually set the hashcode of the RuuviTag so it only appears once per address
+                        hashcode = beaconAddress?.hashCode() ?: -1
+                        beaconType = BeaconSaved.TYPE_RUUVITAG
+                        val ruuviParser = RuuviParser(hash)
 
-                            ruuviData = RuuviData(ruuviParser.humidity, ruuviParser.airPressure, ruuviParser.temp)
-                        }
+                        ruuviData = RuuviData(ruuviParser.humidity, ruuviParser.airPressure, ruuviParser.temp)
                     }
                 }
             }
@@ -116,5 +125,37 @@ open class BeaconSaved() : RealmObject() {
         ret.ruuviData = ruuviData?.clone()
 
         return ret
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(hashcode)
+        parcel.writeString(beaconType)
+        parcel.writeString(beaconAddress)
+        parcel.writeInt(manufacturer)
+        parcel.writeInt(txPower)
+        parcel.writeInt(rssi)
+        parcel.writeDouble(distance)
+        parcel.writeLong(lastSeen)
+        parcel.writeLong(lastMinuteSeen)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<BeaconSaved> {
+        @Ignore const val TYPE_EDDYSTONE_UID = "eddystone_uid"
+        @Ignore const val TYPE_EDDYSTONE_URL = "eddystone_url"
+        @Ignore const val TYPE_ALTBEACON = "altbeacon"
+        @Ignore const val TYPE_IBEACON = "ibeacon"
+        @Ignore const val TYPE_RUUVITAG = "ruuvitag"
+
+        override fun createFromParcel(parcel: Parcel): BeaconSaved {
+            return BeaconSaved(parcel)
+        }
+
+        override fun newArray(size: Int): Array<BeaconSaved?> {
+            return arrayOfNulls(size)
+        }
     }
 }

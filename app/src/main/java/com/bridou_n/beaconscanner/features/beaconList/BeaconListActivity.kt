@@ -161,7 +161,12 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     }
 
     override fun setAdapter(beaconResults: RealmResults<BeaconSaved>) {
-        beaconsRv.adapter = BeaconsRecyclerViewAdapter(beaconResults, this)
+        beaconsRv.adapter = BeaconsRecyclerViewAdapter(beaconResults, this, object : BeaconsRecyclerViewAdapter.OnControlsOpen {
+            override fun onOpenControls(beacon: BeaconSaved) {
+                val bsDialog = ControlsBottomSheetDialog.newInstance(beacon)
+                bsDialog.show(supportFragmentManager, bsDialog.tag)
+            }
+        })
     }
 
     override fun showEmptyView(show: Boolean) {

@@ -1,6 +1,5 @@
 package com.bridou_n.beaconscanner.features.beaconList
 
-import android.os.Bundle
 import android.os.RemoteException
 import android.util.Log
 import com.bridou_n.beaconscanner.API.LoggingService
@@ -11,6 +10,7 @@ import com.bridou_n.beaconscanner.models.LoggingRequest
 import com.bridou_n.beaconscanner.utils.BluetoothManager
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
 import com.bridou_n.beaconscanner.utils.RatingHelper
+import com.bridou_n.beaconscanner.utils.extensionFunctions.*
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,7 +21,6 @@ import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
-import io.realm.exceptions.RealmException
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.Region
@@ -44,7 +43,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
 
     private val TAG = "BeaconListPresenter"
 
-    private var beaconResults: RealmResults<BeaconSaved> = realm.where(BeaconSaved::class.java).findAllSortedAsync(arrayOf("lastMinuteSeen", "distance"), arrayOf(Sort.DESCENDING, Sort.ASCENDING))
+    private var beaconResults: RealmResults<BeaconSaved> = realm.getScannedBeacons()
 
     private var bluetoothStateDisposable: Disposable? = null
     private var rangeDisposable: Disposable? = null
@@ -149,12 +148,12 @@ class BeaconListPresenter(val view: BeaconListContract.View,
     }
 
     override fun onLocationPermissionDenied(requestCode: Int, permList: List<String>) {
-        tracker.logEvent("permission_denied", null)
+        tracker.logEvent("permission_denied")
 
         // If the user refused the permission, we just disabled the scan on open
         prefs.isScanOnOpen = false
         if (view.hasSomePermissionPermanentlyDenied(permList)) {
-            tracker.logEvent("permission_denied_permanently", null)
+            tracker.logEvent("permission_denied_permanently")
             view.showEnablePermissionSnackbar()
         }
     }
@@ -186,16 +185,16 @@ class BeaconListPresenter(val view: BeaconListContract.View,
     override fun storeBeaconsAround(beacons: Collection<Beacon>) {
         realm.executeTransactionAsync({ tRealm ->
             for (b: Beacon in beacons) {
-                val beacon = BeaconSaved(b)
+                val beacon = BeaconSaved(b) // Create a new object
 
-                val infos = Bundle()
+                val res = tRealm.getBeaconWithId(b.hashCode()) // See if we scanned this beacon before
 
-                infos.putInt("manufacturer", beacon.manufacturer)
-                infos.putString("type", beacon.beaconType)
-                infos.putDouble("distance", beacon.distance)
+                res?.let {  // If we did, update the beacon logic fields
+                    beacon.isBlocked = it.isBlocked
+                }
 
-                tracker.logEvent("adding_or_updating_beacon", infos)
                 tRealm.copyToRealmOrUpdate(beacon)
+                tracker.logBeaconScanned(beacon.manufacturer, beacon.beaconType, beacon.distance)
             }
         }, null, { error: Throwable? ->
             view.showGenericError(error?.message ?: "")
@@ -205,7 +204,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
     fun logToWebhookIfNeeded() {
         if (prefs.isLoggingEnabled && prefs.loggingEndpoint != null &&
                 ++numberOfScansSinceLog >= prefs.getLoggingFrequency()) {
-            val beaconToLog = realm.where(BeaconSaved::class.java).greaterThan("lastSeen", prefs.lasLoggingCall).findAllAsync()
+            val beaconToLog = realm.getBeaconsScannedAfter(prefs.lasLoggingCall)
 
             numberOfScansSinceLog = 0 // Reset the counter before we get the results
             beaconToLog.addChangeListener { results ->
@@ -254,21 +253,21 @@ class BeaconListPresenter(val view: BeaconListContract.View,
 
     override fun onBluetoothToggle() {
         bluetoothState.toggle()
-        tracker.logEvent("action_bluetooth", null)
+        tracker.logEvent("action_bluetooth")
     }
 
     override fun onSettingsClicked() {
-        tracker.logEvent("action_settings", null)
+        tracker.logEvent("action_settings")
         view.startSettingsActivity()
     }
 
     override fun onClearClicked() {
-        tracker.logEvent("action_clear", null)
+        tracker.logEvent("action_clear")
         view.showClearDialog()
     }
 
     override fun onClearAccepted() {
-        tracker.logEvent("action_clear_accepted", null)
+        tracker.logEvent("action_clear_accepted")
         realm.executeTransactionAsync { tRealm -> tRealm.where(BeaconSaved::class.java).findAll().deleteAllFromRealm() }
     }
 
@@ -285,7 +284,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
     }
 
     fun unbindBeaconManager() {
-        if (beaconManager?.isBound(view) ?: false) {
+        if (beaconManager?.isBound(view) == true) {
             Log.d(TAG, "Unbinding from beaconManager")
             beaconManager?.unbind(view)
         }

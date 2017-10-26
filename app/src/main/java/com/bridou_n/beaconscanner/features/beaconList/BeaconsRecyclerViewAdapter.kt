@@ -12,10 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import butterknife.BindView
-import butterknife.BindViews
-import butterknife.ButterKnife
-import butterknife.OnClick
+import butterknife.*
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.utils.CountHelper
@@ -28,14 +25,16 @@ import java.util.*
  * Created by bridou_n on 30/09/2016.
  */
 
-class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: Context) :
+class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>,
+                                 val ctx: Context,
+                                 val onLongClickListener: OnControlsOpen?) :
         RealmRecyclerViewAdapter<BeaconSaved, BeaconsRecyclerViewAdapter.BaseHolder>(data, true) {
 
     companion object {
         private val TAG = "BEACONS_RV_ADAPTER"
     }
 
-    open class BaseHolder(itemView: View, val ctx: Context) : RecyclerView.ViewHolder(itemView) {
+    open class BaseHolder(itemView: View, val ctx: Context, val listener: OnControlsOpen?) : RecyclerView.ViewHolder(itemView) {
         @BindView(R.id.card) lateinit var cardView: CardView
 
         @BindView(R.id.beacon_type) lateinit var beaconType: TextView
@@ -100,9 +99,17 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
                 ctx.startActivity(Intent(Intent.ACTION_VIEW, uri))
             } catch (e: Exception) { }
         }
+
+        @OnLongClick(R.id.card)
+        fun onLongClick(): Boolean {
+            beaconDisplayed?.let {
+                listener?.onOpenControls(it)
+            }
+            return true
+        }
     }
 
-    class IBeaconAltBeaconHolder(itemView: View, ctx: Context) : BaseHolder(itemView, ctx) {
+    class IBeaconAltBeaconHolder(itemView: View, ctx: Context, listener: OnControlsOpen?) : BaseHolder(itemView, ctx, listener) {
         @BindView(R.id.proximity_uuid) lateinit var proximityUUID: TextView
         @BindView(R.id.major) lateinit var major: TextView
         @BindView(R.id.minor) lateinit var minor: TextView
@@ -131,7 +138,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
         }
     }
 
-    class EddystoneUidHolder(itemView: View, ctx: Context) : BaseHolder(itemView, ctx) {
+    class EddystoneUidHolder(itemView: View, ctx: Context, listener: OnControlsOpen?) : BaseHolder(itemView, ctx, listener) {
         @BindView(R.id.namespace_id) lateinit var namespaceId: TextView
         @BindView(R.id.instance_id) lateinit var instanceId: TextView
 
@@ -157,7 +164,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
         }
     }
 
-    class EddystoneUrlHolder(itemView: View, ctx: Context) : BaseHolder(itemView, ctx) {
+    class EddystoneUrlHolder(itemView: View, ctx: Context, listener: OnControlsOpen?) : BaseHolder(itemView, ctx, listener) {
         @BindView(R.id.url) lateinit var url: TextView
 
         init {
@@ -178,7 +185,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
         }
     }
 
-    class RuuviTagHolder(itemView: View, ctx: Context) : BaseHolder(itemView, ctx) {
+    class RuuviTagHolder(itemView: View, ctx: Context, listener: OnControlsOpen?) : BaseHolder(itemView, ctx, listener) {
         @BindView(R.id.ruuvi_url) lateinit var ruuviUrl: TextView
         @BindView(R.id.ruuvi_air_pressure) lateinit var ruuviAirPressure: TextView
         @BindView(R.id.ruuvi_temperature) lateinit var ruuviTemperature: TextView
@@ -232,11 +239,11 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
         val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
 
         when (viewType) {
-            R.layout.eddystone_uid_item -> return EddystoneUidHolder(view, ctx)
-            R.layout.eddystone_url_item -> return EddystoneUrlHolder(view, ctx)
-            R.layout.ruuvitag_item -> return RuuviTagHolder(view, ctx)
-            R.layout.ibeacon_altbeacon_item -> return IBeaconAltBeaconHolder(view, ctx)
-            else -> return BaseHolder(view, ctx)
+            R.layout.eddystone_uid_item -> return EddystoneUidHolder(view, ctx, onLongClickListener)
+            R.layout.eddystone_url_item -> return EddystoneUrlHolder(view, ctx, onLongClickListener)
+            R.layout.ruuvitag_item -> return RuuviTagHolder(view, ctx, onLongClickListener)
+            R.layout.ibeacon_altbeacon_item -> return IBeaconAltBeaconHolder(view, ctx, onLongClickListener)
+            else -> return BaseHolder(view, ctx, onLongClickListener)
         }
     }
 
@@ -248,5 +255,9 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>, val ctx: C
                 holder.bindView(beacon)
             }
         }
+    }
+
+    interface OnControlsOpen {
+        fun onOpenControls(beacon: BeaconSaved)
     }
 }

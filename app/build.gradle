@@ -10,8 +10,8 @@ android {
         applicationId "com.bridou_n.beaconscanner"
         minSdkVersion 18
         targetSdkVersion 26
-        versionCode 12
-        versionName "2.0.2"
+        versionCode 13
+        versionName "2.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -23,11 +23,15 @@ android {
         }
         
         debug {
-            minifyEnabled true
+            minifyEnabled false
             applicationIdSuffix = ".debug"
             buildConfigField "String", "CONTACT_EMAIL", "\"nicobr65@gmail.com\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.2'
     }
 }
 
