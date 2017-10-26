@@ -268,7 +268,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
 
     override fun onClearAccepted() {
         tracker.logEvent("action_clear_accepted")
-        realm.executeTransactionAsync { tRealm -> tRealm.where(BeaconSaved::class.java).findAll().deleteAllFromRealm() }
+        realm.clearScannedBeacons()
     }
 
     fun isScanning() = !(rangeDisposable?.isDisposed ?: true)

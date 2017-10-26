@@ -1,21 +1,27 @@
 package com.bridou_n.beaconscanner.features.beaconList
 
 import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context.CLIPBOARD_SERVICE
 import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.design.widget.CoordinatorLayout
-import android.util.Log
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.bridou_n.beaconscanner.AppSingleton
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.models.BeaconSaved
+import com.bridou_n.beaconscanner.utils.extensionFunctions.getBeaconWithId
+import com.bridou_n.beaconscanner.utils.extensionFunctions.showSnackBar
 import io.realm.Realm
 import javax.inject.Inject
+
 
 /**
  * Created by bridou_n on 23/10/2017.
@@ -102,24 +108,29 @@ class ControlsBottomSheetDialog : BottomSheetDialogFragment() {
 
         removeContainer.setOnClickListener {
             realm.executeTransactionAsync(Realm.Transaction { tRealm ->
-                tRealm.where(BeaconSaved::class.java).equalTo("hashcode", hashcode)
-                        .findFirst()?.deleteFromRealm()
+                tRealm.getBeaconWithId(hashcode)?.deleteFromRealm()
             }, Realm.Transaction.OnSuccess {
                 dismiss()
             })
         }
 
         clipboardContainer.setOnClickListener {
+            val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Beacon infos", beacon.toString())
+            clipboard.primaryClip = clip
 
+            dismiss()
+            (activity as AppCompatActivity).showSnackBar(context.getString(R.string.the_informations_has_been_copied))
         }
 
         blockedContainer.setOnClickListener {
-            realm.executeTransactionAsync { tRealm ->
-                val beacon = tRealm.where(BeaconSaved::class.java).equalTo("hashcode", hashcode)
-                        .findFirst()
+            realm.executeTransactionAsync(Realm.Transaction { tRealm ->
+                val beacon = tRealm.getBeaconWithId(hashcode)
 
                 beacon?.isBlocked = true
-            }
+            }, Realm.Transaction.OnSuccess {
+                dismiss()
+            })
         }
     }
 

@@ -25,3 +25,17 @@ fun Realm.getBeaconsScannedAfter(timestamp: Long) : RealmResults<BeaconSaved> {
 fun Realm.getBeaconWithId(hashcode: Int) : BeaconSaved? {
     return this.where(BeaconSaved::class.java).equalTo("hashcode", hashcode).findFirst()
 }
+
+fun Realm.clearScannedBeacons(blocked: Boolean = false) {
+    this.executeTransactionAsync { tRealm ->
+        tRealm.where(BeaconSaved::class.java)
+                .equalTo("isBlocked", blocked)
+                .findAll().deleteAllFromRealm()
+    }
+}
+
+fun Realm.flushDb() {
+    this.executeTransactionAsync { tRealm ->
+        tRealm.deleteAll()
+    }
+}

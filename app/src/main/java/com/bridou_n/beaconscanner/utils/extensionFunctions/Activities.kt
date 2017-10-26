@@ -30,6 +30,8 @@ fun AppCompatActivity.setStatusBarColor(color: Int) {
     }
 }
 
+fun AppCompatActivity.showSnackBar(str: String) = showSnackbar(findViewById(android.R.id.content), str)
+
 fun AppCompatActivity.showSnackbar(view: View, str: String) = Snackbar.make(view, str, Snackbar.LENGTH_LONG).show()
 
 fun AppCompatActivity.hideKeyboard() {
