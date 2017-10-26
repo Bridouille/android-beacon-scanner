@@ -102,8 +102,8 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         ButterKnife.bind(this)
         component().inject(this)
 
-        setSupportActionBar(toolbar)
         toolbar.inflateMenu(R.menu.main_menu)
+        setSupportActionBar(toolbar)
 
         beaconsRv.setHasFixedSize(true)
         beaconsRv.layoutManager = LinearLayoutManager(this)
@@ -121,7 +121,10 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     }
 
     override fun showTutorial() : Boolean {
-        if (menu == null) { // If the menu is not inflated yet
+        val btIcon = toolbar.findViewById<View?>(R.id.action_bluetooth)
+        val clearIcon = toolbar.findViewById<View?>(R.id.action_clear)
+
+        if (menu == null || btIcon == null || clearIcon == null) { // If the menu is not inflated yet
             return false
         }
 

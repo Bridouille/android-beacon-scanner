@@ -2,10 +2,20 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
+apply plugin: 'com.google.firebase.firebase-crash'
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'BeaconScannerKey'
+            keyPassword beacon_scanner_key_password
+            storeFile file(beacon_scanner_store_file)
+            storePassword beacon_scanner_store_password
+        }
+    }
+
     compileSdkVersion 26
-    buildToolsVersion '26.0.1'
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.bridou_n.beaconscanner"
         minSdkVersion 18
@@ -20,6 +30,7 @@ android {
             minifyEnabled true
             buildConfigField "String", "CONTACT_EMAIL", "\"nicobr65@gmail.com\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         
         debug {
@@ -86,7 +97,7 @@ dependencies {
     compile 'pub.devrel:easypermissions:0.4.3'
 
     // Tap target view, discovery feature
-    compile 'com.getkeepsafe.taptargetview:taptargetview:1.9.1'
+    compile 'com.getkeepsafe.taptargetview:taptargetview:1.10.0'
 
     // Constraint Layout
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
