@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bridou_n.beaconscanner.features.blockedList.BlockedActivity">
+
+    <!-- Toolbar -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/toolbarColor"
+        android:elevation="4dp"
+        app:titleTextColor="@color/toolbarTextColor"
+        app:theme="@style/Widget.MyApp.Toolbar.Solid"
+        />
+
+    <!-- Actual content -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/beacons_rv"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="8dp"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:scrollbars="vertical" />
+
+    <!-- Empty view -->
+    <RelativeLayout
+        android:id="@+id/empty_view"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@color/colorPrimary"
+            app:srcCompat="@drawable/ic_track_changes_black_48dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/error_image" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_scanned_beacons_yet"
+            android:id="@+id/empty_state_title"
+            android:textColor="@color/primaryText"
+            android:layout_below="@+id/error_image"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/keyline_16"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_state_content"
+            android:id="@+id/empty_state_content"
+            android:layout_below="@+id/empty_state_title"
+            android:layout_centerHorizontal="true"
+            android:textSize="14sp"
+            android:textAlignment="center"
+            android:maxWidth="250dip"
+            android:layout_marginLeft="@dimen/keyline_32"
+            android:layout_marginRight="@dimen/keyline_32" />
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

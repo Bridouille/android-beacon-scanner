@@ -85,4 +85,6 @@
     <string name="copy_infos_to_clipboard">Copy infos to clipboard</string>
     <string name="add_to_the_blocked_list">Add to the blocked list</string>
     <string name="the_informations_has_been_copied">The informations have been copied to the clipboard!</string>
+    <string name="blacklist">Blacklist</string>
+    <string name="see_the_blocked_beacons">See the blocked beacons</string>
 </resources>

@@ -5,6 +5,7 @@ import com.bridou_n.beaconscanner.dagger.PerActivity
 import com.bridou_n.beaconscanner.dagger.modules.BluetoothModule
 import com.bridou_n.beaconscanner.features.beaconList.BeaconListActivity
 import com.bridou_n.beaconscanner.features.beaconList.ControlsBottomSheetDialog
+import com.bridou_n.beaconscanner.features.blockedList.BlockedActivity
 import com.bridou_n.beaconscanner.features.settings.SettingsActivity
 
 import dagger.Component
@@ -24,6 +25,7 @@ interface ActivityComponent {
     fun inject(app: AppSingleton)
     fun inject(activity: BeaconListActivity)
     fun inject(activity: SettingsActivity)
+    fun inject(activity: BlockedActivity)
 
     fun inject(bs: ControlsBottomSheetDialog)
 }

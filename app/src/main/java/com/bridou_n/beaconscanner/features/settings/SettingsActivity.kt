@@ -21,9 +21,11 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bridou_n.beaconscanner.BuildConfig
 import com.bridou_n.beaconscanner.R
+import com.bridou_n.beaconscanner.features.blockedList.BlockedActivity
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
 import com.bridou_n.beaconscanner.utils.RatingHelper
 import com.bridou_n.beaconscanner.utils.extensionFunctions.component
+import com.bridou_n.beaconscanner.utils.extensionFunctions.logEvent
 import com.google.firebase.analytics.FirebaseAnalytics
 import javax.inject.Inject
 
@@ -219,9 +221,16 @@ class SettingsActivity : AppCompatActivity() {
                 .show()
     }
 
+    @OnClick(R.id.blacklist)
+    fun onBlackListClicked() {
+        tracker.logEvent("blacklist_clicked")
+
+        startActivity(Intent(this, BlockedActivity::class.java))
+    }
+
     @OnClick(R.id.rate)
     fun onRateClicked() {
-        tracker.logEvent("rate_clicked", null)
+        tracker.logEvent("rate_clicked")
         ratingHelper.setPopupSeen()
         val appPackageName = packageName // getPackageName() from Context or Activity object
 
@@ -243,7 +252,7 @@ class SettingsActivity : AppCompatActivity() {
 
     @OnClick(R.id.tutorial)
     fun onTutorialClicked() {
-        tracker.logEvent("tutorial_reset_clicked", null)
+        tracker.logEvent("tutorial_reset_clicked")
         prefs.setHasSeenTutorial(false)
         Snackbar.make(content, getString(R.string.the_tutorial_has_been_reset), Snackbar.LENGTH_LONG).show()
     }

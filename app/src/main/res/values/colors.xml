@@ -42,4 +42,5 @@
 
     <!-- Cards icon colors -->
     <color name="iconColors">#FFD54F</color>
+    <color name="rateStarColor">#FFD54F</color>
 </resources>
