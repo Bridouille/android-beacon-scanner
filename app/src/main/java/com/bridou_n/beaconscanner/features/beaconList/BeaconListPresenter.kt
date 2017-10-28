@@ -43,7 +43,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
 
     private val TAG = "BeaconListPresenter"
 
-    private var beaconResults: RealmResults<BeaconSaved> = realm.getScannedBeacons()
+    private lateinit var beaconResults: RealmResults<BeaconSaved>
 
     private var bluetoothStateDisposable: Disposable? = null
     private var rangeDisposable: Disposable? = null
@@ -71,10 +71,13 @@ class BeaconListPresenter(val view: BeaconListContract.View,
                     }
                 }
 
+        beaconResults = realm.getScannedBeacons()
         view.setAdapter(beaconResults)
 
         beaconResults.addChangeListener { results ->
-            view.showEmptyView(results.size == 0)
+            if (results.isLoaded) {
+                view.showEmptyView(results.size == 0)
+            }
         }
 
         // Show the tutorial if needed
@@ -187,7 +190,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
             for (b: Beacon in beacons) {
                 val beacon = BeaconSaved(b) // Create a new object
 
-                val res = tRealm.getBeaconWithId(b.hashCode()) // See if we scanned this beacon before
+                val res = tRealm.getBeaconWithId(beacon.hashcode) // See if we scanned this beacon before
 
                 res?.let {  // If we did, update the beacon logic fields
                     beacon.isBlocked = it.isBlocked

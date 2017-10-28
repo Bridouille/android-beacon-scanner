@@ -87,4 +87,6 @@
     <string name="the_informations_has_been_copied">The informations have been copied to the clipboard!</string>
     <string name="blacklist">Blacklist</string>
     <string name="see_the_blocked_beacons">See the blocked beacons</string>
+    <string name="no_blocked_beacons">No beacon has been blocked yet!</string>
+    <string name="unblock">Unblock</string>
 </resources>

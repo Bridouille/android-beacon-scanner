@@ -10,9 +10,12 @@
     <!-- Toolbar -->
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:background="@color/toolbarColor"
         android:elevation="4dp"
         app:titleTextColor="@color/toolbarTextColor"
@@ -23,51 +26,51 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/beacons_rv"
         android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:paddingTop="8dp"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        tools:visibility="visible"
+        />
 
     <!-- Empty view -->
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/empty_view"
-        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        >
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/empty_state_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:tint="@color/colorPrimary"
-            app:srcCompat="@drawable/ic_track_changes_black_48dp"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/error_image" />
+            app:srcCompat="@drawable/ic_verified_user_black_24dp"
+             />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/no_scanned_beacons_yet"
             android:id="@+id/empty_state_title"
-            android:textColor="@color/primaryText"
-            android:layout_below="@+id/error_image"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="@dimen/keyline_16"
-            android:textSize="16sp" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/empty_state_content"
-            android:id="@+id/empty_state_content"
-            android:layout_below="@+id/empty_state_title"
-            android:layout_centerHorizontal="true"
-            android:textSize="14sp"
-            android:textAlignment="center"
-            android:maxWidth="250dip"
-            android:layout_marginLeft="@dimen/keyline_32"
-            android:layout_marginRight="@dimen/keyline_32" />
-
-    </RelativeLayout>
+            app:layout_constraintTop_toBottomOf="@+id/empty_state_icon"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="@string/no_blocked_beacons"
+            android:textColor="@color/primaryText"
+            android:layout_margin="@dimen/keyline_16"
+            android:textSize="16sp"
+            />
+    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

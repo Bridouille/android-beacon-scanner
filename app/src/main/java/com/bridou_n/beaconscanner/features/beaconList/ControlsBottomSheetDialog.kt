@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.TextView
 import com.bridou_n.beaconscanner.AppSingleton
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.models.BeaconSaved
@@ -31,12 +32,14 @@ class ControlsBottomSheetDialog : BottomSheetDialogFragment() {
 
     companion object {
         const val KEY_BEACON = "key_beacon"
+        const val KEY_BLOCKED = "key_blocked"
 
-        fun newInstance(beacon: BeaconSaved) : ControlsBottomSheetDialog {
+        fun newInstance(beacon: BeaconSaved, blocked: Boolean = false) : ControlsBottomSheetDialog {
             val frag = ControlsBottomSheetDialog()
 
             val bundle = Bundle()
             bundle.putParcelable(KEY_BEACON, beacon)
+            bundle.putBoolean(KEY_BLOCKED, blocked)
             frag.arguments = bundle
 
             return frag
@@ -45,6 +48,7 @@ class ControlsBottomSheetDialog : BottomSheetDialogFragment() {
 
     private val TAG = "ConstrolsBS"
     private lateinit var beacon: BeaconSaved
+    private var isBlockedLst: Boolean = false
 
     @Inject lateinit var realm: Realm
 
@@ -57,12 +61,14 @@ class ControlsBottomSheetDialog : BottomSheetDialogFragment() {
     private fun restoreFromBundle(bundle: Bundle?) {
         if (bundle != null) {
             beacon = bundle.getParcelable(KEY_BEACON)
+            isBlockedLst = bundle.getBoolean(KEY_BLOCKED)
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable(KEY_BEACON, beacon)
+        outState.putBoolean(KEY_BLOCKED, isBlockedLst)
     }
 
     private val mBottomSheetBehaviorCallback = object : BottomSheetBehavior.BottomSheetCallback() {
@@ -103,8 +109,14 @@ class ControlsBottomSheetDialog : BottomSheetDialogFragment() {
         val removeContainer = contentView.findViewById<LinearLayout>(R.id.remove)
         val clipboardContainer = contentView.findViewById<LinearLayout>(R.id.clipboard)
         val blockedContainer = contentView.findViewById<LinearLayout>(R.id.block)
+        val blockLabel = contentView.findViewById<TextView>(R.id.block_label)
 
         val hashcode = beacon.hashcode
+
+        if (isBlockedLst) {
+            removeContainer.visibility = View.GONE
+            blockLabel.setText(R.string.unblock)
+        }
 
         removeContainer.setOnClickListener {
             realm.executeTransactionAsync(Realm.Transaction { tRealm ->
@@ -127,7 +139,7 @@ class ControlsBottomSheetDialog : BottomSheetDialogFragment() {
             realm.executeTransactionAsync(Realm.Transaction { tRealm ->
                 val beacon = tRealm.getBeaconWithId(hashcode)
 
-                beacon?.isBlocked = true
+                beacon?.isBlocked = !isBlockedLst
             }, Realm.Transaction.OnSuccess {
                 dismiss()
             })
