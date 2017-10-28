@@ -12,8 +12,8 @@ class RatingHelper(ctx: Context) {
 
     companion object {
         private val SHARED_PREF_RATING = "shared_pref_rating"
-        // The user must have opened the app 10 times before he sees the rating bs
-        private val MIN_APP_OPENS = 10
+        // We show the rating every 10 opennings until they rate
+        private val APP_OPENS_STEPS = 10L
 
         private val APP_OPENS_KEY = "appOpenKey"
         private val POPUP_SEEN = "popupSeenKey"
@@ -41,7 +41,7 @@ class RatingHelper(ctx: Context) {
         isRatingOngoing = true
     }
 
-    fun shouldShowRatingRationale() = !isRatingOngoing && !hasSeenPopup() && getAppOpens() >= MIN_APP_OPENS
+    fun shouldShowRatingRationale() = !isRatingOngoing && !hasSeenPopup() && getAppOpens() % APP_OPENS_STEPS == 0L
 
     fun reset() = prefs.edit().clear().apply()
 }

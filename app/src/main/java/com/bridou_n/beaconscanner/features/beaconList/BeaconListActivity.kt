@@ -3,7 +3,6 @@ package com.bridou_n.beaconscanner.features.beaconList
 import android.Manifest
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -38,7 +37,6 @@ import com.afollestad.materialdialogs.Theme
 import com.bridou_n.beaconscanner.API.LoggingService
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.events.RxBus
-import com.bridou_n.beaconscanner.features.blockedList.BlockedActivity
 import com.bridou_n.beaconscanner.features.settings.SettingsActivity
 import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.utils.BluetoothManager
@@ -102,9 +100,6 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
         component().inject(this)
-
-        // TODO: remove this
-        startActivity(Intent(this, BlockedActivity::class.java))
 
         toolbar.inflateMenu(R.menu.main_menu)
         setSupportActionBar(toolbar)

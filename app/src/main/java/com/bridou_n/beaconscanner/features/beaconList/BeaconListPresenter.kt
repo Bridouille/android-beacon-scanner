@@ -171,7 +171,6 @@ class BeaconListPresenter(val view: BeaconListContract.View,
     override fun onRatingInteraction(step: Int, answer: Boolean) {
         Log.d(TAG, "step: $step -- answer : $answer")
         if (!answer) { // The user answered "no" to any question
-            ratingHelper.setPopupSeen()
             return view.showRating(step, false)
         }
 
