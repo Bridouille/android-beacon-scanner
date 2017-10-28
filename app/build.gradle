@@ -20,8 +20,8 @@ android {
         applicationId "com.bridou_n.beaconscanner"
         minSdkVersion 18
         targetSdkVersion 26
-        versionCode 13
-        versionName "2.0.3"
+        versionCode 14
+        versionName "2.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -29,6 +29,17 @@ android {
         release {
             minifyEnabled true
             buildConfigField "String", "CONTACT_EMAIL", "\"nicobr65@gmail.com\""
+            resValue "string", "app_name", "Beacon Scanner"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
+        preRelease {
+            minifyEnabled true
+            applicationIdSuffix = ".preRelease"
+            versionNameSuffix = "-preRelease"
+            buildConfigField "String", "CONTACT_EMAIL", "\"nicobr65@gmail.com\""
+            resValue "string", "app_name", "Beacon Scanner"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -36,7 +47,9 @@ android {
         debug {
             minifyEnabled false
             applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
             buildConfigField "String", "CONTACT_EMAIL", "\"nicobr65@gmail.com\""
+            resValue "string", "app_name", "BS debug"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -48,7 +61,7 @@ android {
 
 ext {
     supportLibraryVersion = '26.0.1'
-    firebaseVersion = '11.2.2'
+    firebaseVersion = '11.4.2'
 }
 
 dependencies {

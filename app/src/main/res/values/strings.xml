@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Beacon Scanner</string>
     <string name="settings">Settings</string>
     <string name="enable">Enable</string>
     <string name="enable_permission_from_settings">Please enable location permission from settings to use the bluetooth</string>
