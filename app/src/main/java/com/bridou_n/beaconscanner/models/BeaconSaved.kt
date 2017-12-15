@@ -3,14 +3,14 @@ package com.bridou_n.beaconscanner.models
 import android.os.Parcel
 import android.os.Parcelable
 import com.bridou_n.beaconscanner.utils.RuuviParser
+import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
-import java.util.Date
-
 import io.realm.RealmObject
 import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor
+import java.util.*
 
 /**
  * Created by bridou_n on 30/09/2016.
@@ -124,6 +124,8 @@ open class BeaconSaved() : RealmObject(), Parcelable {
         ret.telemetryData = telemetryData?.clone()
         ret.ruuviData = ruuviData?.clone()
 
+        ret.isBlocked = isBlocked
+
         return ret
     }
 
@@ -160,56 +162,6 @@ open class BeaconSaved() : RealmObject(), Parcelable {
     }
 
     override fun toString(): String {
-        var str =  "{    \n" +
-                "         \"beaconAddress\":\"$beaconAddress\",\n" +
-                "         \"beaconType\":\"$beaconType\",\n" +
-                "         \"distance\":$distance,\n" +
-                "         \"hashcode\":$hashcode,\n" +
-                "         \"isBlocked\":$isBlocked,\n" +
-                "         \"lastMinuteSeen\":$lastMinuteSeen,\n" +
-                "         \"lastSeen\":$lastSeen,\n" +
-                "         \"manufacturer\":$manufacturer,\n" +
-                "         \"rssi\":$rssi,\n" +
-                "         \"txPower\":$txPower\n";
-
-        if (ibeaconData != null) {
-            str +=  "         \"ibeaconData\":{  \n" +
-                    "            \"uuid\":\"${ibeaconData?.uuid}\"\n" +
-                    "            \"major\":${ibeaconData?.major},\n" +
-                    "            \"minor\":${ibeaconData?.minor},\n" +
-                    "         },\n"
-        }
-
-        if (eddystoneUrlData != null) {
-            str +=  "         \"eddystoneUrlData\":{  \n" +
-                    "            \"url\":\"${eddystoneUrlData?.url}\"\n" +
-                    "         },\n"
-        }
-
-        if (eddystoneUidData != null) {
-            str +=  "         \"eddystoneUidData\":{  \n" +
-                    "            \"namespaceId\":\"${eddystoneUidData?.namespaceId}\"\n" +
-                    "            \"instanceId\":${eddystoneUidData?.instanceId},\n" +
-                    "         },\n"
-        }
-
-        if (telemetryData != null) {
-            str +=  "         \"telemetryData\":{  \n" +
-                    "            \"batteryMilliVolts\":${telemetryData?.batteryMilliVolts},\n" +
-                    "            \"pduCount\":${telemetryData?.pduCount},\n" +
-                    "            \"temperature\":${telemetryData?.temperature},\n" +
-                    "            \"uptimeSeconds\":${telemetryData?.uptime},\n" +
-                    "            \"version\":${telemetryData?.version}\n" +
-                    "         },\n"
-        }
-
-        if (ruuviData != null) {
-            str +=  "         \"ruuviData\":{  \n" +
-                    "            \"humidity\":\"${ruuviData?.humidity}\"\n" +
-                    "            \"airPressure\":${ruuviData?.airPressure},\n" +
-                    "            \"temperatue\":${ruuviData?.temperatue},\n" +
-                    "         },\n"
-        }
-        return str + "    }"
+        return GsonBuilder().setPrettyPrinting().create().toJson(this.clone())
     }
 }
