@@ -127,12 +127,14 @@ class ControlsBottomSheetDialog : BottomSheetDialogFragment() {
         }
 
         clipboardContainer.setOnClickListener {
-            val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("Beacon infos", beacon.toString())
-            clipboard.primaryClip = clip
+            context?.let {
+                val clipboard = it.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("Beacon infos", beacon.toString())
+                clipboard.primaryClip = clip
 
-            dismiss()
-            (activity as AppCompatActivity).showSnackBar(context.getString(R.string.the_informations_has_been_copied))
+                dismiss()
+                (activity as AppCompatActivity).showSnackBar(it.getString(R.string.the_informations_has_been_copied))
+            }
         }
 
         blockedContainer.setOnClickListener {

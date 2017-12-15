@@ -14,14 +14,14 @@ android {
         }
     }
 
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.2'
     defaultConfig {
         applicationId "com.bridou_n.beaconscanner"
         minSdkVersion 18
-        targetSdkVersion 26
-        versionCode 14
-        versionName "2.1.0"
+        targetSdkVersion 27
+        versionCode 15
+        versionName "2.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -60,8 +60,8 @@ android {
 }
 
 ext {
-    supportLibraryVersion = '26.0.1'
-    firebaseVersion = '11.4.2'
+    supportLibraryVersion = '27.0.2'
+    firebaseVersion = '11.6.2'
 }
 
 dependencies {
