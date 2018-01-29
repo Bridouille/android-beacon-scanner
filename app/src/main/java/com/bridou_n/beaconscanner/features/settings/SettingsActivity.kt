@@ -243,11 +243,7 @@ class SettingsActivity : AppCompatActivity() {
 
     @OnClick(R.id.feature_request)
     fun onFeatureRequestClicked() {
-        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", BuildConfig.CONTACT_EMAIL, null))
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feature request for BeaconScanner")
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "")
-
-        startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email)))
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Bridouille/android-beacon-scanner")))
     }
 
     @OnClick(R.id.tutorial)
