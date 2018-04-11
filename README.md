@@ -1,3 +1,4 @@
+
 # :cyclone: Android Beacon Scanner #
 
 A simple android beacon scanner that can recognize iBeacons, AltBeacons, Eddystone beacons (UID and URL, with or without TLM) and RuuviTags [available on Google Play](https://play.google.com/store/apps/details?id=com.bridou_n.beaconscanner).
@@ -39,6 +40,12 @@ For RuuviTag:
 It can display several frames emitted by a single beacon, allowing you to see if a beacon emits multiple frames types (for example radius network beacons can emit iBeacon and AltBeacon at the same time)!
 
 * You can also log the scans of the beacons to an endpoint via a HTTP POST request.
+
+## :wrench: Installation setup ##
+
+ 1. This project uses Firebase Analytics and Firebase Crash reporting, therefore it needs a `google-services.json` files in the `app` directory. To get it you need to create a Firebase project in the [Firebase console](https://console.firebase.google.com/u/0/) and go to the project settings and download the `google-services.json` file from there.
+ 2. You'll see there is a `signingConfigs.release` in the `app/build.gradle` that contains variable that you didn't declare `beacon_scanner_key_password`, `beacon_scanner_store_file`, `beacon_scanner_store_password`. Either you create those 3 keys in your `~/.gradle/gradle.properties` files or you can simply remove this configuration if you're not interested in having a release signing configuration. Make sure to remove it in the `release` and `preRelease` buildTypes as well.
+ 3. That's it, the app should now compile!
 
 ## :blue_book: Main libraries used ##
 
