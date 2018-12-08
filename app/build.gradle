@@ -2,9 +2,21 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
-apply plugin: 'com.google.firebase.firebase-crash'
+apply plugin: 'io.fabric'
 
 android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.bridou_n.beaconscanner"
+        minSdkVersion 18
+        targetSdkVersion 27
+        versionCode 16
+        versionName "2.1.2"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
+
     signingConfigs {
         release {
             keyAlias 'BeaconScannerKey'
@@ -14,16 +26,6 @@ android {
         }
     }
 
-    compileSdkVersion 27
-    defaultConfig {
-        applicationId "com.bridou_n.beaconscanner"
-        minSdkVersion 18
-        targetSdkVersion 27
-        versionCode 16
-        versionName "2.1.2"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
-    }
     buildTypes {
         release {
             minifyEnabled true
@@ -64,62 +66,66 @@ ext {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    testCompile 'junit:junit:4.12'
-    compile "com.android.support:design:${supportLibraryVersion}"
-    compile "com.android.support:support-v4:${supportLibraryVersion}"
-    compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
-    compile "com.android.support:recyclerview-v7:${supportLibraryVersion}"
-    compile "com.android.support:cardview-v7:${supportLibraryVersion}"
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "com.android.support:design:${supportLibraryVersion}"
+    implementation "com.android.support:support-v4:${supportLibraryVersion}"
+    implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
+    implementation "com.android.support:recyclerview-v7:${supportLibraryVersion}"
+    implementation "com.android.support:cardview-v7:${supportLibraryVersion}"
 
     // Kotlin
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // ButterKnife
-    compile 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.jakewharton:butterknife:8.8.1'
     kapt 'com.jakewharton:butterknife-compiler:8.8.1'
 
     // Dagger 2
-    compile 'com.google.dagger:dagger:2.11'
+    implementation 'com.google.dagger:dagger:2.11'
     kapt 'com.google.dagger:dagger-compiler:2.11'
 
     // RxJava & RxAndroid
-    compile 'io.reactivex.rxjava2:rxjava:2.1.2'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.2'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 
     // Retrofit & RxJava call adapters & Gson
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
 
-    compile 'com.google.code.gson:gson:2.8.1'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.google.code.gson:gson:2.8.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
     // Realm adapters
-    compile 'io.realm:android-adapters:2.1.0'
+    implementation 'io.realm:android-adapters:2.1.0'
 
     // ALT Beacon library
-    compile 'org.altbeacon:android-beacon-library:2.12.1'
+    implementation 'org.altbeacon:android-beacon-library:2.12.1'
 
     // Easy permissions
-    compile 'pub.devrel:easypermissions:0.4.3'
+    implementation 'pub.devrel:easypermissions:0.4.3'
 
     // Tap target view, discovery feature
-    compile 'com.getkeepsafe.taptargetview:taptargetview:1.10.0'
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.10.0'
 
     // Constraint Layout
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
     // Material dialog
-    compile 'com.afollestad.material-dialogs:core:0.9.4.5'
+    implementation 'com.afollestad.material-dialogs:core:0.9.4.5'
 
     // Firebase Analytics & Crash reporting
-    compile "com.google.firebase:firebase-core:${firebaseVersion}"
-    compile "com.google.firebase:firebase-crash:${firebaseVersion}"
+    implementation "com.google.firebase:firebase-core:${firebaseVersion}"
+    implementation "com.google.firebase:firebase-crash:${firebaseVersion}"
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.7'
+
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    testImplementation 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'
