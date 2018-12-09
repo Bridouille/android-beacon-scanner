@@ -3,6 +3,8 @@ package com.bridou_n.beaconscanner.features.beaconList
 import android.Manifest
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -181,7 +183,11 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         bluetoothStateTv.setBackgroundColor(ContextCompat.getColor(this, state.bgColor))
         bluetoothStateTv.text = getString(state.text)
 
-        menu?.getItem(1)?.setIcon(if (isEnabled) R.drawable.ic_bluetooth_white_24dp else R.drawable.ic_bluetooth_disabled_white_24dp)
+        val icon = AppCompatResources.getDrawable(this, if (isEnabled) R.drawable.ic_round_bluetooth_24px else R.drawable.ic_round_bluetooth_disabled_24px)
+                ?.mutate()
+        icon?.setColorFilter(ContextCompat.getColor(this, R.color.toolbarTextColor), PorterDuff.Mode.SRC_IN)
+
+        menu?.getItem(1)?.icon = icon
 
         // If the bluetooth is ON, we don't warn the user
         if (state == BluetoothState.STATE_ON) {

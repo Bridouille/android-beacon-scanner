@@ -9,7 +9,7 @@
         android:title="@string/clear"
         app:showAsAction="ifRoom"/>
     <item
-        android:icon="@drawable/ic_bluetooth_white_24dp"
+        android:icon="@drawable/ic_round_bluetooth_24px"
         android:id="@+id/action_bluetooth"
         android:title="@string/bluetooth_state"
         app:showAsAction="ifRoom"/>

@@ -29,7 +29,6 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            buildConfigField "String", "CONTACT_EMAIL", "\"nicobr65@gmail.com\""
             resValue "string", "app_name", "Beacon Scanner"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -39,7 +38,6 @@ android {
             minifyEnabled true
             applicationIdSuffix = ".preRelease"
             versionNameSuffix = "-preRelease"
-            buildConfigField "String", "CONTACT_EMAIL", "\"nicobr65@gmail.com\""
             resValue "string", "app_name", "Beacon Scanner"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -49,8 +47,7 @@ android {
             minifyEnabled false
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
-            buildConfigField "String", "CONTACT_EMAIL", "\"nicobr65@gmail.com\""
-            resValue "string", "app_name", "BS debug"
+            resValue "string", "app_name", "Beacon Scanner"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
