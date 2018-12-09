@@ -46,7 +46,6 @@ class ControlsBottomSheetDialog : BottomSheetDialogFragment() {
         }
     }
 
-    private val TAG = "ConstrolsBS"
     private lateinit var beacon: BeaconSaved
     private var isBlockedLst: Boolean = false
 
