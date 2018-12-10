@@ -115,6 +115,9 @@ dependencies {
     implementation "com.google.firebase:firebase-crash:${firebaseVersion}"
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.7'
 
+    // Timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

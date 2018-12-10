@@ -1,7 +1,6 @@
 package com.bridou_n.beaconscanner.features.beaconList
 
 import android.os.RemoteException
-import android.util.Log
 import com.bridou_n.beaconscanner.API.LoggingService
 import com.bridou_n.beaconscanner.events.Events
 import com.bridou_n.beaconscanner.events.RxBus
@@ -20,10 +19,10 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import io.realm.RealmResults
-import io.realm.Sort
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.Region
+import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -40,8 +39,6 @@ class BeaconListPresenter(val view: BeaconListContract.View,
                           val bluetoothState: BluetoothManager,
                           val ratingHelper: RatingHelper,
                           val tracker: FirebaseAnalytics) : BeaconListContract.Presenter {
-
-    private val TAG = "BeaconListPresenter"
 
     private lateinit var beaconResults: RealmResults<BeaconSaved>
 
@@ -110,7 +107,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
         }
 
         if (!(beaconManager?.isBound(view) ?: false)) {
-            Log.d(TAG, "binding beaconManager")
+            Timber.d("binding beaconManager")
             beaconManager?.bind(view)
         }
 
@@ -135,7 +132,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
     }
 
     override fun onBeaconServiceConnect() {
-        Log.d(TAG, "beaconManager is bound, ready to start scanning")
+        Timber.d("beaconManager is bound, ready to start scanning")
         beaconManager?.addRangeNotifier { beacons, region -> rxBus.send(Events.RangeBeacon(beacons, region)) }
 
         try {
@@ -169,7 +166,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
     }
 
     override fun onRatingInteraction(step: Int, answer: Boolean) {
-        Log.d(TAG, "step: $step -- answer : $answer")
+        Timber.d("step: $step -- answer : $answer")
         if (!answer) { // The user answered "no" to any question
             return view.showRating(step, false)
         }
@@ -211,7 +208,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
             numberOfScansSinceLog = 0 // Reset the counter before we get the results
             beaconToLog.addChangeListener { results ->
                 if (results.isLoaded && results.isNotEmpty()) {
-                    Log.d(TAG, "Result is loaded size : ${results.size} - lastLoggingCall : ${Date(prefs.lasLoggingCall)}")
+                    Timber.d("Result is loaded size : ${results.size} - lastLoggingCall : ${Date(prefs.lasLoggingCall)}")
 
                     // Execute the network request
                     prefs.lasLoggingCall = Date().time
@@ -223,7 +220,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
                     loggingRequests.add(loggingService.postLogs(prefs.loggingEndpoint ?: "", req)
                             .retryWhen({ errors: Flowable<Throwable> ->
                                 errors.zipWith(Flowable.range(1, MAX_RETRIES + 1), BiFunction { _: Throwable, attempt: Int ->
-                                    Log.d(TAG, "attempt : $attempt")
+                                    Timber.d("attempt : $attempt")
                                     if (attempt > MAX_RETRIES) {
                                         view.showLoggingError()
                                     }
@@ -287,7 +284,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
 
     fun unbindBeaconManager() {
         if (beaconManager?.isBound(view) == true) {
-            Log.d(TAG, "Unbinding from beaconManager")
+            Timber.d("Unbinding from beaconManager")
             beaconManager?.unbind(view)
         }
     }

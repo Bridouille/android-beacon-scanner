@@ -1,13 +1,16 @@
 package com.bridou_n.beaconscanner
 
 import android.app.Application
+import android.util.Log.ERROR
 import com.bridou_n.beaconscanner.dagger.components.ActivityComponent
 import com.bridou_n.beaconscanner.dagger.components.DaggerActivityComponent
 import com.bridou_n.beaconscanner.dagger.components.DaggerAppComponent
 import com.bridou_n.beaconscanner.dagger.modules.*
 import com.bridou_n.beaconscanner.utils.RatingHelper
+import com.crashlytics.android.Crashlytics
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -39,6 +42,10 @@ class AppSingleton : Application() {
 
         activityComponent.inject(this)
 
+        // Timber
+        Timber.plant(CrashReportingTree())
+
+        // Realm
         Realm.init(this)
 
         val realmConfig = RealmConfiguration.Builder()
@@ -48,5 +55,21 @@ class AppSingleton : Application() {
         Realm.setDefaultConfiguration(realmConfig)
 
         ratingHelper.incrementAppOpens()
+    }
+}
+
+/** A tree which logs important information for crash reporting.  */
+class CrashReportingTree : Timber.DebugTree() {
+
+    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+        super.log(priority, tag, message, t) // Do the regular timber debug
+
+        Crashlytics.log(priority, tag, message)
+
+        t?.let {
+            if (priority == ERROR) {
+                Crashlytics.logException(t)
+            }
+        }
     }
 }

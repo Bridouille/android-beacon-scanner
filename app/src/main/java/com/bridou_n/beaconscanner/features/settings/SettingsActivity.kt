@@ -7,7 +7,6 @@ import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
-import android.util.Log
 import android.util.Patterns
 import android.view.MenuItem
 import com.afollestad.materialdialogs.DialogAction
@@ -22,14 +21,11 @@ import com.bridou_n.beaconscanner.utils.extensionFunctions.component
 import com.bridou_n.beaconscanner.utils.extensionFunctions.logEvent
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_settings.*
+import timber.log.Timber
 import javax.inject.Inject
 
 
 class SettingsActivity : AppCompatActivity() {
-
-    companion object {
-        const val TAG = "SettingsActivity"
-    }
 
     @Inject lateinit var prefs: PreferencesHelper
     @Inject lateinit var ratingHelper: RatingHelper
@@ -70,7 +66,7 @@ class SettingsActivity : AppCompatActivity() {
                     .title(R.string.delay_in_between_each_scan)
                     .items(R.array.scan_delays_names)
                     .itemsCallbackSingleChoice(prefs.getScanDelayIdx()) { _, _, which, text ->
-                        Log.d(TAG, "$which - $text")
+                        Timber.d( "$which - $text")
                         prefs.setScanDelayIdx(which)
                         scan_delay.text = prefs.getScanDelayName()
                         true
@@ -103,7 +99,7 @@ class SettingsActivity : AppCompatActivity() {
                     .title(R.string.logging_frequency)
                     .items(R.array.logging_frequencies_names)
                     .itemsCallbackSingleChoice(prefs.getLoggingFrequencyIdx()) { _, _, which, text ->
-                        Log.d(TAG, "$which - $text")
+                        Timber.d( "$which - $text")
                         prefs.setLoggingFrequencyIdx(which)
                         logging_frequency.text = prefs.getLoggingFrequencyName()
                         true
@@ -119,7 +115,7 @@ class SettingsActivity : AppCompatActivity() {
                     .inputRangeRes(2, 30, R.color.colorPauseFab)
                     .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI)
                     .input(getString(R.string.device_name), prefs.loggingDeviceName ?: "Scanner 1", { _, input ->
-                        Log.d(TAG, "$input")
+                        Timber.d("$input")
 
                         val name = input.toString()
                         if (name.isNotEmpty()) {
@@ -146,7 +142,7 @@ class SettingsActivity : AppCompatActivity() {
                                 endpoint = "http://$endpoint"
                             }
 
-                            Log.d(TAG, "endpoint: $endpoint - valid : " + Patterns.WEB_URL.matcher(endpoint).matches())
+                            Timber.d("endpoint: $endpoint - valid : " + Patterns.WEB_URL.matcher(endpoint).matches())
 
                             if (Patterns.WEB_URL.matcher(endpoint).matches()) { // The URL is a valid endpoint
                                 dialog.getActionButton(DialogAction.POSITIVE).isEnabled = true
@@ -165,7 +161,7 @@ class SettingsActivity : AppCompatActivity() {
                                 newEndpoint = "http://$newEndpoint"
                             }
 
-                            Log.d(TAG, "newEndpoint: " + newEndpoint)
+                            Timber.d("newEndpoint: " + newEndpoint)
 
                             logging_endpoint.text = newEndpoint
                             prefs.loggingEndpoint = newEndpoint

@@ -1,19 +1,18 @@
 package com.bridou_n.beaconscanner.utils;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.bridou_n.beaconscanner.utils.copyPaste.Base64;
 import com.bridou_n.beaconscanner.utils.copyPaste.Base91;
 import com.bridou_n.beaconscanner.utils.extensionFunctions.IntArraysKt;
+
+import timber.log.Timber;
 
 /**
  * Created by bridou_n on 05/09/2017.
  */
 
 public class RuuviParser {
-    private String TAG = "RuuviParser";
-
     private int BASE_64 = 0;
     private int BASE_91 = 1;
 
@@ -38,9 +37,9 @@ public class RuuviParser {
 
         int format = decoded64[0];
 
-        Log.d(TAG, IntArraysKt.print(decoded));
-        Log.d(TAG, IntArraysKt.print(decoded64));
-        Log.d(TAG, "format: " + format);
+        Timber.d(IntArraysKt.print(decoded));
+        Timber.d(IntArraysKt.print(decoded64));
+        Timber.d("format: " + format);
 
         if (format != 2 && format != 4) {
             /*
