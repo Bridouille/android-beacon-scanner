@@ -2,12 +2,13 @@ package com.bridou_n.beaconscanner
 
 import android.app.Application
 import android.util.Log.ERROR
-import com.bridou_n.beaconscanner.dagger.components.ActivityComponent
-import com.bridou_n.beaconscanner.dagger.components.DaggerActivityComponent
-import com.bridou_n.beaconscanner.dagger.components.DaggerAppComponent
-import com.bridou_n.beaconscanner.dagger.modules.*
+import com.bridou_n.beaconscanner.dagger.AppComponent
+import com.bridou_n.beaconscanner.dagger.ContextModule
+import com.bridou_n.beaconscanner.dagger.DaggerAppComponent
+import com.bridou_n.beaconscanner.utils.BuildTypes
 import com.bridou_n.beaconscanner.utils.RatingHelper
 import com.crashlytics.android.Crashlytics
+import com.google.firebase.analytics.FirebaseAnalytics
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import timber.log.Timber
@@ -20,30 +21,26 @@ import javax.inject.Inject
 class AppSingleton : Application() {
 
     companion object {
-        lateinit var activityComponent: ActivityComponent
+        lateinit var appComponent: AppComponent
     }
 
     @Inject lateinit var ratingHelper: RatingHelper
+    @Inject lateinit var tracker: FirebaseAnalytics
 
     override fun onCreate() {
         super.onCreate()
 
-        val appComponent = DaggerAppComponent.builder()
+        // Dagger
+        appComponent = DaggerAppComponent.builder()
                 .contextModule(ContextModule(this))
-                .networkModule(NetworkModule())
-                .databaseModule(DatabaseModule())
-                .eventModule(EventModule())
                 .build()
-
-        activityComponent = DaggerActivityComponent.builder()
-                .appComponent(appComponent)
-                .bluetoothModule(BluetoothModule())
-                .build()
-
-        activityComponent.inject(this)
+        appComponent.inject(this)
 
         // Timber
         Timber.plant(CrashReportingTree())
+
+        // Analytics
+        tracker.setAnalyticsCollectionEnabled(BuildTypes.isRelease())
 
         // Realm
         Realm.init(this)

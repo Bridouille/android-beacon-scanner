@@ -54,7 +54,7 @@ class ControlsBottomSheetDialog : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         restoreFromBundle(savedInstanceState ?: arguments)
-        AppSingleton.activityComponent.inject(this)
+        AppSingleton.appComponent.inject(this)
     }
 
     private fun restoreFromBundle(bundle: Bundle?) {

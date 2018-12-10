@@ -14,7 +14,7 @@ import com.bridou_n.beaconscanner.AppSingleton
  * Created by bridou_n on 21/08/2017.
  */
 
-fun AppCompatActivity.component() = AppSingleton.activityComponent
+fun AppCompatActivity.component() = AppSingleton.appComponent
 
 fun AppCompatActivity.setStatusBarColor(color: Int) {
 

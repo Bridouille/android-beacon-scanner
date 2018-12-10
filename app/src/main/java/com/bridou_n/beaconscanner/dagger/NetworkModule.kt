@@ -1,4 +1,4 @@
-package com.bridou_n.beaconscanner.dagger.modules
+package com.bridou_n.beaconscanner.dagger
 
 import com.bridou_n.beaconscanner.API.LoggingService
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
@@ -20,12 +20,13 @@ import javax.inject.Singleton
  * Created by bridou_n on 24/08/2017.
  */
 
-@Module class NetworkModule {
+@Module
+object NetworkModule {
 
     val EXAMPLE_BASE_URL = "http://www.example.com/"
     val DEVICE_NAME = "device-name"
 
-    @Provides @Singleton @Named("injectDeviceName")
+    @JvmStatic @Provides @Singleton @Named("injectDeviceName")
     fun provideInjectTokenInterceptor(prefs: PreferencesHelper) : Interceptor {
         return Interceptor { chain ->
             val req = chain.request()
@@ -41,7 +42,7 @@ import javax.inject.Singleton
         }
     }
 
-    @Provides @Singleton @Named("logging")
+    @JvmStatic @Provides @Singleton @Named("logging")
     fun provideLoggingInterceptor() : Interceptor {
         val interceptor = HttpLoggingInterceptor()
 
@@ -49,7 +50,7 @@ import javax.inject.Singleton
         return interceptor
     }
 
-    @Provides @Singleton
+    @JvmStatic @Provides @Singleton
     fun provideOkHttpClient(@Named("injectDeviceName") injectTokenInterceptor: Interceptor,
                             @Named("logging") loggingInterceptor: Interceptor) : OkHttpClient {
         return OkHttpClient.Builder()
@@ -58,10 +59,10 @@ import javax.inject.Singleton
                 .build()
     }
 
-    @Provides @Singleton
+    @JvmStatic @Provides @Singleton
     fun provideGson() = GsonBuilder().create()
 
-    @Provides @Singleton
+    @JvmStatic @Provides @Singleton
     fun provideRetrofit(httpClient: OkHttpClient, gson: Gson) : Retrofit {
         return Retrofit.Builder()
                 .baseUrl(EXAMPLE_BASE_URL)
@@ -71,6 +72,6 @@ import javax.inject.Singleton
                 .build()
     }
 
-    @Provides @Singleton
+    @JvmStatic @Provides @Singleton
     fun provideLoggingService(retrofit: Retrofit) = retrofit.create(LoggingService::class.java)
 }
