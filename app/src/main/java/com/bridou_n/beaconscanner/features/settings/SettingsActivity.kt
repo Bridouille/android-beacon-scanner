@@ -3,17 +3,23 @@ package com.bridou_n.beaconscanner.features.settings
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AppCompatActivity
+import android.text.InputType
+import android.util.Patterns
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.WhichButton
+import com.afollestad.materialdialogs.actions.getActionButton
+import com.afollestad.materialdialogs.input.getInputField
+import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.bridou_n.beaconscanner.BuildConfig
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.features.blockedList.BlockedActivity
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
 import com.bridou_n.beaconscanner.utils.extensionFunctions.component
-import com.bridou_n.beaconscanner.utils.extensionFunctions.logEvent
+import com.bridou_n.beaconscanner.utils.extensionFunctions.log
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -98,39 +104,42 @@ class SettingsActivity : AppCompatActivity() {
                         Timber.d( "$idx - $text")
                         prefs.setLoggingFrequencyIdx(idx)
                         logging_frequency.text = prefs.getLoggingFrequencyName()
-                        true
                     }
                     .positiveButton {  }
                     .show()
         }
 
         device_name_container.setOnClickListener {
-            // TODO: redo this
-            /*MaterialDialog(this)
-                    .title(R.string.device_name)
-                    .inputRangeRes(2, 30, R.color.colorPauseFab)
-                    .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI)
-                    .input(getString(R.string.device_name), prefs.loggingDeviceName ?: "Scanner 1", { _, input ->
-                        Timber.d("$input")
+            MaterialDialog(this)
+                .title(R.string.device_name)
+                .input(
+                        hint = getString(R.string.device_name),
+                        prefill = prefs.loggingDeviceName ?: "Scanner 1",
+                        maxLength = 30,
+                        inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI,
+                        waitForPositiveButton = true
+                ) { _,  input ->
+                    Timber.d("$input")
 
-                        val name = input.toString()
-                        if (name.isNotEmpty()) {
-                            device_name.text = name
-                            prefs.loggingDeviceName = name
-                        }
-                    })
-                    .negativeText(android.R.string.cancel)
-                    .show()*/
+                    val name = input.toString()
+                    if (name.isNotEmpty()) {
+                        device_name.text = name
+                        prefs.loggingDeviceName = name
+                    }
+                }
+                .negativeButton(android.R.string.cancel)
+                .show()
         }
 
         logging_endpoint_container.setOnClickListener {
-            // TODO: redo this
-            /*MaterialDialog.Builder(this)
-                    .theme(Theme.LIGHT)
+            MaterialDialog(this)
                     .title(R.string.logging_endpoint)
-                    .inputRangeRes(7, -1, R.color.colorPauseFab)
-                    .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI)
-                    .input(getString(R.string.logging_endpoint), prefs.loggingEndpoint ?: "http://example.com/logging", { dialog, input ->
+                    .input(
+                            hint = getString(R.string.logging_endpoint),
+                            prefill = prefs.loggingEndpoint ?: "http://example.com/logging",
+                            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI,
+                            waitForPositiveButton = false
+                    ) { dialog, input ->
                         var endpoint = input.toString()
 
                         if (endpoint.isNotEmpty()) {
@@ -139,18 +148,18 @@ class SettingsActivity : AppCompatActivity() {
                                 endpoint = "http://$endpoint"
                             }
 
-                            Timber.d("endpoint: $endpoint - valid : " + Patterns.WEB_URL.matcher(endpoint).matches())
+                            Timber.d("endpoint: $endpoint - valid : ${Patterns.WEB_URL.matcher(endpoint).matches()}")
 
                             if (Patterns.WEB_URL.matcher(endpoint).matches()) { // The URL is a valid endpoint
-                                dialog.getActionButton(DialogAction.POSITIVE).isEnabled = true
+                                dialog.getActionButton(WhichButton.POSITIVE).isEnabled = true
                                 return@input
                             }
                         }
-                        dialog.getActionButton(DialogAction.POSITIVE).isEnabled = false
-                    })
-                    .onPositive { dialog, _ ->
+                        dialog.getActionButton(WhichButton.POSITIVE).isEnabled = false
+                    }
+                    .positiveButton {
                         // From here the input should be valid
-                        var newEndpoint = dialog.inputEditText?.text?.toString() ?: return@onPositive
+                        var newEndpoint = it.getInputField()?.text?.toString() ?: return@positiveButton
 
                         if (newEndpoint.isNotEmpty()) {
                             // If we just entered the IP address or 'example.com' for example
@@ -158,25 +167,24 @@ class SettingsActivity : AppCompatActivity() {
                                 newEndpoint = "http://$newEndpoint"
                             }
 
-                            Timber.d("newEndpoint: " + newEndpoint)
+                            Timber.d("newEndpoint: $newEndpoint")
 
                             logging_endpoint.text = newEndpoint
                             prefs.loggingEndpoint = newEndpoint
                         }
                     }
-                    .negativeText(android.R.string.cancel)
-                    .alwaysCallInputCallback()
-                    .show()*/
+                    .negativeButton(android.R.string.cancel)
+                    .show()
         }
 
         blacklist.setOnClickListener {
-            tracker.logEvent("blacklist_clicked")
+            tracker.log("blacklist_clicked")
 
             startActivity(Intent(this, BlockedActivity::class.java))
         }
 
         rate.setOnClickListener {
-            tracker.logEvent("rate_clicked")
+            tracker.log("rate_clicked")
             val appPackageName = packageName
 
             try {
@@ -191,7 +199,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         tutorial.setOnClickListener {
-            tracker.logEvent("tutorial_reset_clicked")
+            tracker.log("tutorial_reset_clicked")
             prefs.setHasSeenTutorial(false)
             Snackbar.make(content, getString(R.string.the_tutorial_has_been_reset), Snackbar.LENGTH_LONG).show()
         }

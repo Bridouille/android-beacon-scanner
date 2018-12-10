@@ -1,23 +1,22 @@
 package com.bridou_n.beaconscanner.features.beaconList
 
-import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.bridou_n.beaconscanner.AppSingleton
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.models.BeaconSaved
+import com.bridou_n.beaconscanner.utils.copyPaste.RoundedBsDialog
 import com.bridou_n.beaconscanner.utils.extensionFunctions.getBeaconWithId
 import com.bridou_n.beaconscanner.utils.extensionFunctions.showSnackBar
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.realm.Realm
 import javax.inject.Inject
 
@@ -26,21 +25,19 @@ import javax.inject.Inject
  * Created by bridou_n on 23/10/2017.
  */
 
-class ControlsBottomSheetDialog : BottomSheetDialogFragment() {
+class ControlsBottomSheetDialog : RoundedBsDialog() {
 
     companion object {
         const val KEY_BEACON = "key_beacon"
         const val KEY_BLOCKED = "key_blocked"
 
         fun newInstance(beacon: BeaconSaved, blocked: Boolean = false) : ControlsBottomSheetDialog {
-            val frag = ControlsBottomSheetDialog()
-
-            val bundle = Bundle()
-            bundle.putParcelable(KEY_BEACON, beacon)
-            bundle.putBoolean(KEY_BLOCKED, blocked)
-            frag.arguments = bundle
-
-            return frag
+            return ControlsBottomSheetDialog().apply {
+                arguments = Bundle().apply {
+                    putParcelable(KEY_BEACON, beacon)
+                    putBoolean(KEY_BLOCKED, blocked)
+                }
+            }
         }
     }
 
@@ -48,12 +45,6 @@ class ControlsBottomSheetDialog : BottomSheetDialogFragment() {
     private var isBlockedLst: Boolean = false
 
     @Inject lateinit var realm: Realm
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        restoreFromBundle(savedInstanceState ?: arguments)
-        AppSingleton.appComponent.inject(this)
-    }
 
     private fun restoreFromBundle(bundle: Bundle?) {
         if (bundle != null) {
@@ -68,38 +59,18 @@ class ControlsBottomSheetDialog : BottomSheetDialogFragment() {
         outState.putBoolean(KEY_BLOCKED, isBlockedLst)
     }
 
-    private val mBottomSheetBehaviorCallback = object : BottomSheetBehavior.BottomSheetCallback() {
-        override fun onStateChanged(bottomSheet: View, newState: Int) {
-            if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                dismiss()
-            }
-        }
-
-        override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        restoreFromBundle(savedInstanceState ?: arguments)
+        AppSingleton.appComponent.inject(this)
     }
 
-    override fun setupDialog(dialog: Dialog, style: Int) {
-        super.setupDialog(dialog, style)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.bottom_sheet_controls, container, false)
+    }
 
-        val contentView = View.inflate(context, R.layout.bottom_sheet_controls, null)
-        dialog.setContentView(contentView)
-
-        // This is to set the Bottomsheet to STATE_EXPANDED upon show
-       /* dialog.setOnShowListener { dial ->
-            val bsDialog = dial as BottomSheetDialog
-            val bottomSheet = bsDialog.findViewById<FrameLayout>(android.support.design.R.id.design_bottom_sheet)
-
-            BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_EXPANDED
-        }*/
-
-        val params = (contentView.parent as View).layoutParams as CoordinatorLayout.LayoutParams
-        val behavior = params.behavior
-
-        if (behavior != null && behavior is BottomSheetBehavior<*>) {
-            behavior.setBottomSheetCallback(mBottomSheetBehaviorCallback)
-        }
-
-        setupView(contentView)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupView(view)
     }
 
     fun setupView(contentView: View) {

@@ -140,17 +140,17 @@ class BeaconListPresenter(val view: BeaconListContract.View,
     }
 
     override fun onLocationPermissionGranted() {
-        tracker.logEvent("permission_granted", null)
+        tracker.log("permission_granted", null)
         startScan()
     }
 
     override fun onLocationPermissionDenied(requestCode: Int, permList: List<String>) {
-        tracker.logEvent("permission_denied")
+        tracker.log("permission_denied")
 
         // If the user refused the permission, we just disabled the scan on open
         prefs.isScanOnOpen = false
         if (view.hasSomePermissionPermanentlyDenied(permList)) {
-            tracker.logEvent("permission_denied_permanently")
+            tracker.log("permission_denied_permanently")
             view.showEnablePermissionSnackbar()
         }
     }
@@ -226,21 +226,21 @@ class BeaconListPresenter(val view: BeaconListContract.View,
 
     override fun onBluetoothToggle() {
         bluetoothState.toggle()
-        tracker.logEvent("action_bluetooth")
+        tracker.log("action_bluetooth")
     }
 
     override fun onSettingsClicked() {
-        tracker.logEvent("action_settings")
+        tracker.log("action_settings")
         view.startSettingsActivity()
     }
 
     override fun onClearClicked() {
-        tracker.logEvent("action_clear")
+        tracker.log("action_clear")
         view.showClearDialog()
     }
 
     override fun onClearAccepted() {
-        tracker.logEvent("action_clear_accepted")
+        tracker.log("action_clear_accepted")
         realm.clearScannedBeacons()
     }
 

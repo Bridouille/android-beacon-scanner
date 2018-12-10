@@ -18,6 +18,9 @@
         <item name="colorOnSurface">@color/colorOnSurface</item>
         <!-- / Material component styles colors -->
 
+        <!-- Material dialog styles -->
+        <item name="md_corner_radius">8dp</item>
+
         <item name="android:windowBackground">@color/colorBackground</item>
     </style>
 
@@ -28,6 +31,7 @@
 
     <!-- Splash theme -->
     <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/colorSecondary</item>
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 
@@ -44,5 +48,17 @@
         <item name="android:actionMenuTextColor">@color/toolbarTextColor</item>
     </style>
 
+    <!-- BottomSheetFragment theme -->
+    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bs_dialog_bg</item>
+    </style>
+
+    <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+    </style>
 </resources>

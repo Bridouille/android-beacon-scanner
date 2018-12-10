@@ -18,7 +18,6 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bridou_n.beaconscanner.API.LoggingService
@@ -68,10 +67,9 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     private val rvAdapter by lazy {
         BeaconsRecyclerViewAdapter(this, object : BeaconsRecyclerViewAdapter.OnControlsOpen {
             override fun onOpenControls(beacon: BeaconSaved) {
-
-                // TODO: update this
-                /*val bsDialog = ControlsBottomSheetDialog.newInstance(beacon)
-                bsDialog.show(supportFragmentManager, bsDialog.tag)*/
+                ControlsBottomSheetDialog.newInstance(beacon).apply {
+                    show(supportFragmentManager, this.tag)
+                }
             }
         })
     }
@@ -88,11 +86,6 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         beacons_rv.setHasFixedSize(true)
         beacons_rv.layoutManager = LinearLayoutManager(this)
         beacons_rv.adapter = rvAdapter
-
-        val rvAnimator = beacons_rv.itemAnimator
-        if (rvAnimator is SimpleItemAnimator) {
-            rvAnimator.supportsChangeAnimations = false
-        }
 
         presenter = BeaconListPresenter(this, rxBus, prefs, realm, loggingService, bluetoothState, tracker)
 
@@ -111,6 +104,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
         TapTargetSequence(this)
                 .targets(
+                        // TODO: double check this
                         TapTarget.forToolbarMenuItem(toolbar, R.id.action_bluetooth, getString(R.string.bluetooth_control), getString(R.string.feature_bluetooth_content))
                                 .cancelable(false)
                                 .dimColor(R.color.colorOnBackground)

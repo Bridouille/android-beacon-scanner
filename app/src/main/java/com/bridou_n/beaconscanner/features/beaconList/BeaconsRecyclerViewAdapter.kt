@@ -32,11 +32,11 @@ class BeaconsRecyclerViewAdapter(val ctx: Context,
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<BeaconSaved>() {
             override fun areItemsTheSame(oldItem: BeaconSaved, newItem: BeaconSaved): Boolean {
-                return oldItem.hashcode == newItem.hashcode
+                return false // TODO: update this oldItem.hashcode == newItem.hashcode
             }
 
             override fun areContentsTheSame(oldItem: BeaconSaved, newItem: BeaconSaved): Boolean {
-                return oldItem == newItem
+                return false // TODO: update this oldItem == newItem
             }
         }
 

@@ -7,15 +7,14 @@ import com.google.firebase.analytics.FirebaseAnalytics
  * Created by bridou_n on 26/10/2017.
  */
 
-fun FirebaseAnalytics.logEvent(name: String) {
+fun FirebaseAnalytics.log(name: String, bundle: Bundle? = null) {
     logEvent(name, null)
 }
 
 fun FirebaseAnalytics.logBeaconScanned(manufacturer: Int, type: String, distance: Double) {
-    val infos = Bundle()
-    infos.putInt("manufacturer", manufacturer)
-    infos.putString("type", type)
-    infos.putDouble("distance", distance)
-
-    logEvent("adding_or_updating_beacon", infos)
+    log("adding_or_updating_beacon", Bundle().apply {
+        putInt("manufacturer", manufacturer)
+        putString("type", type)
+        putDouble("distance", distance)
+    })
 }

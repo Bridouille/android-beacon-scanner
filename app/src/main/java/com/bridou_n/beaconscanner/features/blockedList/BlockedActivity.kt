@@ -7,6 +7,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.features.beaconList.BeaconsRecyclerViewAdapter
+import com.bridou_n.beaconscanner.features.beaconList.ControlsBottomSheetDialog
 import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.utils.extensionFunctions.component
 import com.bridou_n.beaconscanner.utils.extensionFunctions.getScannedBeacons
@@ -24,11 +25,9 @@ class BlockedActivity : AppCompatActivity() {
     private val rvAdapter by lazy {
         BeaconsRecyclerViewAdapter(this, object : BeaconsRecyclerViewAdapter.OnControlsOpen {
             override fun onOpenControls(beacon: BeaconSaved) {
-                // TODO: update this
-
-                /*val bsDialog = ControlsBottomSheetDialog.newInstance(beacon, true)
-
-                bsDialog.show(supportFragmentManager, bsDialog.tag)*/
+                ControlsBottomSheetDialog.newInstance(beacon, true).apply {
+                    show(supportFragmentManager, this.tag)
+                }
             }
         })
     }

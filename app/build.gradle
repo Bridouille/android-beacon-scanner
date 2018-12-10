@@ -91,6 +91,7 @@ dependencies {
 
     // Material dialog
     implementation 'com.afollestad.material-dialogs:core:2.0.0-rc3'
+    implementation 'com.afollestad.material-dialogs:input:2.0.0-rc3'
 
     // Firebase Analytics & Crash reporting
     implementation "com.google.firebase:firebase-core:16.0.6"
@@ -110,4 +111,5 @@ dependencies {
 apply plugin: 'com.google.gms.google-services'
 repositories {
     mavenCentral()
+    maven { url "https://dl.bintray.com/drummer-aidan/maven/" }
 }
