@@ -3,16 +3,16 @@ package com.bridou_n.beaconscanner.features.beaconList
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.utils.CountHelper
-import io.realm.RealmRecyclerViewAdapter
-import io.realm.RealmResults
 import kotlinx.android.synthetic.main.beacon_item.view.*
 import kotlinx.android.synthetic.main.eddystone_uid_item.view.*
 import kotlinx.android.synthetic.main.eddystone_url_item.view.*
@@ -25,10 +25,22 @@ import java.util.*
  * Created by bridou_n on 30/09/2016.
  */
 
-class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>,
-                                 val ctx: Context,
+class BeaconsRecyclerViewAdapter(val ctx: Context,
                                  val onLongClickListener: OnControlsOpen?) :
-        RealmRecyclerViewAdapter<BeaconSaved, BeaconsRecyclerViewAdapter.BaseHolder>(data, true) {
+        ListAdapter<BeaconSaved, BeaconsRecyclerViewAdapter.BaseHolder>(diffCallback) {
+
+    companion object {
+        val diffCallback = object : DiffUtil.ItemCallback<BeaconSaved>() {
+            override fun areItemsTheSame(oldItem: BeaconSaved, newItem: BeaconSaved): Boolean {
+                return oldItem.hashcode == newItem.hashcode
+            }
+
+            override fun areContentsTheSame(oldItem: BeaconSaved, newItem: BeaconSaved): Boolean {
+                return oldItem == newItem
+            }
+        }
+
+    }
 
     open class BaseHolder(itemView: View, val ctx: Context, val listener: OnControlsOpen?) : RecyclerView.ViewHolder(itemView) {
 
@@ -170,14 +182,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>,
         }
     }
 
-    override fun getItemCount(): Int {
-        return super.getItemCount() + 1
-    }
-
     override fun getItemViewType(position: Int): Int {
-        if (position >= data.size) {
-            return R.layout.footer_item
-        }
         val b = getItem(position)
 
         when (b?.beaconType) {
@@ -190,9 +195,7 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder {
-        // The actual layout file to inflate
-        val layout = if (viewType == R.layout.footer_item) viewType else R.layout.beacon_item
-        val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.beacon_item, parent, false)
 
         when (viewType) {
             R.layout.eddystone_uid_item -> return EddystoneUidHolder(view, ctx, onLongClickListener)
@@ -204,13 +207,9 @@ class BeaconsRecyclerViewAdapter(val data: RealmResults<BeaconSaved>,
     }
 
     override fun onBindViewHolder(holder: BaseHolder, position: Int) {
-        if (getItemViewType(position) != R.layout.footer_item) {
-            val beacon = getItem(position)
+        val beacon = getItem(position)
 
-            if (beacon != null) {
-                holder.bindView(beacon)
-            }
-        }
+        holder.bindView(beacon)
     }
 
     interface OnControlsOpen {

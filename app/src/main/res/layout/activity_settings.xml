@@ -9,7 +9,7 @@
     tools:context="com.bridou_n.beaconscanner.features.settings.SettingsActivity">
 
     <!-- Toolbar -->
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
@@ -39,10 +39,10 @@
                 android:paddingTop="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@color/colorSecondary"/>
 
             <!-- Scan on open toggle -->
-            <android.support.v7.widget.SwitchCompat
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/scan_open"
                 android:text="@string/start_scanning_when_app_opens"
                 android:layout_width="match_parent"
@@ -70,14 +70,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/primaryText" />
+                    android:textColor="@color/colorOnBackground" />
 
                 <TextView
                     android:id="@+id/scan_delay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/secondaryText"
+                    android:textColor="@color/divider"
                     tools:text="5 seconds"
                     />
             </LinearLayout>
@@ -89,7 +89,7 @@
                 android:background="@color/divider" />
 
             <!-- "Prevent sleep" while scanning -->
-            <android.support.v7.widget.SwitchCompat
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/prevent_sleep"
                 android:text="@string/prevent_sleep_while_scanning"
                 android:layout_width="match_parent"
@@ -106,10 +106,10 @@
                 android:paddingTop="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@color/colorSecondary"/>
 
             <!-- Logging toggle -->
-            <android.support.v7.widget.SwitchCompat
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/logging_enabled"
                 android:text="@string/enable_logging"
                 android:layout_width="match_parent"
@@ -126,7 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:textColor="@color/secondaryText" />
+                android:textColor="@color/divider" />
 
             <View
                 android:layout_width="match_parent"
@@ -150,14 +150,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/primaryText" />
+                    android:textColor="@color/colorOnBackground" />
 
                 <TextView
                     android:id="@+id/logging_endpoint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/secondaryText"
+                    android:textColor="@color/divider"
                     tools:text="http://example.com/logging"
                     />
             </LinearLayout>
@@ -184,14 +184,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/primaryText" />
+                    android:textColor="@color/colorOnBackground" />
 
                 <TextView
                     android:id="@+id/device_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/secondaryText"
+                    android:textColor="@color/divider"
                     tools:text="Red beacon"
                     />
             </LinearLayout>
@@ -218,14 +218,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/primaryText" />
+                    android:textColor="@color/colorOnBackground" />
 
                 <TextView
                     android:id="@+id/logging_frequency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/secondaryText"
+                    android:textColor="@color/divider"
                     tools:text="Every scan"
                     />
             </LinearLayout>
@@ -240,10 +240,10 @@
                 android:paddingTop="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@color/colorSecondary"/>
 
             <!-- Blacklist content-->
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/blacklist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -261,7 +261,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:srcCompat="@drawable/ic_block_black_24dp"
-                    android:tint="@color/secondaryText"
+                    android:tint="@color/divider"
                     />
 
                 <TextView
@@ -273,7 +273,7 @@
                     app:layout_constraintLeft_toRightOf="@+id/blacklist_icon"
                     android:layout_marginStart="16dp"
                     android:textSize="16sp"
-                    android:textColor="@color/primaryText"
+                    android:textColor="@color/colorOnBackground"
                     />
 
                 <TextView
@@ -283,9 +283,9 @@
                     app:layout_constraintTop_toBottomOf="@+id/blacklist_title"
                     app:layout_constraintLeft_toLeftOf="@+id/blacklist_title"
                     android:textSize="16sp"
-                    android:textColor="@color/secondaryText"
+                    android:textColor="@color/divider"
                     />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Feedback and Rating title-->
             <TextView
@@ -297,10 +297,10 @@
                 android:paddingTop="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@color/colorSecondary"/>
 
             <!-- Rate the app -->
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/rate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -331,7 +331,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="16dp"
                     android:textSize="16sp"
-                    android:textColor="@color/primaryText"
+                    android:textColor="@color/colorOnBackground"
                     />
 
                 <TextView
@@ -341,9 +341,9 @@
                     app:layout_constraintLeft_toLeftOf="@id/rate_title"
                     app:layout_constraintTop_toBottomOf="@+id/rate_title"
                     android:textSize="16sp"
-                    android:textColor="@color/secondaryText"
+                    android:textColor="@color/divider"
                     />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -352,7 +352,7 @@
                 android:background="@color/divider" />
 
             <!-- Feature request -->
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/feature_request"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -370,7 +370,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:srcCompat="@drawable/ic_code_black_24dp"
-                    android:tint="@color/colorAccent"
+                    android:tint="@color/colorSecondary"
                     />
 
                 <TextView
@@ -382,7 +382,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="16dp"
                     android:textSize="16sp"
-                    android:textColor="@color/primaryText"
+                    android:textColor="@color/colorOnBackground"
                     />
 
                 <TextView
@@ -393,9 +393,9 @@
                     app:layout_constraintLeft_toLeftOf="@id/feedback_title"
                     app:layout_constraintRight_toRightOf="parent"
                     android:textSize="16sp"
-                    android:textColor="@color/secondaryText"
+                    android:textColor="@color/divider"
                     />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Tutorial Title -->
             <TextView
@@ -407,10 +407,10 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:paddingTop="16dp"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorSecondary" />
 
             <!-- Activate tutorial -->
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/tutorial"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -428,7 +428,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:srcCompat="@drawable/ic_help_outline_black_24dp"
-                    android:tint="@color/secondaryText"
+                    android:tint="@color/colorOnBackground"
                     />
 
                 <TextView
@@ -440,7 +440,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="16dp"
                     android:textSize="16sp"
-                    android:textColor="@color/primaryText"
+                    android:textColor="@color/divider"
                     />
 
                 <TextView
@@ -450,9 +450,9 @@
                     app:layout_constraintLeft_toLeftOf="@id/tutorial_title"
                     app:layout_constraintTop_toBottomOf="@+id/tutorial_title"
                     android:textSize="16sp"
-                    android:textColor="@color/secondaryText"
+                    android:textColor="@color/divider"
                     />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- About Title -->
             <TextView
@@ -464,7 +464,7 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:paddingTop="16dp"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@color/colorSecondary"/>
 
             <!-- Version of the app -->
             <LinearLayout
@@ -480,7 +480,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/primaryText" />
+                    android:textColor="@color/colorOnBackground" />
 
                 <TextView
                     android:id="@+id/version"
@@ -488,7 +488,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/secondaryText" />
+                    android:textColor="@color/divider" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

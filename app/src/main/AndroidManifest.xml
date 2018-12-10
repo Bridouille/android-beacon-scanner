@@ -18,6 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".features.beaconList.BeaconListActivity"
             android:theme="@style/SplashTheme">
@@ -27,13 +28,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".features.settings.SettingsActivity"
-            android:theme="@style/AppThemeNoActionBar" />
+            />
 
         <activity
             android:name=".features.blockedList.BlockedActivity"
-            android:theme="@style/AppThemeNoActionBar"
             />
     </application>
 

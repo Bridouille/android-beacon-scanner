@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryDark">#1976D2</color>
-    <color name="colorPrimary">#2196F3</color>
-    <color name="colorPrimaryLight">#BBDEFB</color>
-    <color name="colorAccent">#03A9F4</color>
-    <color name="primaryText">#212121</color>
-    <color name="secondaryText">#757575</color>
-    <color name="icons">#FFFFFF</color>
-    <color name="divider">#E0E0E0</color>
+    <color name="colorPrimary">#344955</color>
+    <color name="colorPrimaryVariant">#0b222c</color>
+    <color name="colorOnPrimary">#FFF</color>
+
+    <color name="colorSecondary">#2196F3</color>
+    <color name="colorSecondaryVariant">#1976D2</color>
+    <color name="colorOnSecondary">#FFF</color>
+
+    <color name="colorBackground">#FAFAFA</color>
+    <color name="colorOnBackground">#212121</color>
+
+    <color name="colorSurface">#FFF</color>
+
+    <!-- Used for the snackbars colors -->
+    <color name="colorOnSurface">#212121</color>
+
+    <color name="divider">#33424242</color>
+    <color name="dividerLight">#44FFFFFF</color>
+
+    <color name="colorOnError">#ff6347</color>
+    <!-- End of Material Theme colors -->
 
     <color name="statusBarColor">#F5F5F5</color>
     <color name="toolbarColor">#FFFFFF</color>
@@ -23,8 +36,6 @@
     <color name="bluetoothTurningOn">#8BC34A</color>
 
     <color name="colorPauseFab">#EF5350 </color>
-
-    <color name="rating_background">#00BCD4</color>
 
     <!-- Cards background colors -->
     <color name="ibeaconBackground">#64B5F6</color>

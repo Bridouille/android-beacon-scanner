@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
@@ -30,7 +30,7 @@
                 android:layout_marginStart="@dimen/keyline_16"
                 android:visibility="gone"
                 />
-        </android.support.v7.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
         <!-- Header with bluetooth state -->
         <TextView
@@ -64,13 +64,14 @@
             />
 
         <!-- Actual content -->
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/beacons_rv"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/progress_2"
             android:paddingTop="8dp"
+            android:paddingBottom="88dp"
             android:clipToPadding="false"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:scrollbars="vertical" />
@@ -95,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/no_scanned_beacons_yet"
                 android:id="@+id/empty_state_title"
-                android:textColor="@color/primaryText"
+                android:textColor="@color/colorOnBackground"
                 android:layout_below="@+id/error_image"
                 android:layout_centerHorizontal="true"
                 android:layout_margin="@dimen/keyline_16"
@@ -117,28 +118,14 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <!-- Bottom Sheet -->
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="true"
-        android:background="@android:color/white"
-        app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
-        app:behavior_hideable="true">
-
-        <include layout="@layout/rating_bottom_sheet" />
-    </android.support.v4.widget.NestedScrollView>
-
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/scan_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/keyline_16"
         android:tint="@android:color/white"
-        app:layout_anchor="@id/bottom_sheet"
-        app:layout_anchorGravity="top|end"
+        android:layout_gravity="bottom|end"
         app:srcCompat="@drawable/play_icon"
         app:fabSize="normal" />
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

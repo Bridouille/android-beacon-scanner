@@ -3,22 +3,18 @@ package com.bridou_n.beaconscanner.features.settings
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.text.InputType
-import android.util.Patterns
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
-import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.Theme
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.bridou_n.beaconscanner.BuildConfig
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.features.blockedList.BlockedActivity
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
-import com.bridou_n.beaconscanner.utils.RatingHelper
 import com.bridou_n.beaconscanner.utils.extensionFunctions.component
 import com.bridou_n.beaconscanner.utils.extensionFunctions.logEvent
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_settings.*
 import timber.log.Timber
@@ -28,7 +24,6 @@ import javax.inject.Inject
 class SettingsActivity : AppCompatActivity() {
 
     @Inject lateinit var prefs: PreferencesHelper
-    @Inject lateinit var ratingHelper: RatingHelper
     @Inject lateinit var tracker: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,17 +56,18 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         scan_delay_container.setOnClickListener {
-            MaterialDialog.Builder(this)
-                    .theme(Theme.LIGHT)
+            MaterialDialog(this)
                     .title(R.string.delay_in_between_each_scan)
-                    .items(R.array.scan_delays_names)
-                    .itemsCallbackSingleChoice(prefs.getScanDelayIdx()) { _, _, which, text ->
-                        Timber.d( "$which - $text")
-                        prefs.setScanDelayIdx(which)
+                    .listItemsSingleChoice(R.array.scan_delays_names,
+                            initialSelection = prefs.getScanDelayIdx(),
+                            waitForPositiveButton = true) { _, index, text ->
+                        Timber.d( "$index - $text")
+
+                        prefs.setScanDelayIdx(index)
                         scan_delay.text = prefs.getScanDelayName()
                         true
                     }
-                    .positiveText(R.string.choose)
+                    .positiveButton {  }
                     .show()
         }
 
@@ -94,23 +90,23 @@ class SettingsActivity : AppCompatActivity() {
 
 
         logging_frequency_container.setOnClickListener {
-            MaterialDialog.Builder(this)
-                    .theme(Theme.LIGHT)
+            MaterialDialog(this)
                     .title(R.string.logging_frequency)
-                    .items(R.array.logging_frequencies_names)
-                    .itemsCallbackSingleChoice(prefs.getLoggingFrequencyIdx()) { _, _, which, text ->
-                        Timber.d( "$which - $text")
-                        prefs.setLoggingFrequencyIdx(which)
+                    .listItemsSingleChoice(R.array.logging_frequencies_names,
+                            initialSelection = prefs.getLoggingFrequencyIdx(),
+                            waitForPositiveButton = true) { _, idx, text ->
+                        Timber.d( "$idx - $text")
+                        prefs.setLoggingFrequencyIdx(idx)
                         logging_frequency.text = prefs.getLoggingFrequencyName()
                         true
                     }
-                    .positiveText(R.string.choose)
+                    .positiveButton {  }
                     .show()
         }
 
         device_name_container.setOnClickListener {
-            MaterialDialog.Builder(this)
-                    .theme(Theme.LIGHT)
+            // TODO: redo this
+            /*MaterialDialog(this)
                     .title(R.string.device_name)
                     .inputRangeRes(2, 30, R.color.colorPauseFab)
                     .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI)
@@ -124,11 +120,12 @@ class SettingsActivity : AppCompatActivity() {
                         }
                     })
                     .negativeText(android.R.string.cancel)
-                    .show()
+                    .show()*/
         }
 
         logging_endpoint_container.setOnClickListener {
-            MaterialDialog.Builder(this)
+            // TODO: redo this
+            /*MaterialDialog.Builder(this)
                     .theme(Theme.LIGHT)
                     .title(R.string.logging_endpoint)
                     .inputRangeRes(7, -1, R.color.colorPauseFab)
@@ -169,7 +166,7 @@ class SettingsActivity : AppCompatActivity() {
                     }
                     .negativeText(android.R.string.cancel)
                     .alwaysCallInputCallback()
-                    .show()
+                    .show()*/
         }
 
         blacklist.setOnClickListener {
@@ -180,13 +177,12 @@ class SettingsActivity : AppCompatActivity() {
 
         rate.setOnClickListener {
             tracker.logEvent("rate_clicked")
-            ratingHelper.setPopupSeen()
-            val appPackageName = packageName // getPackageName() from Context or Activity object
+            val appPackageName = packageName
 
             try {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)))
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
             } catch (anfe: android.content.ActivityNotFoundException) {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)))
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
             }
         }
 
@@ -203,10 +199,10 @@ class SettingsActivity : AppCompatActivity() {
 
     fun handleLoggingState(isLoggingEnabled: Boolean) {
         listOf(logging_endpoint_title, device_name_title, logging_frequency_title).forEach {
-            it.setTextColor(ContextCompat.getColor(this, if (isLoggingEnabled) R.color.primaryText else R.color.primaryTextDisabled))
+            it.setTextColor(ContextCompat.getColor(this, if (isLoggingEnabled) R.color.colorOnBackground else R.color.primaryTextDisabled))
         }
         listOf(logging_endpoint, device_name, logging_frequency).forEach {
-            it.setTextColor(ContextCompat.getColor(this, if (isLoggingEnabled) R.color.secondaryText else R.color.secondaryTextDisabled ))
+            it.setTextColor(ContextCompat.getColor(this, if (isLoggingEnabled) R.color.divider else R.color.secondaryTextDisabled ))
         }
         listOf(logging_endpoint_container, device_name_container, logging_frequency_container).forEach {
             it.isClickable = isLoggingEnabled

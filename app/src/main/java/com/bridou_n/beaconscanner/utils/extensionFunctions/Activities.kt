@@ -2,13 +2,13 @@ package com.bridou_n.beaconscanner.utils.extensionFunctions
 
 import android.content.Context
 import android.os.Build
-import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import com.bridou_n.beaconscanner.AppSingleton
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * Created by bridou_n on 21/08/2017.

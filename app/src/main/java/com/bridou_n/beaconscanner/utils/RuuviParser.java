@@ -1,6 +1,6 @@
 package com.bridou_n.beaconscanner.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.bridou_n.beaconscanner.utils.copyPaste.Base64;
 import com.bridou_n.beaconscanner.utils.copyPaste.Base91;

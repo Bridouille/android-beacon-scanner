@@ -8,7 +8,6 @@ import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.models.LoggingRequest
 import com.bridou_n.beaconscanner.utils.BluetoothManager
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
-import com.bridou_n.beaconscanner.utils.RatingHelper
 import com.bridou_n.beaconscanner.utils.extensionFunctions.*
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.reactivex.Flowable
@@ -37,7 +36,6 @@ class BeaconListPresenter(val view: BeaconListContract.View,
                           val realm: Realm,
                           val loggingService: LoggingService,
                           val bluetoothState: BluetoothManager,
-                          val ratingHelper: RatingHelper,
                           val tracker: FirebaseAnalytics) : BeaconListContract.Presenter {
 
     private lateinit var beaconResults: RealmResults<BeaconSaved>
@@ -69,11 +67,11 @@ class BeaconListPresenter(val view: BeaconListContract.View,
                 }
 
         beaconResults = realm.getScannedBeacons()
-        view.setAdapter(beaconResults)
 
         beaconResults.addChangeListener { results ->
             if (results.isLoaded) {
                 view.showEmptyView(results.size == 0)
+                view.submitData(results.toList())
             }
         }
 
@@ -123,7 +121,6 @@ class BeaconListPresenter(val view: BeaconListContract.View,
                 .subscribe({ e ->
                     e as Events.RangeBeacon
 
-                    handleRating()
                     storeBeaconsAround(e.beacons)
                     logToWebhookIfNeeded()
                 }, { err ->
@@ -155,29 +152,6 @@ class BeaconListPresenter(val view: BeaconListContract.View,
         if (view.hasSomePermissionPermanentlyDenied(permList)) {
             tracker.logEvent("permission_denied_permanently")
             view.showEnablePermissionSnackbar()
-        }
-    }
-
-    fun handleRating() {
-        if (ratingHelper.shouldShowRatingRationale()) {
-            ratingHelper.setRatingOngoing()
-            view.showRating(RatingHelper.STEP_ONE)
-        }
-    }
-
-    override fun onRatingInteraction(step: Int, answer: Boolean) {
-        Timber.d("step: $step -- answer : $answer")
-        if (!answer) { // The user answered "no" to any question
-            return view.showRating(step, false)
-        }
-
-        when (step) {
-            RatingHelper.STEP_ONE -> view.showRating(RatingHelper.STEP_TWO)
-            RatingHelper.STEP_TWO -> {
-                ratingHelper.setPopupSeen()
-                view.redirectToStorePage()
-                view.showRating(step, false)
-            }
         }
     }
 

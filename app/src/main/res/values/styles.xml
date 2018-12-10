@@ -1,48 +1,38 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="AppThemeNoActionBarLightStatusBar">
+        <!-- Material component styles colors -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
 
-        <item name="android:statusBarColor">@color/statusBarColor</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
 
-        <item name="android:colorPressedHighlight">@color/colorPrimaryLight</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
 
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@color/secondaryText</item>
-        <item name="icon">@color/icons</item>
-        <item name="divider">@color/divider</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <!-- / Material component styles colors -->
+
+        <item name="android:windowBackground">@color/colorBackground</item>
     </style>
 
-    <!-- No action bar theme -->
-    <style name="AppThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="android:statusBarColor">@color/statusBarColor</item>
-        <item name="android:windowLightStatusBar">true</item>
-
-        <item name="android:colorPressedHighlight">@color/colorPrimaryLight</item>
-
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@color/secondaryText</item>
-        <item name="icon">@color/icons</item>
-        <item name="divider">@color/divider</item>
+    <!-- Theme for setting the backgrounds etc-->
+    <style name="AppThemeNoActionBarLightStatusBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Only used in values-v23 -->
     </style>
 
     <!-- Splash theme -->
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 
     <!-- Toolbar style -->
-    <style name="Widget.MyApp.Toolbar.Solid" parent="Widget.AppCompat.ActionBar">
+    <style name="Widget.MyApp.Toolbar.Solid" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="android:colorControlNormal">@color/toolbarTextColor</item>
 
         <!-- navigation icon color -->
@@ -53,5 +43,6 @@
 
         <item name="android:actionMenuTextColor">@color/toolbarTextColor</item>
     </style>
+
 
 </resources>

@@ -6,20 +6,18 @@ import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetDialog
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.design.widget.CoordinatorLayout
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.bridou_n.beaconscanner.AppSingleton
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.utils.extensionFunctions.getBeaconWithId
 import com.bridou_n.beaconscanner.utils.extensionFunctions.showSnackBar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.realm.Realm
 import javax.inject.Inject
 
@@ -87,12 +85,12 @@ class ControlsBottomSheetDialog : BottomSheetDialogFragment() {
         dialog.setContentView(contentView)
 
         // This is to set the Bottomsheet to STATE_EXPANDED upon show
-        dialog.setOnShowListener { dial ->
+       /* dialog.setOnShowListener { dial ->
             val bsDialog = dial as BottomSheetDialog
             val bottomSheet = bsDialog.findViewById<FrameLayout>(android.support.design.R.id.design_bottom_sheet)
 
             BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_EXPANDED
-        }
+        }*/
 
         val params = (contentView.parent as View).layoutParams as CoordinatorLayout.LayoutParams
         val behavior = params.behavior

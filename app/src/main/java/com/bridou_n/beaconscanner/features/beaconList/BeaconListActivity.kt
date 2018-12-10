@@ -9,22 +9,18 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.Snackbar
-import android.support.graphics.drawable.AnimatedVectorDrawableCompat
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v4.widget.NestedScrollView
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.content.res.AppCompatResources
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.SimpleItemAnimator
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.Theme
 import com.bridou_n.beaconscanner.API.LoggingService
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.events.RxBus
@@ -32,15 +28,13 @@ import com.bridou_n.beaconscanner.features.settings.SettingsActivity
 import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.utils.BluetoothManager
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
-import com.bridou_n.beaconscanner.utils.RatingHelper
 import com.bridou_n.beaconscanner.utils.extensionFunctions.component
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.realm.Realm
-import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.rating_bottom_sheet.*
 import org.altbeacon.beacon.BeaconConsumer
 import pub.devrel.easypermissions.EasyPermissions
 import javax.inject.Inject
@@ -65,16 +59,25 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     @Inject lateinit var realm: Realm
     @Inject lateinit var loggingService: LoggingService
     @Inject lateinit var prefs: PreferencesHelper
-    @Inject lateinit var ratingHelper: RatingHelper
     @Inject lateinit var tracker: FirebaseAnalytics
 
     private var dialog: MaterialDialog? = null
     private var menu: Menu? = null
-    private var bsBehavior: BottomSheetBehavior<NestedScrollView>? = null
     private lateinit var presenter: BeaconListContract.Presenter
 
+    private val rvAdapter by lazy {
+        BeaconsRecyclerViewAdapter(this, object : BeaconsRecyclerViewAdapter.OnControlsOpen {
+            override fun onOpenControls(beacon: BeaconSaved) {
+
+                // TODO: update this
+                /*val bsDialog = ControlsBottomSheetDialog.newInstance(beacon)
+                bsDialog.show(supportFragmentManager, bsDialog.tag)*/
+            }
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppThemeNoActionBar)
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         component().inject(this)
@@ -84,25 +87,17 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
         beacons_rv.setHasFixedSize(true)
         beacons_rv.layoutManager = LinearLayoutManager(this)
+        beacons_rv.adapter = rvAdapter
+
         val rvAnimator = beacons_rv.itemAnimator
         if (rvAnimator is SimpleItemAnimator) {
             rvAnimator.supportsChangeAnimations = false
         }
 
-        bsBehavior = BottomSheetBehavior.from(bottom_sheet)
-
-        // Hide the bottomSheet uppon creation
-        bsBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-
-        presenter = BeaconListPresenter(this, rxBus, prefs, realm, loggingService, bluetoothState, ratingHelper, tracker)
+        presenter = BeaconListPresenter(this, rxBus, prefs, realm, loggingService, bluetoothState, tracker)
 
         scan_fab.setOnClickListener {
             presenter.toggleScan()
-        }
-        listOf(positive_btn_step_1, negative_btn_step_1, positive_btn_step_2, negative_btn_step_2).forEach {
-            it.setOnClickListener {
-                onRatingInteraction(it)
-            }
         }
     }
 
@@ -118,17 +113,17 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
                 .targets(
                         TapTarget.forToolbarMenuItem(toolbar, R.id.action_bluetooth, getString(R.string.bluetooth_control), getString(R.string.feature_bluetooth_content))
                                 .cancelable(false)
-                                .dimColor(R.color.primaryText)
+                                .dimColor(R.color.colorOnBackground)
                                 .drawShadow(true),
                         TapTarget.forView(scan_fab, getString(R.string.feature_scan_title), getString(R.string.feature_scan_content))
                                 .tintTarget(false)
                                 .cancelable(false)
-                                .dimColor(R.color.primaryText)
+                                .dimColor(R.color.colorOnBackground)
                                 .drawShadow(true)
                         ,
                         TapTarget.forToolbarMenuItem(toolbar, R.id.action_clear, getString(R.string.feature_clear_title), getString(R.string.feature_clear_content))
                                 .cancelable(false)
-                                .dimColor(R.color.primaryText)
+                                .dimColor(R.color.colorOnBackground)
                                 .drawShadow(true)
                 )
                 .start()
@@ -149,13 +144,8 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         }
     }
 
-    override fun setAdapter(beaconResults: RealmResults<BeaconSaved>) {
-        beacons_rv.adapter = BeaconsRecyclerViewAdapter(beaconResults, this, object : BeaconsRecyclerViewAdapter.OnControlsOpen {
-            override fun onOpenControls(beacon: BeaconSaved) {
-                val bsDialog = ControlsBottomSheetDialog.newInstance(beacon)
-                bsDialog.show(supportFragmentManager, bsDialog.tag)
-            }
-        })
+    override fun submitData(list: List<BeaconSaved>) {
+        rvAdapter.submitList(list)
     }
 
     override fun showEmptyView(show: Boolean) {
@@ -235,7 +225,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         progress_1.visibility = if (state) View.VISIBLE else View.GONE
         progress_2.visibility = if (state) View.VISIBLE else View.GONE
 
-        scan_fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, if (state) R.color.colorPauseFab else R.color.colorAccent))
+        scan_fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, if (state) R.color.colorPauseFab else R.color.colorSecondary))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val anim = AnimatedVectorDrawableCompat.create(this, if (state) R.drawable.play_to_pause else R.drawable.pause_to_play) as AnimatedVectorDrawableCompat
@@ -249,26 +239,6 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
     override fun onBeaconServiceConnect() = presenter.onBeaconServiceConnect()
 
-    override fun showRating(step: Int, show: Boolean) {
-        if (!show) {
-            bsBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-            return
-        }
-
-        when (step) {
-            RatingHelper.STEP_ONE -> {
-                bsBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-                rating_step_1.visibility = View.VISIBLE
-                rating_step_2.visibility = View.GONE
-            }
-            RatingHelper.STEP_TWO -> {
-                bsBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-                rating_step_1.visibility = View.GONE
-                rating_step_2.visibility = View.VISIBLE
-            }
-        }
-    }
-
     override fun redirectToStorePage() {
         val appPackageName = packageName
 
@@ -279,20 +249,6 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         }
     }
 
-    fun onRatingInteraction(view: View) {
-        val step = when (view.id) {
-            R.id.positive_btn_step_1, R.id.negative_btn_step_1 -> RatingHelper.STEP_ONE
-            R.id.positive_btn_step_2, R.id.negative_btn_step_2 -> RatingHelper.STEP_TWO
-            else -> RatingHelper.STEP_ONE
-        }
-        val answer = when (view.id) {
-            R.id.positive_btn_step_1, R.id.positive_btn_step_2 -> true
-            else -> false
-        }
-
-        presenter.onRatingInteraction(step, answer)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
 
@@ -301,17 +257,13 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     }
 
     override fun showClearDialog() {
-        dialog = MaterialDialog.Builder(this)
-                .theme(Theme.LIGHT)
+        dialog = MaterialDialog(this)
                 .title(R.string.delete_all)
-                .content(R.string.are_you_sure_delete_all)
-                .autoDismiss(true)
-                .onPositive { _, _ ->
+                .message(R.string.are_you_sure_delete_all)
+                .positiveButton(android.R.string.ok, click = {
                     presenter.onClearAccepted()
-                }
-                .positiveText(android.R.string.ok)
-                .negativeText(android.R.string.cancel)
-                .build()
+                })
+                .negativeButton(android.R.string.cancel)
         dialog?.show()
     }
 

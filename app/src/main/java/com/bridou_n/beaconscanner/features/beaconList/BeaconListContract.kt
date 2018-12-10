@@ -16,7 +16,7 @@ interface BeaconListContract {
         fun showTutorial() : Boolean
 
         fun showEmptyView(show: Boolean)
-        fun setAdapter(beaconResults: RealmResults<BeaconSaved>)
+        fun submitData(list: List<BeaconSaved>)
 
         fun updateBluetoothState(state: BeaconListActivity.BluetoothState, isEnabled: Boolean)
         fun keepScreenOn(status: Boolean)
@@ -29,7 +29,6 @@ interface BeaconListContract {
         fun askForCoarseLocationPermission()
         fun showEnablePermissionSnackbar()
 
-        fun showRating(step: Int, show: Boolean = true)
         fun redirectToStorePage()
 
         fun showClearDialog()
@@ -56,8 +55,6 @@ interface BeaconListContract {
         fun onSettingsClicked()
         fun onClearClicked()
         fun onClearAccepted()
-
-        fun onRatingInteraction(step: Int, answer: Boolean)
 
         fun clear()
     }

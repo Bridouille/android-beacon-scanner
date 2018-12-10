@@ -1,12 +1,11 @@
 package com.bridou_n.beaconscanner
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 import android.util.Log.ERROR
 import com.bridou_n.beaconscanner.dagger.AppComponent
 import com.bridou_n.beaconscanner.dagger.ContextModule
 import com.bridou_n.beaconscanner.dagger.DaggerAppComponent
 import com.bridou_n.beaconscanner.utils.BuildTypes
-import com.bridou_n.beaconscanner.utils.RatingHelper
 import com.crashlytics.android.Crashlytics
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.realm.Realm
@@ -18,13 +17,12 @@ import javax.inject.Inject
  * Created by bridou_n on 30/09/2016.
  */
 
-class AppSingleton : Application() {
+class AppSingleton : MultiDexApplication() {
 
     companion object {
         lateinit var appComponent: AppComponent
     }
 
-    @Inject lateinit var ratingHelper: RatingHelper
     @Inject lateinit var tracker: FirebaseAnalytics
 
     override fun onCreate() {
@@ -50,8 +48,6 @@ class AppSingleton : Application() {
                 .build()
 
         Realm.setDefaultConfiguration(realmConfig)
-
-        ratingHelper.incrementAppOpens()
     }
 }
 
