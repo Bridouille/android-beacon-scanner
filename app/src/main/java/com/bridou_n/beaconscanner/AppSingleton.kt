@@ -1,15 +1,13 @@
 package com.bridou_n.beaconscanner
 
-import androidx.multidex.MultiDexApplication
 import android.util.Log.ERROR
+import androidx.multidex.MultiDexApplication
 import com.bridou_n.beaconscanner.dagger.AppComponent
 import com.bridou_n.beaconscanner.dagger.ContextModule
 import com.bridou_n.beaconscanner.dagger.DaggerAppComponent
 import com.bridou_n.beaconscanner.utils.BuildTypes
 import com.crashlytics.android.Crashlytics
 import com.google.firebase.analytics.FirebaseAnalytics
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,15 +37,6 @@ class AppSingleton : MultiDexApplication() {
 
         // Analytics
         tracker.setAnalyticsCollectionEnabled(BuildTypes.isRelease())
-
-        // Realm
-        Realm.init(this)
-
-        val realmConfig = RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .build()
-
-        Realm.setDefaultConfiguration(realmConfig)
     }
 }
 

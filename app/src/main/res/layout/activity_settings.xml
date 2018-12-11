@@ -77,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/divider"
+                    android:textColor="@color/toolbarTextColor"
                     tools:text="5 seconds"
                     />
             </LinearLayout>
@@ -126,7 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:textColor="@color/divider" />
+                android:textColor="@color/toolbarTextColor" />
 
             <View
                 android:layout_width="match_parent"
@@ -157,7 +157,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/divider"
+                    android:textColor="@color/toolbarTextColor"
                     tools:text="http://example.com/logging"
                     />
             </LinearLayout>
@@ -191,7 +191,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/divider"
+                    android:textColor="@color/toolbarTextColor"
                     tools:text="Red beacon"
                     />
             </LinearLayout>
@@ -225,7 +225,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/divider"
+                    android:textColor="@color/toolbarTextColor"
                     tools:text="Every scan"
                     />
             </LinearLayout>
@@ -283,7 +283,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/blacklist_title"
                     app:layout_constraintLeft_toLeftOf="@+id/blacklist_title"
                     android:textSize="16sp"
-                    android:textColor="@color/divider"
+                    android:textColor="@color/toolbarTextColor"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -341,7 +341,7 @@
                     app:layout_constraintLeft_toLeftOf="@id/rate_title"
                     app:layout_constraintTop_toBottomOf="@+id/rate_title"
                     android:textSize="16sp"
-                    android:textColor="@color/divider"
+                    android:textColor="@color/toolbarTextColor"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -393,7 +393,7 @@
                     app:layout_constraintLeft_toLeftOf="@id/feedback_title"
                     app:layout_constraintRight_toRightOf="parent"
                     android:textSize="16sp"
-                    android:textColor="@color/divider"
+                    android:textColor="@color/toolbarTextColor"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -440,7 +440,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="16dp"
                     android:textSize="16sp"
-                    android:textColor="@color/divider"
+                    android:textColor="@color/colorOnBackground"
                     />
 
                 <TextView
@@ -450,7 +450,7 @@
                     app:layout_constraintLeft_toLeftOf="@id/tutorial_title"
                     app:layout_constraintTop_toBottomOf="@+id/tutorial_title"
                     android:textSize="16sp"
-                    android:textColor="@color/divider"
+                    android:textColor="@color/toolbarTextColor"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -488,7 +488,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="@color/divider" />
+                    android:textColor="@color/toolbarTextColor" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

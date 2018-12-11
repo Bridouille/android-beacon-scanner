@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
@@ -21,10 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bridou_n.beaconscanner.API.LoggingService
+import com.bridou_n.beaconscanner.Database.AppDatabase
 import com.bridou_n.beaconscanner.R
-import com.bridou_n.beaconscanner.events.RxBus
 import com.bridou_n.beaconscanner.features.settings.SettingsActivity
 import com.bridou_n.beaconscanner.models.BeaconSaved
+import com.bridou_n.beaconscanner.utils.AndroidVersion
 import com.bridou_n.beaconscanner.utils.BluetoothManager
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
 import com.bridou_n.beaconscanner.utils.extensionFunctions.component
@@ -32,7 +32,6 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 import org.altbeacon.beacon.BeaconConsumer
 import pub.devrel.easypermissions.EasyPermissions
@@ -54,8 +53,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     }
 
     @Inject lateinit var bluetoothState: BluetoothManager
-    @Inject lateinit var rxBus: RxBus
-    @Inject lateinit var realm: Realm
+    @Inject lateinit var db: AppDatabase
     @Inject lateinit var loggingService: LoggingService
     @Inject lateinit var prefs: PreferencesHelper
     @Inject lateinit var tracker: FirebaseAnalytics
@@ -67,7 +65,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     private val rvAdapter by lazy {
         BeaconsRecyclerViewAdapter(this, object : BeaconsRecyclerViewAdapter.OnControlsOpen {
             override fun onOpenControls(beacon: BeaconSaved) {
-                ControlsBottomSheetDialog.newInstance(beacon).apply {
+                ControlsBottomSheetDialog.newInstance(beacon.hashcode).apply {
                     show(supportFragmentManager, this.tag)
                 }
             }
@@ -87,7 +85,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         beacons_rv.layoutManager = LinearLayoutManager(this)
         beacons_rv.adapter = rvAdapter
 
-        presenter = BeaconListPresenter(this, rxBus, prefs, realm, loggingService, bluetoothState, tracker)
+        presenter = BeaconListPresenter(this, prefs, db, loggingService, bluetoothState, tracker)
 
         scan_fab.setOnClickListener {
             presenter.toggleScan()
@@ -104,20 +102,19 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
         TapTargetSequence(this)
                 .targets(
-                        // TODO: double check this
                         TapTarget.forToolbarMenuItem(toolbar, R.id.action_bluetooth, getString(R.string.bluetooth_control), getString(R.string.feature_bluetooth_content))
                                 .cancelable(false)
-                                .dimColor(R.color.colorOnBackground)
+                                .dimColor(R.color.colorPrimary)
                                 .drawShadow(true),
                         TapTarget.forView(scan_fab, getString(R.string.feature_scan_title), getString(R.string.feature_scan_content))
                                 .tintTarget(false)
                                 .cancelable(false)
-                                .dimColor(R.color.colorOnBackground)
+                                .dimColor(R.color.colorPrimary)
                                 .drawShadow(true)
                         ,
                         TapTarget.forToolbarMenuItem(toolbar, R.id.action_clear, getString(R.string.feature_clear_title), getString(R.string.feature_clear_content))
                                 .cancelable(false)
-                                .dimColor(R.color.colorOnBackground)
+                                .dimColor(R.color.colorPrimary)
                                 .drawShadow(true)
                 )
                 .start()
@@ -221,7 +218,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
         scan_fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, if (state) R.color.colorPauseFab else R.color.colorSecondary))
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (AndroidVersion.isLOrLater()) {
             val anim = AnimatedVectorDrawableCompat.create(this, if (state) R.drawable.play_to_pause else R.drawable.pause_to_play) as AnimatedVectorDrawableCompat
 
             scan_fab.setImageDrawable(anim)
@@ -288,7 +285,6 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
     override fun onDestroy() {
         dialog?.dismiss()
-        presenter.clear()
         super.onDestroy()
     }
 }

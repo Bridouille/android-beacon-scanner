@@ -12,12 +12,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bridou_n.beaconscanner.AppSingleton
+import com.bridou_n.beaconscanner.Database.AppDatabase
 import com.bridou_n.beaconscanner.R
-import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.utils.copyPaste.RoundedBsDialog
-import com.bridou_n.beaconscanner.utils.extensionFunctions.getBeaconWithId
 import com.bridou_n.beaconscanner.utils.extensionFunctions.showSnackBar
-import io.realm.Realm
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
@@ -28,34 +30,36 @@ import javax.inject.Inject
 class ControlsBottomSheetDialog : RoundedBsDialog() {
 
     companion object {
-        const val KEY_BEACON = "key_beacon"
+        const val KEY_BEACON_ID = "key_beacon_id"
         const val KEY_BLOCKED = "key_blocked"
 
-        fun newInstance(beacon: BeaconSaved, blocked: Boolean = false) : ControlsBottomSheetDialog {
+        fun newInstance(beaconId: Int, blocked: Boolean = false) : ControlsBottomSheetDialog {
             return ControlsBottomSheetDialog().apply {
                 arguments = Bundle().apply {
-                    putParcelable(KEY_BEACON, beacon)
+                    putInt(KEY_BEACON_ID, beaconId)
                     putBoolean(KEY_BLOCKED, blocked)
                 }
             }
         }
     }
 
-    private lateinit var beacon: BeaconSaved
+    private var beaconId: Int = 0
     private var isBlockedLst: Boolean = false
 
-    @Inject lateinit var realm: Realm
+    private val queries = CompositeDisposable()
+
+    @Inject lateinit var db: AppDatabase
 
     private fun restoreFromBundle(bundle: Bundle?) {
         if (bundle != null) {
-            beacon = bundle.getParcelable(KEY_BEACON)
+            beaconId = bundle.getInt(KEY_BEACON_ID)
             isBlockedLst = bundle.getBoolean(KEY_BLOCKED)
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(KEY_BEACON, beacon)
+        outState.putInt(KEY_BEACON_ID, beaconId)
         outState.putBoolean(KEY_BLOCKED, isBlockedLst)
     }
 
@@ -79,45 +83,57 @@ class ControlsBottomSheetDialog : RoundedBsDialog() {
         val blockedContainer = contentView.findViewById<LinearLayout>(R.id.block)
         val blockLabel = contentView.findViewById<TextView>(R.id.block_label)
 
-        val hashcode = beacon.hashcode
-
         if (isBlockedLst) {
             removeContainer.visibility = View.GONE
             blockLabel.setText(R.string.unblock)
         }
 
         removeContainer.setOnClickListener {
-            realm.executeTransactionAsync(Realm.Transaction { tRealm ->
-                tRealm.getBeaconWithId(hashcode)?.deleteFromRealm()
-            }, Realm.Transaction.OnSuccess {
-                dismiss()
+            queries.add(Completable.fromCallable {
+                db.beaconsDao().deleteBeaconById(beaconId)
+            }.subscribeOn(Schedulers.io()).subscribe {
+                dismissAllowingStateLoss()
             })
         }
 
         clipboardContainer.setOnClickListener {
-            context?.let {
-                val clipboard = it.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText("Beacon infos", beacon.toString())
-                clipboard.primaryClip = clip
+            context?.let { ctx ->
+                queries.add(
+                        db.beaconsDao().getBeaconById(beaconId)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe({
+                                    val clipboard = ctx.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                                    val clip = ClipData.newPlainText("Beacon infos", it.toJson())
+                                    clipboard.primaryClip = clip
 
-                dismiss()
-                (activity as AppCompatActivity).showSnackBar(it.getString(R.string.the_informations_has_been_copied))
+                                    dismissAllowingStateLoss()
+                                    (activity as? BeaconListActivity)?.showGenericError(ctx.getString(R.string.the_informations_has_been_copied)) ?:
+                                    (activity as? AppCompatActivity)?.showSnackBar(ctx.getString(R.string.the_informations_has_been_copied))
+                                }, { err ->
+
+                                })
+                )
             }
         }
 
         blockedContainer.setOnClickListener {
-            realm.executeTransactionAsync(Realm.Transaction { tRealm ->
-                val beacon = tRealm.getBeaconWithId(hashcode)
-
-                beacon?.isBlocked = !isBlockedLst
-            }, Realm.Transaction.OnSuccess {
-                dismiss()
-            })
+            queries.add(db.beaconsDao().getBeaconById(beaconId)
+                    .flatMapCompletable {
+                        Completable.fromCallable{
+                            db.beaconsDao().insertBeacon(it.copy(isBlocked = !isBlockedLst))
+                        }
+                    }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        dismissAllowingStateLoss()
+                    })
         }
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
-        realm.close()
+        queries.clear()
         super.onDismiss(dialog)
     }
 }

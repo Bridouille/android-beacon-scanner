@@ -1,29 +1,26 @@
 package com.bridou_n.beaconscanner.features.beaconList
 
 import android.os.RemoteException
+import androidx.room.EmptyResultSetException
 import com.bridou_n.beaconscanner.API.LoggingService
-import com.bridou_n.beaconscanner.events.Events
-import com.bridou_n.beaconscanner.events.RxBus
+import com.bridou_n.beaconscanner.Database.AppDatabase
 import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.models.LoggingRequest
 import com.bridou_n.beaconscanner.utils.BluetoothManager
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
-import com.bridou_n.beaconscanner.utils.extensionFunctions.*
+import com.bridou_n.beaconscanner.utils.extensionFunctions.log
 import com.google.firebase.analytics.FirebaseAnalytics
-import io.reactivex.Flowable
+import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
-import io.realm.Realm
-import io.realm.RealmResults
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.Region
 import timber.log.Timber
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 /**
@@ -31,22 +28,20 @@ import java.util.concurrent.TimeUnit
  */
 
 class BeaconListPresenter(val view: BeaconListContract.View,
-                          val rxBus: RxBus,
                           val prefs: PreferencesHelper,
-                          val realm: Realm,
+                          val db: AppDatabase,
                           val loggingService: LoggingService,
                           val bluetoothState: BluetoothManager,
                           val tracker: FirebaseAnalytics) : BeaconListContract.Presenter {
 
-    private lateinit var beaconResults: RealmResults<BeaconSaved>
-
     private var bluetoothStateDisposable: Disposable? = null
-    private var rangeDisposable: Disposable? = null
     private var beaconManager: BeaconManager? = null
+    private var listQuery: Disposable? = null
 
     private var numberOfScansSinceLog = 0
-    private val MAX_RETRIES = 3
     private var loggingRequests = CompositeDisposable()
+
+    private var isScanning = false
 
     override fun setBeaconManager(bm: BeaconManager) {
         beaconManager = bm
@@ -56,24 +51,23 @@ class BeaconListPresenter(val view: BeaconListContract.View,
         // Setup an observable on the bluetooth changes
         bluetoothStateDisposable = bluetoothState.asFlowable()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { e ->
-                    if (e is Events.BluetoothState) {
-                        view.updateBluetoothState(e.getBluetoothState(), bluetoothState.isEnabled)
+                .subscribe { newState ->
+                    view.updateBluetoothState(newState, bluetoothState.isEnabled)
 
-                        if (e.getBluetoothState() == BeaconListActivity.BluetoothState.STATE_OFF) {
-                            stopScan()
-                        }
+                    if (newState == BeaconListActivity.BluetoothState.STATE_OFF) {
+                        stopScan()
                     }
                 }
 
-        beaconResults = realm.getScannedBeacons()
+        listQuery = db.beaconsDao().getBeacons(blocked = false)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { list ->
+                    Timber.d("list: $list")
 
-        beaconResults.addChangeListener { results ->
-            if (results.isLoaded) {
-                view.showEmptyView(results.size == 0)
-                view.submitData(results.toList())
-            }
-        }
+                    view.showEmptyView(list.size == 0)
+                    view.submitData(list)
+                }
 
         // Show the tutorial if needed
         if (!prefs.hasSeenTutorial()) {
@@ -82,6 +76,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
 
         // Start scanning if the scan on open is activated or if we were previously scanning
         if (prefs.isScanOnOpen || prefs.wasScanning()) {
+            isScanning = true
             startScan()
         }
     }
@@ -114,23 +109,17 @@ class BeaconListPresenter(val view: BeaconListContract.View,
         }
 
         view.showScanningState(true)
-        rangeDisposable?.dispose() // clear the previous subscription if any
-        rangeDisposable = rxBus.asFlowable() // Listen for range events
-                .observeOn(AndroidSchedulers.mainThread()) // We use this so we use the realm on the good thread & we can make UI changes
-                .filter({ e -> e is Events.RangeBeacon && e.beacons.isNotEmpty() })
-                .subscribe({ e ->
-                    e as Events.RangeBeacon
-
-                    storeBeaconsAround(e.beacons)
-                    logToWebhookIfNeeded()
-                }, { err ->
-                    view.showGenericError(err.message ?: "")
-                })
+        isScanning = true
     }
 
     override fun onBeaconServiceConnect() {
         Timber.d("beaconManager is bound, ready to start scanning")
-        beaconManager?.addRangeNotifier { beacons, region -> rxBus.send(Events.RangeBeacon(beacons, region)) }
+        beaconManager?.addRangeNotifier { beacons, region ->
+            if (isScanning) {
+                storeBeaconsAround(beacons)
+                logToWebhookIfNeeded()
+            }
+        }
 
         try {
             beaconManager?.startRangingBeaconsInRegion(Region("com.bridou_n.beaconscanner", null, null, null))
@@ -156,72 +145,57 @@ class BeaconListPresenter(val view: BeaconListContract.View,
     }
 
     override fun storeBeaconsAround(beacons: Collection<Beacon>) {
-        realm.executeTransactionAsync({ tRealm ->
-            for (b: Beacon in beacons) {
-                val beacon = BeaconSaved(b) // Create a new object
+        loggingRequests.add(Observable.fromIterable(beacons)
+                .map {
+                    val beaconInDb = try {
+                        db.beaconsDao().getBeaconById(it.hashCode()).blockingGet()
+                    } catch (e: EmptyResultSetException) {
+                        null
+                    }
 
-                val res = tRealm.getBeaconWithId(beacon.hashcode) // See if we scanned this beacon before
-
-                res?.let {  // If we did, update the beacon logic fields
-                    beacon.isBlocked = it.isBlocked
+                    BeaconSaved.createFromBeacon(it, isBlocked = beaconInDb?.isBlocked ?: false)
                 }
-
-                tRealm.copyToRealmOrUpdate(beacon)
-                tracker.logBeaconScanned(beacon.manufacturer, beacon.beaconType, beacon.distance)
-            }
-        }, null, { error: Throwable? ->
-            view.showGenericError(error?.message ?: "")
-        })
+                .doOnNext {
+                    db.beaconsDao().insertBeacon(it)
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    Timber.d("Beacon inserted")
+                }, { err ->
+                    Timber.e(err)
+                    view.showGenericError(err?.message ?: "")
+                }))
     }
 
     fun logToWebhookIfNeeded() {
         if (prefs.isLoggingEnabled && prefs.loggingEndpoint != null &&
                 ++numberOfScansSinceLog >= prefs.getLoggingFrequency()) {
-            val beaconToLog = realm.getBeaconsScannedAfter(prefs.lasLoggingCall)
 
-            numberOfScansSinceLog = 0 // Reset the counter before we get the results
-            beaconToLog.addChangeListener { results ->
-                if (results.isLoaded && results.isNotEmpty()) {
-                    Timber.d("Result is loaded size : ${results.size} - lastLoggingCall : ${Date(prefs.lasLoggingCall)}")
-
-                    // Execute the network request
-                    prefs.lasLoggingCall = Date().time
-
-                    // We clone the objects
-                    val resultPlainObjects = results.map { it.clone() }
-                    val req = LoggingRequest(prefs.loggingDeviceName ?: "", resultPlainObjects)
-
-                    loggingRequests.add(loggingService.postLogs(prefs.loggingEndpoint ?: "", req)
-                            .retryWhen({ errors: Flowable<Throwable> ->
-                                errors.zipWith(Flowable.range(1, MAX_RETRIES + 1), BiFunction { _: Throwable, attempt: Int ->
-                                    Timber.d("attempt : $attempt")
-                                    if (attempt > MAX_RETRIES) {
-                                        view.showLoggingError()
-                                    }
-                                    attempt
-                                }).flatMap { attempt ->
-                                    if (attempt > MAX_RETRIES) {
-                                        Flowable.empty()
-                                    } else {
-                                        Flowable.timer(Math.pow(4.0, attempt.toDouble()).toLong(), TimeUnit.SECONDS)
-                                    }
-                                }
-                            })
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe())
-
-                    beaconToLog.removeAllChangeListeners()
-                }
-            }
+            numberOfScansSinceLog = 0
+            loggingRequests.add(db.beaconsDao().getBeaconsSeenAfter(prefs.lasLoggingCall)
+                    .filter { it.isNotEmpty() }
+                    .doOnSuccess { Timber.d("list to log: $it") }
+                    .map { LoggingRequest(prefs.loggingDeviceName ?: "", it) }
+                    .flatMapCompletable {
+                        loggingService.postLogs(prefs.loggingEndpoint ?: "", it)
+                    }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        Timber.d("Logged successfully")
+                        prefs.lasLoggingCall = Date().time
+                    }, { err ->
+                        Timber.e(IllegalStateException("Got err $err"))
+                    }))
         }
     }
 
     override fun stopScan() {
         unbindBeaconManager()
-        rangeDisposable?.dispose()
         view.showScanningState(false)
         view.keepScreenOn(false)
+        isScanning = false
     }
 
     override fun onBluetoothToggle() {
@@ -241,18 +215,21 @@ class BeaconListPresenter(val view: BeaconListContract.View,
 
     override fun onClearAccepted() {
         tracker.log("action_clear_accepted")
-        realm.clearScannedBeacons()
+        loggingRequests.add(
+                Completable.fromCallable {
+                    db.beaconsDao().clearBeacons()
+                }.subscribeOn(Schedulers.io()).subscribe()
+        )
     }
 
-    fun isScanning() = !(rangeDisposable?.isDisposed ?: true)
+    fun isScanning() = isScanning
 
     override fun stop() {
         prefs.setScanningState(isScanning())
         unbindBeaconManager()
-        beaconResults.removeAllChangeListeners()
+        listQuery?.dispose()
         loggingRequests.clear()
         bluetoothStateDisposable?.dispose()
-        rangeDisposable?.dispose()
         view.keepScreenOn(false)
     }
 
@@ -261,9 +238,5 @@ class BeaconListPresenter(val view: BeaconListContract.View,
             Timber.d("Unbinding from beaconManager")
             beaconManager?.unbind(view)
         }
-    }
-
-    override fun clear() {
-        realm.close()
     }
 }

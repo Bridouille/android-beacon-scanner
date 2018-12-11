@@ -1,27 +1,18 @@
 package com.bridou_n.beaconscanner.models
 
+import androidx.room.ColumnInfo
 import com.google.gson.annotations.SerializedName
-import io.realm.RealmObject
 
 /**
  * Created by bridou_n on 10/09/2017.
  */
 
-open class EddystoneUidData() : RealmObject() {
-    @SerializedName("namespaceId") var namespaceId: String? = null
-    @SerializedName("instanceId") var instanceId: String? = null
+data class EddystoneUidData(
+        @SerializedName("namespace_id")
+        @ColumnInfo(name = "namespace_id")
+        val namespaceId: String? = null,
 
-    constructor(nameId: String, instId: String) : this() {
-        namespaceId = nameId
-        instanceId = instId
-    }
-
-    fun clone(): EddystoneUidData {
-        val ret = EddystoneUidData()
-
-        ret.namespaceId = namespaceId
-        ret.instanceId = instanceId
-
-        return ret
-    }
-}
+        @SerializedName("instance_id")
+        @ColumnInfo(name = "instance_id")
+        val instanceId: String? = null
+)

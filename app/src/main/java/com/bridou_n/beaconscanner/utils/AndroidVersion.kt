@@ -4,6 +4,8 @@ import android.os.Build
 
 object AndroidVersion {
 
+    fun isLOrLater() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+
     fun isMOrLater() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
 
     fun isNOrLater() =  Build.VERSION.SDK_INT >= Build.VERSION_CODES.N

@@ -17,7 +17,6 @@ import javax.inject.Singleton
     ContextModule::class,
     DatabaseModule::class,
     NetworkModule::class,
-    EventModule::class,
     PreferencesModule::class,
     AnalyticsModule::class,
     BluetoothModule::class

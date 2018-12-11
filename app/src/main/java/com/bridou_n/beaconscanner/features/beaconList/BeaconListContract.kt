@@ -2,7 +2,6 @@ package com.bridou_n.beaconscanner.features.beaconList
 
 import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.utils.BasePresenter
-import io.realm.RealmResults
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconConsumer
 import org.altbeacon.beacon.BeaconManager
@@ -55,7 +54,5 @@ interface BeaconListContract {
         fun onSettingsClicked()
         fun onClearClicked()
         fun onClearAccepted()
-
-        fun clear()
     }
 }

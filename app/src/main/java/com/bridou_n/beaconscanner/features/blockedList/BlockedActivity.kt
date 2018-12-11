@@ -1,36 +1,36 @@
 package com.bridou_n.beaconscanner.features.blockedList
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bridou_n.beaconscanner.Database.AppDatabase
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.features.beaconList.BeaconsRecyclerViewAdapter
 import com.bridou_n.beaconscanner.features.beaconList.ControlsBottomSheetDialog
 import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.utils.extensionFunctions.component
-import com.bridou_n.beaconscanner.utils.extensionFunctions.getScannedBeacons
-import io.realm.Realm
-import io.realm.RealmResults
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_blocked.*
 import javax.inject.Inject
 
 class BlockedActivity : AppCompatActivity() {
 
-    @Inject lateinit var realm: Realm
-
-    lateinit var beaconResults: RealmResults<BeaconSaved>
+    @Inject lateinit var db: AppDatabase
 
     private val rvAdapter by lazy {
         BeaconsRecyclerViewAdapter(this, object : BeaconsRecyclerViewAdapter.OnControlsOpen {
             override fun onOpenControls(beacon: BeaconSaved) {
-                ControlsBottomSheetDialog.newInstance(beacon, true).apply {
+                ControlsBottomSheetDialog.newInstance(beacon.hashcode, true).apply {
                     show(supportFragmentManager, this.tag)
                 }
             }
         })
     }
+    private var dbQuery: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,17 +41,19 @@ class BlockedActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.blacklist)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        beaconResults = realm.getScannedBeacons(true)
-        beacons_rv.layoutManager = LinearLayoutManager(this)
-        beacons_rv.setHasFixedSize(true)
-        beacons_rv.adapter = rvAdapter
-
-        beaconResults.addChangeListener { results ->
-            if (results.isLoaded) {
-                showEmptyView(results.size == 0)
-                rvAdapter.submitList(results)
-            }
+        beacons_rv.apply {
+            layoutManager = LinearLayoutManager(this@BlockedActivity)
+            setHasFixedSize(true)
+            adapter = rvAdapter
         }
+
+        dbQuery = db.beaconsDao().getBeacons(blocked = true)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    showEmptyView(it.size == 0)
+                    rvAdapter.submitList(it)
+                }
     }
 
     fun showEmptyView(show: Boolean) {
@@ -67,5 +69,10 @@ class BlockedActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dbQuery?.dispose()
     }
 }

@@ -210,7 +210,7 @@ class SettingsActivity : AppCompatActivity() {
             it.setTextColor(ContextCompat.getColor(this, if (isLoggingEnabled) R.color.colorOnBackground else R.color.primaryTextDisabled))
         }
         listOf(logging_endpoint, device_name, logging_frequency).forEach {
-            it.setTextColor(ContextCompat.getColor(this, if (isLoggingEnabled) R.color.divider else R.color.secondaryTextDisabled ))
+            it.setTextColor(ContextCompat.getColor(this, if (isLoggingEnabled) R.color.toolbarTextColor else R.color.secondaryTextDisabled ))
         }
         listOf(logging_endpoint_container, device_name_container, logging_frequency_container).forEach {
             it.isClickable = isLoggingEnabled
