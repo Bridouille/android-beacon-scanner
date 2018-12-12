@@ -46,10 +46,10 @@ class BluetoothManager @Inject constructor(private val adapter: BluetoothAdapter
         return subject
     }
 
-    val isEnabled = adapter?.isEnabled == true
+    fun isEnabled() = adapter?.isEnabled == true
 
     fun toggle() {
-        if (isEnabled) {
+        if (isEnabled()) {
             disable()
         } else {
             enable()

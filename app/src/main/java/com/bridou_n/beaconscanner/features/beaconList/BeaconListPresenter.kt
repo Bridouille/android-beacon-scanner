@@ -52,7 +52,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
         bluetoothStateDisposable = bluetoothState.asFlowable()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { newState ->
-                    view.updateBluetoothState(newState, bluetoothState.isEnabled)
+                    view.updateBluetoothState(newState, bluetoothState.isEnabled())
 
                     if (newState == BeaconListActivity.BluetoothState.STATE_OFF) {
                         stopScan()
@@ -95,7 +95,7 @@ class BeaconListPresenter(val view: BeaconListContract.View,
             return view.askForCoarseLocationPermission()
         }
 
-        if (!bluetoothState.isEnabled || beaconManager == null) {
+        if (!bluetoothState.isEnabled() || beaconManager == null) {
             return view.showBluetoothNotEnabledError()
         }
 
