@@ -12,3 +12,4 @@ app/google-services.json
 
 # Release APKs
 app/*.apk
+app/release

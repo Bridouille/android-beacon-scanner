@@ -16,10 +16,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="@color/toolbarColor"
-            android:elevation="4dp"
-            app:titleTextColor="@color/toolbarTextColor"
-            app:theme="@style/Widget.MyApp.Toolbar.Solid"
+            android:background="@color/colorBackground"
+            android:stateListAnimator="@animator/toolbar_elevation"
+            app:titleTextAppearance="?attr/textAppearanceHeadline5"
             >
 
             <ProgressBar
@@ -74,7 +73,9 @@
             android:paddingBottom="88dp"
             android:clipToPadding="false"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            android:overScrollMode="never"
+            />
 
         <!-- Empty view -->
         <RelativeLayout
@@ -87,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:tint="@color/colorPrimary"
-                app:srcCompat="@drawable/ic_track_changes_black_48dp"
+                app:srcCompat="@drawable/ic_round_track_changes_24px"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/error_image" />
 

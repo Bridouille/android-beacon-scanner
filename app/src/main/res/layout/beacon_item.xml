@@ -173,7 +173,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_network_check_black_24dp"
+                app:srcCompat="@drawable/ic_round_network_check_24px"
                 android:tint="@color/iconColors"
                 />
 
@@ -203,7 +203,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_wifi_black_24dp"
+                app:srcCompat="@drawable/ic_round_wifi_24px"
                 android:tint="@color/iconColors"
                 />
 
@@ -235,7 +235,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_battery_std_black_24dp"
+                app:srcCompat="@drawable/ic_round_battery_std_24px"
                 android:tint="@color/iconColors"
                 />
 
@@ -265,7 +265,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_whatshot_black_24dp"
+                app:srcCompat="@drawable/ic_round_whatshot_24px"
                 android:tint="@color/iconColors"
                 />
 
@@ -296,7 +296,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_access_time_black_24dp"
+                app:srcCompat="@drawable/ic_round_access_time_24px"
                 android:tint="@color/iconColors"
                 />
 

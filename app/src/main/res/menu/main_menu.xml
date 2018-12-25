@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".features.beaconList.BeaconListActivity">
     <item
-        android:icon="@drawable/ic_clear_all_white_24dp"
+        android:icon="@drawable/ic_round_clear_all_24px"
         android:id="@+id/action_clear"
         android:title="@string/clear"
         app:showAsAction="ifRoom"/>
@@ -14,7 +14,7 @@
         android:title="@string/bluetooth_state"
         app:showAsAction="ifRoom"/>
     <item
-        android:icon="@drawable/ic_settings_white_24dp"
+        android:icon="@drawable/ic_outline_settings_24px"
         android:id="@+id/action_settings"
         android:title="@string/settings"
         app:showAsAction="ifRoom"/>

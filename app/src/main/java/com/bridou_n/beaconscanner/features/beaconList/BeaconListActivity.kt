@@ -81,9 +81,14 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         toolbar.inflateMenu(R.menu.main_menu)
         setSupportActionBar(toolbar)
 
-        beacons_rv.setHasFixedSize(true)
-        beacons_rv.layoutManager = LinearLayoutManager(this)
-        beacons_rv.adapter = rvAdapter
+        beacons_rv.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(this@BeaconListActivity)
+            adapter = rvAdapter
+            viewTreeObserver.addOnScrollChangedListener {
+                toolbar.isSelected = beacons_rv.canScrollVertically(-1)
+            }
+        }
 
         presenter = BeaconListPresenter(this, prefs, db, loggingService, bluetoothState, tracker)
 
@@ -151,7 +156,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
         val icon = AppCompatResources.getDrawable(this, if (isEnabled) R.drawable.ic_round_bluetooth_24px else R.drawable.ic_round_bluetooth_disabled_24px)
                 ?.mutate()
-        icon?.setColorFilter(ContextCompat.getColor(this, R.color.toolbarTextColor), PorterDuff.Mode.SRC_IN)
+        icon?.setColorFilter(ContextCompat.getColor(this, R.color.colorOnBackground), PorterDuff.Mode.SRC_IN)
 
         menu?.getItem(1)?.icon = icon
 

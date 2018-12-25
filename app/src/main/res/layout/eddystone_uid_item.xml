@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_description_black_24dp"
+        app:srcCompat="@drawable/ic_round_description_24px"
         android:tint="@color/iconColors"
         />
 
@@ -40,7 +40,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/namespace_id_icon"
         android:layout_marginTop="8dp"
-        app:srcCompat="@drawable/ic_description_black_24dp"
+        app:srcCompat="@drawable/ic_round_description_24px"
         android:tint="@color/iconColors"
         />
 

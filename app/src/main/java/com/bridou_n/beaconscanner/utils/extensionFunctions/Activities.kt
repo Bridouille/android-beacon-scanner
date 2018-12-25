@@ -1,12 +1,17 @@
 package com.bridou_n.beaconscanner.utils.extensionFunctions
 
 import android.content.Context
+import android.graphics.PorterDuff
 import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.content.res.AppCompatResources
 import com.bridou_n.beaconscanner.AppSingleton
 import com.google.android.material.snackbar.Snackbar
 
@@ -41,5 +46,20 @@ fun AppCompatActivity.hideKeyboard() {
     if (view != null) {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+}
+
+fun ActionBar?.setHomeIcon(@DrawableRes drawableRes: Int, @ColorRes iconColor: Int) {
+    if (this == null) return
+
+    setDisplayHomeAsUpEnabled(true)
+    setDisplayShowHomeEnabled(true)
+
+    val drawable = AppCompatResources.getDrawable(this.themedContext, drawableRes)
+
+    drawable?.let {
+        val newDrawable = it.mutate()
+        newDrawable.setColorFilter(ContextCompat.getColor(this.themedContext, iconColor), PorterDuff.Mode.SRC_IN)
+        setHomeAsUpIndicator(newDrawable)
     }
 }

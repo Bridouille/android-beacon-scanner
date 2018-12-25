@@ -13,16 +13,17 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="@color/toolbarColor"
-        android:elevation="4dp"
-        app:titleTextColor="@color/toolbarTextColor"
-        app:theme="@style/Widget.MyApp.Toolbar.Solid"
+        android:background="@color/colorBackground"
+        android:stateListAnimator="@animator/toolbar_elevation"
+        app:titleTextAppearance="?attr/textAppearanceHeadline5"
         />
 
     <ScrollView
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,12 +35,13 @@
                 android:text="@string/scanner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textAppearance="?attr/textAppearanceBody1"
                 android:textStyle="bold"
                 android:paddingTop="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:textColor="@color/colorSecondary"/>
+                android:textColor="@color/colorSecondary"
+                />
 
             <!-- Scan on open toggle -->
             <androidx.appcompat.widget.SwitchCompat
@@ -47,13 +49,16 @@
                 android:text="@string/start_scanning_when_app_opens"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"/>
+                android:padding="16dp"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginStart="16dp"
-                android:background="@color/divider" />
+                android:background="@color/divider"
+                />
 
             <!-- Scan delay -->
             <LinearLayout
@@ -69,15 +74,14 @@
                     android:text="@string/delay_in_between_each_scan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorOnBackground" />
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
+                    />
 
                 <TextView
                     android:id="@+id/scan_delay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/toolbarTextColor"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     tools:text="5 seconds"
                     />
             </LinearLayout>
@@ -94,39 +98,44 @@
                 android:text="@string/prevent_sleep_while_scanning"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"/>
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:padding="16dp"
+                />
 
             <!-- Logging title-->
             <TextView
                 android:text="@string/logging"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textAppearance="?attr/textAppearanceBody1"
                 android:textStyle="bold"
                 android:paddingTop="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:textColor="@color/colorSecondary"/>
+                android:textColor="@color/colorSecondary"
+                />
 
             <!-- Logging toggle -->
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/logging_enabled"
                 android:text="@string/enable_logging"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"/>
+                android:padding="16dp"
+                />
 
             <!-- Logging description -->
             <TextView
                 android:id="@+id/logging_description"
                 android:text="@string/logging_description"
+                android:textAppearance="?attr/textAppearanceBody1"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:paddingBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/toolbarTextColor" />
+                />
 
             <View
                 android:layout_width="match_parent"
@@ -149,15 +158,14 @@
                     android:text="@string/logging_endpoint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorOnBackground" />
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
+                    />
 
                 <TextView
                     android:id="@+id/logging_endpoint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/toolbarTextColor"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     tools:text="http://example.com/logging"
                     />
             </LinearLayout>
@@ -183,15 +191,14 @@
                     android:text="@string/device_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorOnBackground" />
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
+                    />
 
                 <TextView
                     android:id="@+id/device_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/toolbarTextColor"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     tools:text="Red beacon"
                     />
             </LinearLayout>
@@ -217,15 +224,14 @@
                     android:text="@string/logging_frequency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorOnBackground" />
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
+                    />
 
                 <TextView
                     android:id="@+id/logging_frequency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/toolbarTextColor"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     tools:text="Every scan"
                     />
             </LinearLayout>
@@ -272,8 +278,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/blacklist_icon"
                     android:layout_marginStart="16dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorOnBackground"
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
                     />
 
                 <TextView
@@ -282,8 +287,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/blacklist_title"
                     app:layout_constraintLeft_toLeftOf="@+id/blacklist_title"
-                    android:textSize="16sp"
-                    android:textColor="@color/toolbarTextColor"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -292,7 +296,7 @@
                 android:text="@string/feedback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textAppearance="?attr/textAppearanceBody1"
                 android:textStyle="bold"
                 android:paddingTop="16dp"
                 android:paddingStart="16dp"
@@ -318,7 +322,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:srcCompat="@drawable/ic_star_black_24dp"
+                    app:srcCompat="@drawable/ic_round_star_border_24px"
                     android:tint="@color/rateStarColor"
                     />
 
@@ -330,8 +334,7 @@
                     app:layout_constraintLeft_toRightOf="@+id/rate_icon"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="16dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorOnBackground"
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
                     />
 
                 <TextView
@@ -340,8 +343,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintLeft_toLeftOf="@id/rate_title"
                     app:layout_constraintTop_toBottomOf="@+id/rate_title"
-                    android:textSize="16sp"
-                    android:textColor="@color/toolbarTextColor"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -369,7 +371,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:srcCompat="@drawable/ic_code_black_24dp"
+                    app:srcCompat="@drawable/ic_round_code_24px"
                     android:tint="@color/colorSecondary"
                     />
 
@@ -381,8 +383,7 @@
                     app:layout_constraintLeft_toRightOf="@+id/feedback_icon"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="16dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorOnBackground"
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
                     />
 
                 <TextView
@@ -392,8 +393,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/feedback_title"
                     app:layout_constraintLeft_toLeftOf="@id/feedback_title"
                     app:layout_constraintRight_toRightOf="parent"
-                    android:textSize="16sp"
-                    android:textColor="@color/toolbarTextColor"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -402,12 +402,13 @@
                 android:text="@string/tutorial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textAppearance="?attr/textAppearanceBody1"
                 android:textStyle="bold"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:paddingTop="16dp"
-                android:textColor="@color/colorSecondary" />
+                android:textColor="@color/colorSecondary"
+                />
 
             <!-- Activate tutorial -->
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -427,7 +428,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:srcCompat="@drawable/ic_help_outline_black_24dp"
+                    app:srcCompat="@drawable/ic_round_help_outline_24px"
                     android:tint="@color/colorOnBackground"
                     />
 
@@ -439,8 +440,7 @@
                     app:layout_constraintLeft_toRightOf="@+id/tutorial_icon"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="16dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorOnBackground"
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
                     />
 
                 <TextView
@@ -449,8 +449,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintLeft_toLeftOf="@id/tutorial_title"
                     app:layout_constraintTop_toBottomOf="@+id/tutorial_title"
-                    android:textSize="16sp"
-                    android:textColor="@color/toolbarTextColor"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -459,12 +458,13 @@
                 android:text="@string/about"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textAppearance="?attr/textAppearanceBody1"
                 android:textStyle="bold"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:paddingTop="16dp"
-                android:textColor="@color/colorSecondary"/>
+                android:textColor="@color/colorSecondary"
+                />
 
             <!-- Version of the app -->
             <LinearLayout
@@ -479,16 +479,16 @@
                     android:text="@string/version"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorOnBackground" />
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
+                    />
 
                 <TextView
                     android:id="@+id/version"
                     tools:text="1.0.4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="@color/toolbarTextColor" />
+                    android:textAppearance="?attr/textAppearanceBody1"
+                    />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

@@ -8,6 +8,7 @@ import android.util.Patterns
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.widget.TextViewCompat
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
@@ -20,6 +21,7 @@ import com.bridou_n.beaconscanner.features.blockedList.BlockedActivity
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
 import com.bridou_n.beaconscanner.utils.extensionFunctions.component
 import com.bridou_n.beaconscanner.utils.extensionFunctions.log
+import com.bridou_n.beaconscanner.utils.extensionFunctions.setHomeIcon
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -39,7 +41,7 @@ class SettingsActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
         supportActionBar?.title = getString(R.string.settings)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeIcon(R.drawable.ic_round_arrow_back_24px, R.color.colorOnBackground)
 
         scan_open.isChecked = prefs.isScanOnOpen
         scan_delay.text = prefs.getScanDelayName()
@@ -52,6 +54,12 @@ class SettingsActivity : AppCompatActivity() {
         handleLoggingState(prefs.isLoggingEnabled)
 
         version.text = BuildConfig.VERSION_NAME
+
+        content.apply {
+            viewTreeObserver.addOnScrollChangedListener {
+                toolbar.isSelected = content.canScrollVertically(-1)
+            }
+        }
 
         scan_open.setOnCheckedChangeListener { _, isChecked ->
 
@@ -71,7 +79,6 @@ class SettingsActivity : AppCompatActivity() {
 
                         prefs.setScanDelayIdx(index)
                         scan_delay.text = prefs.getScanDelayName()
-                        true
                     }
                     .positiveButton {  }
                     .show()
@@ -206,11 +213,9 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     fun handleLoggingState(isLoggingEnabled: Boolean) {
-        listOf(logging_endpoint_title, device_name_title, logging_frequency_title).forEach {
-            it.setTextColor(ContextCompat.getColor(this, if (isLoggingEnabled) R.color.colorOnBackground else R.color.primaryTextDisabled))
-        }
-        listOf(logging_endpoint, device_name, logging_frequency).forEach {
-            it.setTextColor(ContextCompat.getColor(this, if (isLoggingEnabled) R.color.toolbarTextColor else R.color.secondaryTextDisabled ))
+        listOf(logging_endpoint_title, device_name_title, logging_frequency_title,
+                logging_endpoint, device_name, logging_frequency).forEach {
+            it.isEnabled = isLoggingEnabled
         }
         listOf(logging_endpoint_container, device_name_container, logging_frequency_container).forEach {
             it.isClickable = isLoggingEnabled

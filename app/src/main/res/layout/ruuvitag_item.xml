@@ -66,7 +66,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            app:srcCompat="@drawable/ic_satellite_black_24dp"
+            app:srcCompat="@drawable/ic_round_satellite_24px"
             android:tint="@color/iconColors"
             />
 
@@ -95,7 +95,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            app:srcCompat="@drawable/ic_wb_sunny_black_24dp"
+            app:srcCompat="@drawable/ic_round_wb_sunny_24px"
             android:tint="@color/iconColors"
             />
 
