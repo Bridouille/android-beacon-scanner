@@ -28,7 +28,7 @@ class BluetoothManager @Inject constructor(private val adapter: BluetoothAdapter
         context.registerReceiver(receiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
     }
 
-    fun getStaeFromAdapterState(state: Int) : BeaconListActivity.BluetoothState {
+    fun getStateFromAdapterState(state: Int) : BeaconListActivity.BluetoothState {
         return when (state) {
             BluetoothAdapter.STATE_OFF -> BeaconListActivity.BluetoothState.STATE_OFF
             BluetoothAdapter.STATE_TURNING_OFF -> BeaconListActivity.BluetoothState.STATE_TURNING_OFF
