@@ -44,8 +44,6 @@ class AppSingleton : MultiDexApplication() {
 class CrashReportingTree : Timber.DebugTree() {
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        super.log(priority, tag, message, t) // Do the regular timber debug
-
         Crashlytics.log(priority, tag, message)
 
         t?.let {

@@ -121,11 +121,11 @@ data class BeaconSaved(
 
                 when (beacon.beaconTypeCode) {
                     0x00 -> { // This is a Eddystone-UID frame
-                        beaconType = BeaconSaved.TYPE_EDDYSTONE_UID
+                        beaconType = TYPE_EDDYSTONE_UID
                         eddystoneUidData = EddystoneUidData(beacon.id1.toString(), beacon.id2.toString())
                     }
                     0x10 -> { // This is a Eddystone-URL frame
-                        beaconType = BeaconSaved.TYPE_EDDYSTONE_URL
+                        beaconType = TYPE_EDDYSTONE_URL
                         val url = UrlBeaconUrlCompressor.uncompress(beacon.id1.toByteArray())
                         eddystoneUrlData = EddystoneUrlData(url)
 
@@ -134,7 +134,7 @@ data class BeaconSaved(
 
                             // We manually set the hashcode of the RuuviTag so it only appears once per address
                             hashcode = beaconAddress?.hashCode() ?: -1
-                            beaconType = BeaconSaved.TYPE_RUUVITAG
+                            beaconType = TYPE_RUUVITAG
                             val ruuviParser = RuuviParser(hash)
 
                             ruuviData = RuuviData(ruuviParser.humidity, ruuviParser.airPressure, ruuviParser.temp)
@@ -142,7 +142,7 @@ data class BeaconSaved(
                     }
                 }
             } else { // This is an iBeacon or ALTBeacon
-                beaconType = if (beacon.beaconTypeCode == 0xBEAC) BeaconSaved.TYPE_ALTBEACON else BeaconSaved.TYPE_IBEACON // 0x4c000215 is iBeacon
+                beaconType = if (beacon.beaconTypeCode == 0xBEAC) TYPE_ALTBEACON else TYPE_IBEACON // 0x4c000215 is iBeacon
                 ibeaconData = IbeaconData(beacon.id1.toString(), beacon.id2.toString(), beacon.id3.toString())
             }
 

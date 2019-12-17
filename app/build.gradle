@@ -46,29 +46,29 @@ android {
 }
 
 ext {
-    roomVersion = '2.1.0-alpha03'
+    roomVersion = '2.2.2'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
 
-    implementation 'com.google.android.material:material:1.1.0-alpha01'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'com.google.android.material:material:1.2.0-alpha02'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.annotation:annotation:1.0.0'
+    implementation 'androidx.annotation:annotation:1.1.0'
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Dagger 2
-    implementation 'com.google.dagger:dagger:2.18'
-    kapt 'com.google.dagger:dagger-compiler:2.18'
+    implementation 'com.google.dagger:dagger:2.22.1'
+    kapt 'com.google.dagger:dagger-compiler:2.22.1'
 
     // RxJava & RxAndroid
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 
@@ -82,7 +82,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
 
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
     // ALT Beacon library
@@ -95,16 +95,16 @@ dependencies {
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
 
     // Constraint Layout
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
 
     // Material dialog
     implementation 'com.afollestad.material-dialogs:core:2.0.0-rc3'
     implementation 'com.afollestad.material-dialogs:input:2.0.0-rc3'
 
     // Firebase Analytics & Crash reporting
-    implementation "com.google.firebase:firebase-core:16.0.6"
+    implementation "com.google.firebase:firebase-core:17.2.1"
     implementation "com.google.firebase:firebase-crash:16.2.1"
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.7'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
