@@ -1,12 +1,12 @@
 package com.bridou_n.beaconscanner.features.beaconList
 
 import android.Manifest
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
+import android.os.RemoteException
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
@@ -17,6 +17,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.EmptyResultSetException
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bridou_n.beaconscanner.API.LoggingService
@@ -24,20 +25,33 @@ import com.bridou_n.beaconscanner.Database.AppDatabase
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.features.settings.SettingsActivity
 import com.bridou_n.beaconscanner.models.BeaconSaved
+import com.bridou_n.beaconscanner.models.LoggingRequest
 import com.bridou_n.beaconscanner.utils.AndroidVersion
 import com.bridou_n.beaconscanner.utils.BluetoothManager
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
 import com.bridou_n.beaconscanner.utils.extensionFunctions.component
+import com.bridou_n.beaconscanner.utils.extensionFunctions.log
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
+import io.reactivex.Completable
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconConsumer
+import org.altbeacon.beacon.BeaconManager
+import org.altbeacon.beacon.Region
 import pub.devrel.easypermissions.EasyPermissions
+import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
-class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconConsumer, EasyPermissions.PermissionCallbacks {
+class BeaconListActivity : AppCompatActivity(), BeaconConsumer, EasyPermissions.PermissionCallbacks {
 
     companion object {
         val coarseLocationPermission = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -60,7 +74,16 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
     private var dialog: MaterialDialog? = null
     private var menu: Menu? = null
-    private lateinit var presenter: BeaconListContract.Presenter
+
+    private var beaconManager: BeaconManager? = null
+    private var bluetoothStateDisposable: Disposable? = null
+
+    private var listQuery: Disposable? = null
+
+    private var numberOfScansSinceLog = 0
+    private var loggingRequests = CompositeDisposable()
+
+    private var isScanning = false
 
     private val rvAdapter by lazy {
         BeaconsRecyclerViewAdapter(this, object : BeaconsRecyclerViewAdapter.OnControlsOpen {
@@ -90,14 +113,59 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
             }
         }
 
-        presenter = BeaconListPresenter(this, prefs, db, loggingService, bluetoothState, tracker)
-
         scan_fab.setOnClickListener {
-            presenter.toggleScan()
+            toggleScan()
         }
     }
 
-    override fun showTutorial() : Boolean {
+    private fun toggleScan() {
+        if (!isScanning()) {
+            tracker.logEvent("start_scanning_clicked", null)
+            return startScan()
+        }
+        tracker.logEvent("stop_scanning_clicked", null)
+        stopScan()
+    }
+
+    private fun startScan() {
+        if (!hasCoarseLocationPermission()) {
+            return askForCoarseLocationPermission()
+        }
+
+        if (!bluetoothState.isEnabled() || beaconManager == null) {
+            return showBluetoothNotEnabledError()
+        }
+
+        if (beaconManager?.isBound(this) != true) {
+            Timber.d("binding beaconManager")
+            beaconManager?.bind(this)
+        }
+
+        if (prefs.preventSleep) {
+            keepScreenOn(true)
+        }
+
+        showScanningState(true)
+        isScanning = true
+    }
+
+    private fun stopScan() {
+        unbindBeaconManager()
+        showScanningState(false)
+        keepScreenOn(false)
+        isScanning = false
+    }
+
+    fun isScanning() = isScanning
+
+    private fun unbindBeaconManager() {
+        if (beaconManager?.isBound(this) == true) {
+            Timber.d("Unbinding from beaconManager")
+            beaconManager?.unbind(this)
+        }
+    }
+
+    fun showTutorial() : Boolean {
         val btIcon = toolbar.findViewById<View?>(R.id.action_bluetooth)
         val clearIcon = toolbar.findViewById<View?>(R.id.action_clear)
 
@@ -128,11 +196,42 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
     override fun onResume() {
         super.onResume()
-        presenter.setBeaconManager(component().providesBeaconManager())
-        presenter.start()
+        beaconManager = component().providesBeaconManager()
+
+        // Setup an observable on the bluetooth changes
+        bluetoothStateDisposable = bluetoothState.asFlowable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { newState ->
+                    updateBluetoothState(newState, bluetoothState.isEnabled())
+
+                    if (newState == BeaconListActivity.BluetoothState.STATE_OFF) {
+                        stopScan()
+                    }
+                }
+
+        listQuery = db.beaconsDao().getBeacons(blocked = false)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { list ->
+                    Timber.d("list: $list")
+
+                    showEmptyView(list.size == 0)
+                    rvAdapter.submitList(list)
+                }
+
+        // Show the tutorial if needed
+        if (!prefs.hasSeenTutorial()) {
+            prefs.setHasSeenTutorial(showTutorial())
+        }
+
+        // Start scanning if the scan on open is activated or if we were previously scanning
+        if (prefs.isScanOnOpen || prefs.wasScanning()) {
+            isScanning = true
+            startScan()
+        }
     }
 
-    override fun keepScreenOn(status: Boolean) {
+    fun keepScreenOn(status: Boolean) {
         if (status) {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
@@ -140,16 +239,12 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         }
     }
 
-    override fun submitData(list: List<BeaconSaved>) {
-        rvAdapter.submitList(list)
-    }
-
-    override fun showEmptyView(show: Boolean) {
+    fun showEmptyView(show: Boolean) {
         empty_view.visibility = if (show) View.VISIBLE else View.GONE
         beacons_rv.visibility = if (show) View.GONE else View.VISIBLE
     }
 
-    override fun updateBluetoothState(state: BluetoothState, isEnabled: Boolean) {
+    fun updateBluetoothState(state: BluetoothState, isEnabled: Boolean) {
         bluetooth_state.visibility = View.VISIBLE
         bluetooth_state.setBackgroundColor(ContextCompat.getColor(this, state.bgColor))
         bluetooth_state.text = getString(state.text)
@@ -158,7 +253,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
                 ?.mutate()
         icon?.setColorFilter(ContextCompat.getColor(this, R.color.colorOnBackground), PorterDuff.Mode.SRC_IN)
 
-        menu?.getItem(1)?.icon = icon
+        menu?.findItem(R.id.action_bluetooth)?.icon = icon
 
         // If the bluetooth is ON, we don't warn the user
         if (state == BluetoothState.STATE_ON) {
@@ -166,24 +261,96 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         }
     }
 
-    /* Permissions methods */
-    override fun hasCoarseLocationPermission() = EasyPermissions.hasPermissions(this, *coarseLocationPermission)
+    override fun onBeaconServiceConnect() {
+        Timber.d("beaconManager is bound, ready to start scanning")
+        
+        beaconManager?.addRangeNotifier { beacons, region ->
+            if (isScanning) {
+                storeBeaconsAround(beacons)
+                logToWebhookIfNeeded()
+            }
+        }
 
-    override fun hasSomePermissionPermanentlyDenied(perms: List<String>) = EasyPermissions.somePermissionPermanentlyDenied(this, perms)
+        try {
+            beaconManager?.startRangingBeaconsInRegion(Region("com.bridou_n.beaconscanner", null, null, null))
+        } catch (e: RemoteException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun storeBeaconsAround(beacons: Collection<Beacon>) {
+        loggingRequests.add(Observable.fromIterable(beacons)
+                .map {
+                    val beaconInDb = try {
+                        db.beaconsDao().getBeaconById(it.hashCode()).blockingGet()
+                    } catch (e: EmptyResultSetException) {
+                        null
+                    }
+
+                    BeaconSaved.createFromBeacon(it, isBlocked = beaconInDb?.isBlocked ?: false)
+                }
+                .doOnNext {
+                    db.beaconsDao().insertBeacon(it)
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    Timber.d("Beacon inserted")
+                }, { err ->
+                    Timber.e(err)
+                    showGenericError(err?.message ?: "")
+                }))
+    }
+
+    fun logToWebhookIfNeeded() {
+        if (prefs.isLoggingEnabled && prefs.loggingEndpoint != null &&
+                ++numberOfScansSinceLog >= prefs.getLoggingFrequency()) {
+
+            numberOfScansSinceLog = 0
+            loggingRequests.add(db.beaconsDao().getBeaconsSeenAfter(prefs.lasLoggingCall)
+                    .filter { it.isNotEmpty() }
+                    .doOnSuccess { Timber.d("list to log: $it") }
+                    .map { LoggingRequest(prefs.loggingDeviceName ?: "", it) }
+                    .flatMapCompletable {
+                        loggingService.postLogs(prefs.loggingEndpoint ?: "", it)
+                    }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        Timber.d("Logged successfully")
+                        prefs.lasLoggingCall = Date().time
+                    }, { err ->
+                        Timber.e(IllegalStateException("Got err $err"))
+                    }))
+        }
+    }
+
+    /* Permissions methods */
+    fun hasCoarseLocationPermission() = EasyPermissions.hasPermissions(this, *coarseLocationPermission)
+
+    fun hasSomePermissionPermanentlyDenied(perms: List<String>) = EasyPermissions.somePermissionPermanentlyDenied(this, perms)
 
     override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
         if (requestCode == RC_COARSE_LOCATION) {
-            presenter.onLocationPermissionGranted()
+            tracker.log("permission_granted", null)
+            startScan()
         }
     }
 
     override fun onPermissionsDenied(requestCode: Int, permList: List<String>) {
         if (requestCode == RC_COARSE_LOCATION) {
-            presenter.onLocationPermissionDenied(requestCode, permList)
+            tracker.log("permission_denied")
+
+            // If the user refused the permission, we just disabled the scan on open
+            prefs.isScanOnOpen = false
+            if (hasSomePermissionPermanentlyDenied(permList)) {
+                tracker.log("permission_denied_permanently")
+                showEnablePermissionSnackbar()
+            }
         }
     }
 
-    override fun showEnablePermissionSnackbar() {
+    private fun showEnablePermissionSnackbar() {
         Snackbar.make(root_view, getString(R.string.enable_permission_from_settings), Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(R.string.enable)) { _ ->
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + packageName))
@@ -193,7 +360,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
                 }.show()
     }
 
-    override fun askForCoarseLocationPermission() = ActivityCompat.requestPermissions(this, coarseLocationPermission, RC_COARSE_LOCATION)
+    private fun askForCoarseLocationPermission() = ActivityCompat.requestPermissions(this, coarseLocationPermission, RC_COARSE_LOCATION)
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -202,21 +369,22 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
 
     /* ==== end of permission methods ==== */
 
-    override fun showBluetoothNotEnabledError() {
+    private fun showBluetoothNotEnabledError() {
         Snackbar.make(root_view, getString(R.string.enable_bluetooth_to_start_scanning), Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.enable)) { _ ->
-                    presenter.onBluetoothToggle()
+                    bluetoothState.toggle()
+                    tracker.log("action_bluetooth")
                 }
                 .show()
     }
 
-    override fun showGenericError(msg: String) {
-        Snackbar.make(root_view, msg, Snackbar.LENGTH_LONG).show()
+    fun showGenericError(msg: String) {
+         Snackbar.make(root_view, msg, Snackbar.LENGTH_LONG).show()
     }
 
-    override fun showLoggingError() = Snackbar.make(root_view, getString(R.string.logging_error_please_check), Snackbar.LENGTH_LONG).show()
+    private fun showLoggingError() = Snackbar.make(root_view, getString(R.string.logging_error_please_check), Snackbar.LENGTH_LONG).show()
 
-    override fun showScanningState(state: Boolean) {
+    private fun showScanningState(state: Boolean) {
         toolbar.title = getString(if (state) R.string.scanning_for_beacons else R.string.app_name)
         progress_1.visibility = if (state) View.VISIBLE else View.GONE
         progress_2.visibility = if (state) View.VISIBLE else View.GONE
@@ -233,18 +401,6 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         }
     }
 
-    override fun onBeaconServiceConnect() = presenter.onBeaconServiceConnect()
-
-    override fun redirectToStorePage() {
-        val appPackageName = packageName
-
-        try {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
-        } catch (anfe: ActivityNotFoundException) {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
 
@@ -252,31 +408,36 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
         return true
     }
 
-    override fun showClearDialog() {
+    fun showClearDialog() {
+        dialog?.dismiss()
         dialog = MaterialDialog(this)
                 .title(R.string.delete_all)
                 .message(R.string.are_you_sure_delete_all)
                 .positiveButton(android.R.string.ok, click = {
-                    presenter.onClearAccepted()
+                    tracker.log("action_clear_accepted")
+                    loggingRequests.add(
+                            Completable.fromCallable {
+                                db.beaconsDao().clearBeacons()
+                            }.subscribeOn(Schedulers.io()).subscribe()
+                    )
                 })
                 .negativeButton(android.R.string.cancel)
         dialog?.show()
     }
 
-    override fun startSettingsActivity() {
-        startActivity(Intent(this, SettingsActivity::class.java))
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_bluetooth -> {
-                presenter.onBluetoothToggle()
+                bluetoothState.toggle()
+                tracker.log("action_bluetooth")
             }
             R.id.action_clear -> {
-                presenter.onClearClicked()
+                tracker.log("action_clear")
+                showClearDialog()
             }
             R.id.action_settings -> {
-                presenter.onSettingsClicked()
+                tracker.log("action_settings")
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
             else -> return super.onOptionsItemSelected(item)
         }
@@ -284,7 +445,12 @@ class BeaconListActivity : AppCompatActivity(), BeaconListContract.View, BeaconC
     }
 
     override fun onPause() {
-        presenter.stop()
+        prefs.setScanningState(isScanning())
+        unbindBeaconManager()
+        listQuery?.dispose()
+        loggingRequests.clear()
+        bluetoothStateDisposable?.dispose()
+        keepScreenOn(false)
         super.onPause()
     }
 
