@@ -17,17 +17,11 @@
     <color name="colorOnSurface">#212121</color>
 
     <color name="divider">#33424242</color>
-    <color name="dividerLight">#44FFFFFF</color>
 
-    <color name="colorOnError">#ff6347</color>
     <!-- End of Material Theme colors -->
 
-    <color name="statusBarColor">#F5F5F5</color>
     <color name="toolbarColor">#FFFFFF</color>
     <color name="toolbarTextColor">#424242</color>
-
-    <color name="primaryTextDisabled">#80212121</color>
-    <color name="secondaryTextDisabled">#80757575</color>
 
     <!-- Bluetooth State colors -->
     <color name="bluetoothStateTextcolor">#CCFFFFFF</color>
@@ -36,12 +30,6 @@
     <color name="bluetoothTurningOn">#8BC34A</color>
 
     <color name="colorPauseFab">#EF5350 </color>
-
-    <!-- Cards background colors -->
-    <color name="ibeaconBackground">#64B5F6</color>
-    <color name="eddystoneUidBackground">#7986CB</color>
-    <color name='eddystoneUrlBackground'>#4DB6AC</color>
-    <color name="ruuvitagBackground">#A1887F</color>
 
     <color name="rateStarColor">#FFD54F</color>
 </resources>
