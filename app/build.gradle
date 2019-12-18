@@ -97,6 +97,9 @@ dependencies {
     // Constraint Layout
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
 
+    // Flexbox layout
+    implementation 'com.google.android:flexbox:1.1.0'
+
     // Material dialog
     implementation 'com.afollestad.material-dialogs:core:2.0.0-rc3'
     implementation 'com.afollestad.material-dialogs:input:2.0.0-rc3'

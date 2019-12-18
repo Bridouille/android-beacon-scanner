@@ -17,7 +17,6 @@
     <string name="metters_abbreviation">m</string>
 
     <string name="eddystone_uid">Eddystone-UID</string>
-    <string name="plus_tlm"><![CDATA[&TLM]]></string>
     <string name="eddystone_url">Eddystone-URL</string>
     <string name="clear">Clear</string>
     <string name="no_scanned_beacons_yet">No scanned beacons yet!</string>
@@ -64,22 +63,36 @@
     <string name="negative_btn_step_2">No, thanks</string>
     <string name="prevent_sleep_while_scanning">Prevent device sleep while scanning</string>
     <string name="visit_website">Visit website</string>
-    <string name="battery_x_mv">Battery %d mV</string>
-    <string name="uptime_x_seconds">Uptime %s seconds</string>
-    <string name="x_packets_sent">%s packets sent</string>
-    <string name="temperature_x_degres">Temperature %.1f °C</string>
-    <string name="rssi_x_dbm">RSSI %d dBm</string>
-    <string name="tx_x_dbm">TX %d dBm</string>
-    <string name="major_x">Major • %s</string>
-    <string name="minor_x">Minor • %s</string>
-    <string name="namespace_id_x">NamespaceID • %s</string>
-    <string name="instance_id_x">InstanceID • %s</string>
-    <string name="uuid_x">UUID • %s</string>
-    <string name="url_x">URL • %s</string>
+
+    <string name="battery_title">Battery</string>
+    <string name="x_mv">%d mV</string>
+
+    <string name="uptime_title">Uptime</string>
+    <string name="x_seconds">%s seconds</string>
+
+    <string name="pdu_title">Packets sent</string>
+
+    <string name="temperature_title">Temperature</string>
+    <string name="x_degrees">%1$s °C</string>
+
+    <string name="RSSI_title">RSSI</string>
+    <string name="x_dbm">%d dBm</string>
+    <string name="TX_title">TX</string>
+    <string name="major">Major</string>
+    <string name="minor">Minor</string>
+
+    <string name="namespace_id_title">NamespaceID</string>
+    <string name="instance_id_title">InstanceIDs</string>
+    <string name="uuid">UUID</string>
+
+    <string name="url_title">URL</string>
     <string name="ruuvitag">RuuviTag</string>
-    <string name="air_pressure_x_hpa">Air pressure %d hPa</string>
-    <string name="temperature_d_degres">Temperature %d °C</string>
-    <string name="humidity_x_percent">Humidity %d %%</string>
+
+    <string name="air_pressure_title">Air pressure</string>
+    <string name="x_hpa">%d hPa</string>
+
+    <string name="humidity_title">Humidity</string>
+
     <string name="remove_from_the_list">Remove from the list</string>
     <string name="copy_infos_to_clipboard">Copy infos to clipboard</string>
     <string name="add_to_the_blocked_list">Add to the blocked list</string>

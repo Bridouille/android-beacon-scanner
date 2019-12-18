@@ -10,13 +10,13 @@ import com.google.gson.annotations.SerializedName
 data class IbeaconData(
         @SerializedName("uuid")
         @ColumnInfo(name = "uuid")
-        val uuid: String? = null,
+        val uuid: String,
 
         @SerializedName("major")
         @ColumnInfo(name = "major")
-        val major: String? = null,
+        val major: String,
 
         @SerializedName("minor")
         @ColumnInfo(name = "minor")
-        val minor: String? = null
+        val minor: String
 )

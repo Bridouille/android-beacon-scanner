@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.EmptyResultSetException
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.afollestad.materialdialogs.MaterialDialog
@@ -105,8 +104,6 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer, EasyPermissions.
         setSupportActionBar(toolbar)
 
         beacons_rv.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(this@BeaconListActivity)
             adapter = rvAdapter
             viewTreeObserver.addOnScrollChangedListener {
                 toolbar.isSelected = beacons_rv.canScrollVertically(-1)
@@ -204,7 +201,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer, EasyPermissions.
                 .subscribe { newState ->
                     updateBluetoothState(newState, bluetoothState.isEnabled())
 
-                    if (newState == BeaconListActivity.BluetoothState.STATE_OFF) {
+                    if (newState == BluetoothState.STATE_OFF) {
                         stopScan()
                     }
                 }
@@ -263,7 +260,6 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer, EasyPermissions.
 
     override fun onBeaconServiceConnect() {
         Timber.d("beaconManager is bound, ready to start scanning")
-        
         beaconManager?.addRangeNotifier { beacons, region ->
             if (isScanning) {
                 storeBeaconsAround(beacons)

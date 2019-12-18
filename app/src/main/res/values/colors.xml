@@ -43,12 +43,5 @@
     <color name='eddystoneUrlBackground'>#4DB6AC</color>
     <color name="ruuvitagBackground">#A1887F</color>
 
-    <!-- Cards text colors -->
-    <color name="cardTitleColor">@android:color/white</color>
-    <color name="cardSubtitleColor">#CCFFFFFF</color>
-    <color name="cardPropertyColor">@android:color/white</color>
-
-    <!-- Cards icon colors -->
-    <color name="iconColors">#FFD54F</color>
     <color name="rateStarColor">#FFD54F</color>
 </resources>

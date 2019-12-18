@@ -14,6 +14,8 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.content.res.AppCompatResources
 import com.bridou_n.beaconscanner.AppSingleton
 import com.google.android.material.snackbar.Snackbar
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 /**
  * Created by bridou_n on 21/08/2017.
@@ -62,4 +64,8 @@ fun ActionBar?.setHomeIcon(@DrawableRes drawableRes: Int, @ColorRes iconColor: I
         newDrawable.setColorFilter(ContextCompat.getColor(this.themedContext, iconColor), PorterDuff.Mode.SRC_IN)
         setHomeAsUpIndicator(newDrawable)
     }
+}
+
+infix fun Disposable.addTo(collection: CompositeDisposable) {
+    collection.add(this)
 }

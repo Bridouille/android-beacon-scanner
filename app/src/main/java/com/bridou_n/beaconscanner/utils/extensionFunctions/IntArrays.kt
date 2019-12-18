@@ -1,5 +1,7 @@
 package com.bridou_n.beaconscanner.utils.extensionFunctions
 
+import com.bridou_n.beaconscanner.utils.CountHelper
+
 /**
  * Created by bridou_n on 05/09/2017.
  */
@@ -16,4 +18,8 @@ fun IntArray.print() : String {
 
     output.append("]")
     return output.toString()
+}
+
+fun Long.toCoolFormat() : String {
+    return CountHelper.coolFormat(this.toDouble(), 0)
 }
