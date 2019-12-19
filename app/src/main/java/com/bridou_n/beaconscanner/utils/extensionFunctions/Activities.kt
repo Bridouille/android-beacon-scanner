@@ -1,6 +1,7 @@
 package com.bridou_n.beaconscanner.utils.extensionFunctions
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.PorterDuff
 import android.os.Build
 import androidx.core.content.ContextCompat
@@ -12,6 +13,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.app.ActivityCompat
 import com.bridou_n.beaconscanner.AppSingleton
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.disposables.CompositeDisposable
@@ -64,6 +66,14 @@ fun ActionBar?.setHomeIcon(@DrawableRes drawableRes: Int, @ColorRes iconColor: I
         newDrawable.setColorFilter(ContextCompat.getColor(this.themedContext, iconColor), PorterDuff.Mode.SRC_IN)
         setHomeAsUpIndicator(newDrawable)
     }
+}
+
+fun AppCompatActivity.isPermissionGranted(permissionName: String) : Boolean {
+    return ContextCompat.checkSelfPermission(this, permissionName) == PackageManager.PERMISSION_GRANTED
+}
+
+fun AppCompatActivity.reqPermission(permissionName: String, requestCode: Int) {
+    ActivityCompat.requestPermissions(this, arrayOf(permissionName), requestCode)
 }
 
 infix fun Disposable.addTo(collection: CompositeDisposable) {

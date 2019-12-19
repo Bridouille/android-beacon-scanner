@@ -12,9 +12,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import androidx.annotation.ColorRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.room.EmptyResultSetException
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
@@ -28,8 +29,7 @@ import com.bridou_n.beaconscanner.models.LoggingRequest
 import com.bridou_n.beaconscanner.utils.AndroidVersion
 import com.bridou_n.beaconscanner.utils.BluetoothManager
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
-import com.bridou_n.beaconscanner.utils.extensionFunctions.component
-import com.bridou_n.beaconscanner.utils.extensionFunctions.log
+import com.bridou_n.beaconscanner.utils.extensionFunctions.*
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.material.snackbar.Snackbar
@@ -45,20 +45,20 @@ import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconConsumer
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.Region
-import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-class BeaconListActivity : AppCompatActivity(), BeaconConsumer, EasyPermissions.PermissionCallbacks {
+class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 
     companion object {
-        val coarseLocationPermission = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION)
-        val RC_COARSE_LOCATION = 1
-        val RC_SETTINGS_SCREEN = 2
+        const val RC_COARSE_LOCATION = 1
     }
 
-    enum class BluetoothState(val bgColor: Int, val text: Int) {
+    enum class BluetoothState(
+            @ColorRes val bgColor: Int,
+            @StringRes val text: Int
+    ) {
         STATE_OFF(R.color.bluetoothDisabled, R.string.bluetooth_disabled),
         STATE_TURNING_OFF(R.color.bluetoothTurningOff, R.string.turning_bluetooth_off),
         STATE_ON(R.color.bluetoothTurningOn, R.string.bluetooth_enabled),
@@ -125,8 +125,8 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer, EasyPermissions.
     }
 
     private fun startScan() {
-        if (!hasCoarseLocationPermission()) {
-            return askForCoarseLocationPermission()
+        if (!isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            return reqPermission(Manifest.permission.ACCESS_COARSE_LOCATION, RC_COARSE_LOCATION)
         }
 
         if (!bluetoothState.isEnabled() || beaconManager == null) {
@@ -321,49 +321,33 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer, EasyPermissions.
         }
     }
 
-    /* Permissions methods */
-    fun hasCoarseLocationPermission() = EasyPermissions.hasPermissions(this, *coarseLocationPermission)
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            RC_COARSE_LOCATION -> {
+                Timber.d("granted -> ${grantResults.hasGrantedPermission()}")
 
-    fun hasSomePermissionPermanentlyDenied(perms: List<String>) = EasyPermissions.somePermissionPermanentlyDenied(this, perms)
+                if (grantResults.hasGrantedPermission()) {
+                    tracker.log("permission_granted", null)
+                    startScan()
+                } else {
+                    tracker.log("permission_denied")
 
-    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
-        if (requestCode == RC_COARSE_LOCATION) {
-            tracker.log("permission_granted", null)
-            startScan()
-        }
-    }
-
-    override fun onPermissionsDenied(requestCode: Int, permList: List<String>) {
-        if (requestCode == RC_COARSE_LOCATION) {
-            tracker.log("permission_denied")
-
-            // If the user refused the permission, we just disabled the scan on open
-            prefs.isScanOnOpen = false
-            if (hasSomePermissionPermanentlyDenied(permList)) {
-                tracker.log("permission_denied_permanently")
-                showEnablePermissionSnackbar()
+                    // If the user refused the permission, we just disable the scan on open
+                    prefs.isScanOnOpen = false
+                    Snackbar.make(root_view, getString(R.string.enable_permission_from_settings), Snackbar.LENGTH_INDEFINITE)
+                            .setAction(getString(R.string.enable)) {
+                                startActivity(Intent(
+                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                        Uri.parse("package:$packageName")
+                                ).apply {
+                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                                })
+                            }.show()
+                }
             }
         }
     }
-
-    private fun showEnablePermissionSnackbar() {
-        Snackbar.make(root_view, getString(R.string.enable_permission_from_settings), Snackbar.LENGTH_INDEFINITE)
-                .setAction(getString(R.string.enable)) { _ ->
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + packageName))
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-
-                    startActivityForResult(intent, RC_SETTINGS_SCREEN)
-                }.show()
-    }
-
-    private fun askForCoarseLocationPermission() = ActivityCompat.requestPermissions(this, coarseLocationPermission, RC_COARSE_LOCATION)
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
-    }
-
-    /* ==== end of permission methods ==== */
 
     private fun showBluetoothNotEnabledError() {
         Snackbar.make(root_view, getString(R.string.enable_bluetooth_to_start_scanning), Snackbar.LENGTH_LONG)

@@ -1,5 +1,6 @@
 package com.bridou_n.beaconscanner.utils.extensionFunctions
 
+import android.content.pm.PackageManager
 import com.bridou_n.beaconscanner.utils.CountHelper
 
 /**
@@ -19,6 +20,8 @@ fun IntArray.print() : String {
     output.append("]")
     return output.toString()
 }
+
+fun IntArray.hasGrantedPermission() = getOrNull(0)?.equals(PackageManager.PERMISSION_GRANTED) == true
 
 fun Long.toCoolFormat() : String {
     return CountHelper.coolFormat(this.toDouble(), 0)

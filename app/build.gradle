@@ -88,9 +88,6 @@ dependencies {
     // ALT Beacon library
     implementation 'org.altbeacon:android-beacon-library:2.12.1'
 
-    // Easy permissions
-    implementation 'pub.devrel:easypermissions:0.4.3'
-
     // Tap target view, discovery feature
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
 

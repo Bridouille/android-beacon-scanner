@@ -46,6 +46,7 @@ class BeaconsRecyclerViewAdapter(
         fun bindView(beacon: BeaconSaved) {
             val ctx = itemView.context
 
+            // TODO: fix nested RV click
             itemView.card.setOnLongClickListener {
                 true.also { listener?.onOpenControls(beacon) }
             }
