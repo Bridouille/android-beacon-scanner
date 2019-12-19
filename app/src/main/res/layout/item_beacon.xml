@@ -6,7 +6,7 @@
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="8dp"
+    app:cardCornerRadius="6dp"
     app:cardElevation="4dp"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
@@ -16,112 +16,135 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
         >
 
-        <!-- Type -->
-        <TextView
-            android:id="@+id/beacon_type"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/header_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/distance"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:textAppearance="?attr/textAppearanceHeadline5"
-            tools:text="Eddystone-UID+TLM title that can be long"
-            />
-
-        <!-- Distance -->
-        <TextView
-            android:id="@+id/distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@+id/beacon_type"
-            app:layout_constraintEnd_toStartOf="@+id/distance_unit"
-            android:gravity="end"
-            android:textAppearance="?attr/textAppearanceHeadline5"
-            tools:text="12.56"
-            />
-
-        <TextView
-            android:id="@+id/distance_unit"
-            android:text="@string/metters_abbreviation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/distance"
-            android:textAppearance="?attr/textAppearanceBody1"
-            android:paddingStart="4dp"
-            />
-
-        <!-- Address -->
-        <TextView
-            android:id="@+id/address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            app:layout_constraintTop_toBottomOf="@id/beacon_type"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textAppearance="?attr/textAppearanceSubtitle2"
-            tools:text="A5:09:FD:B7:C3:22"
-            />
-
-        <TextView
-            android:id="@+id/separator"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toEndOf="@+id/address"
-            app:layout_constraintTop_toTopOf="@+id/address"
-            app:layout_constraintBottom_toBottomOf="@+id/address"
-            android:gravity="center"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:textAppearance="?attr/textAppearanceBody1"
-            android:text="•"
-            />
-
-        <!-- Manufacturer -->
-        <TextView
-            android:id="@+id/manufacturer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/beacon_type"
-            app:layout_constraintStart_toEndOf="@+id/separator"
-            android:textAppearance="?attr/textAppearanceSubtitle2"
-            tools:text="0X0118"
-            />
-
-        <!-- Last seen -->
-        <TextView
-            android:id="@+id/last_seen"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintTop_toBottomOf="@id/distance"
-            app:layout_constraintStart_toEndOf="@+id/manufacturer"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textAppearance="?attr/textAppearanceCaption"
-            tools:text="08/09/2017 22:07:38 odk okeokdekode"
-            />
-
+            android:paddingBottom="8dp"
+            >
+    
+            <!-- Type -->
+            <TextView
+                android:id="@+id/beacon_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/distance"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:textColor="@color/colorOnPrimary"
+                tools:text="Eddystone-UID+TLM title that can be long"
+                />
+    
+            <!-- Distance -->
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/beacon_type"
+                app:layout_constraintEnd_toStartOf="@+id/distance_unit"
+                android:gravity="end"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:textColor="@color/colorOnPrimary"
+                tools:text="12.56"
+                />
+    
+            <TextView
+                android:id="@+id/distance_unit"
+                android:text="@string/metters_abbreviation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/distance"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:textColor="@color/colorOnPrimary"
+                android:paddingStart="4dp"
+                />
+    
+            <!-- Address -->
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintTop_toBottomOf="@id/beacon_type"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:textColor="@color/colorOnPrimary"
+                tools:text="A5:09:FD:B7:C3:22"
+                />
+    
+            <TextView
+                android:id="@+id/separator"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toEndOf="@+id/address"
+                app:layout_constraintTop_toTopOf="@+id/address"
+                app:layout_constraintBottom_toBottomOf="@+id/address"
+                android:gravity="center"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:textColor="@color/colorOnPrimary"
+                android:text="•"
+                />
+    
+            <!-- Manufacturer -->
+            <TextView
+                android:id="@+id/manufacturer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/beacon_type"
+                app:layout_constraintStart_toEndOf="@+id/separator"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:textColor="@color/colorOnPrimary"
+                tools:text="0X0118"
+                />
+    
+            <!-- Last seen -->
+            <TextView
+                android:id="@+id/last_seen"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toBottomOf="@id/distance"
+                app:layout_constraintStart_toEndOf="@+id/manufacturer"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="@color/colorOnPrimary"
+                tools:text="08/09/2017 22:07:38 odk okeokdekode"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        
         <!-- List of other beacon informations -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/infos_rv"
-            app:layout_constraintTop_toBottomOf="@+id/address"
+            app:layout_constraintTop_toBottomOf="@+id/header_container"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp"
             android:overScrollMode="never"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:clipToPadding="false"
+            android:background="@color/colorSurface"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

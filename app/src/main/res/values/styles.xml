@@ -1,9 +1,13 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="AppThemeNoActionBarLightStatusBar">
         <!-- Material component styles colors -->
         <item name="colorPrimary">@color/colorPrimary</item>
+
+        <!-- Only used for the status bar color on lolipop -->
+        <item name="colorPrimaryDark">@color/colorStatusBarLollipop</item>
+
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
 
@@ -16,41 +20,30 @@
 
         <item name="colorSurface">@color/colorSurface</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorOnError">@color/colorOnError</item>
         <!-- / Material component styles colors -->
 
         <!-- Material dialog styles -->
         <item name="md_corner_radius">8dp</item>
+        <item name="md_background_color">@color/colorElevatedComponent</item>
 
         <item name="android:windowBackground">@color/colorBackground</item>
     </style>
 
     <!-- Theme for setting the backgrounds etc-->
-    <style name="AppThemeNoActionBarLightStatusBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppThemeNoActionBarLightStatusBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Only used in values-v23 -->
     </style>
 
     <!-- Splash theme -->
     <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/colorSecondary</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop" >@color/colorSecondary</item>
         <item name="android:windowBackground">@drawable/splash_background</item>
-    </style>
-
-    <!-- Toolbar style -->
-    <style name="Widget.MyApp.Toolbar.Solid" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="android:colorControlNormal">@color/toolbarTextColor</item>
-
-        <!-- navigation icon color -->
-        <item name="android:textColorPrimary">@color/toolbarTextColor</item>
-
-        <!-- color of the menu overflow icon -->
-        <item name="android:textColorSecondary">@color/toolbarTextColor</item>
-
-        <item name="android:actionMenuTextColor">@color/toolbarTextColor</item>
     </style>
 
     <!-- BottomSheetFragment theme -->
     <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog">
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop" >@android:color/transparent</item>
     </style>
 
     <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">

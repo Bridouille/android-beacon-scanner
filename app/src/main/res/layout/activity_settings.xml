@@ -1,495 +1,458 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.bridou_n.beaconscanner.features.settings.SettingsActivity">
-
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:background="@color/colorBackground"
-        android:stateListAnimator="@animator/toolbar_elevation"
-        app:titleTextAppearance="?attr/textAppearanceHeadline5"
-        />
-
-    <ScrollView
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- Scanner title-->
-            <TextView
-                android:text="@string/scanner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textStyle="bold"
-                android:paddingTop="16dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="@color/colorSecondary"
-                />
-
-            <!-- Scan on open toggle -->
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/scan_open"
-                android:text="@string/start_scanning_when_app_opens"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:textAppearance="?attr/textAppearanceSubtitle2"
-                />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="16dp"
-                android:background="@color/divider"
-                />
-
-            <!-- Scan delay -->
-            <LinearLayout
-                android:id="@+id/scan_delay_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:clickable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:text="@string/delay_in_between_each_scan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceSubtitle2"
-                    />
-
-                <TextView
-                    android:id="@+id/scan_delay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    tools:text="5 seconds"
-                    />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="16dp"
-                android:background="@color/divider" />
-
-            <!-- "Prevent sleep" while scanning -->
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/prevent_sleep"
-                android:text="@string/prevent_sleep_while_scanning"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceSubtitle2"
-                android:padding="16dp"
-                />
-
-            <!-- Logging title-->
-            <TextView
-                android:text="@string/logging"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textStyle="bold"
-                android:paddingTop="16dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="@color/colorSecondary"
-                />
-
-            <!-- Logging toggle -->
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/logging_enabled"
-                android:text="@string/enable_logging"
-                android:textAppearance="?attr/textAppearanceSubtitle2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                />
-
-            <!-- Logging description -->
-            <TextView
-                android:id="@+id/logging_description"
-                android:text="@string/logging_description"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="16dp"
-                android:background="@color/divider" />
-
-            <!-- Logging endpoint -->
-            <LinearLayout
-                android:id="@+id/logging_endpoint_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:clickable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/logging_endpoint_title"
-                    android:text="@string/logging_endpoint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceSubtitle2"
-                    />
-
-                <TextView
-                    android:id="@+id/logging_endpoint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    tools:text="http://example.com/logging"
-                    />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="16dp"
-                android:background="@color/divider" />
-
-            <!-- Device name -->
-            <LinearLayout
-                android:id="@+id/device_name_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:clickable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/device_name_title"
-                    android:text="@string/device_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceSubtitle2"
-                    />
-
-                <TextView
-                    android:id="@+id/device_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    tools:text="Red beacon"
-                    />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="16dp"
-                android:background="@color/divider" />
-
-            <!-- Logging frequency -->
-            <LinearLayout
-                android:id="@+id/logging_frequency_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:clickable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/logging_frequency_title"
-                    android:text="@string/logging_frequency"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceSubtitle2"
-                    />
-
-                <TextView
-                    android:id="@+id/logging_frequency"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    tools:text="Every scan"
-                    />
-            </LinearLayout>
-
-            <!-- Blacklist title-->
-            <TextView
-                android:text="@string/blacklist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:paddingTop="16dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="@color/colorSecondary"/>
-
-            <!-- Blacklist content-->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/blacklist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground"
-                >
-
-                <ImageView
-                    android:id="@+id/blacklist_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:srcCompat="@drawable/ic_block_black_24dp"
-                    android:tint="@color/divider"
-                    />
-
-                <TextView
-                    android:id="@+id/blacklist_title"
-                    android:text="@string/blacklist"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toRightOf="@+id/blacklist_icon"
-                    android:layout_marginStart="16dp"
-                    android:textAppearance="?attr/textAppearanceSubtitle2"
-                    />
-
-                <TextView
-                    android:text="@string/see_the_blocked_beacons"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/blacklist_title"
-                    app:layout_constraintLeft_toLeftOf="@+id/blacklist_title"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- Feedback and Rating title-->
-            <TextView
-                android:text="@string/feedback"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textStyle="bold"
-                android:paddingTop="16dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="@color/colorSecondary"/>
-
-            <!-- Rate the app -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/rate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground"
-                >
-
-                <ImageView
-                    android:id="@+id/rate_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:srcCompat="@drawable/ic_round_star_border_24px"
-                    android:tint="@color/rateStarColor"
-                    />
-
-                <TextView
-                    android:id="@+id/rate_title"
-                    android:text="@string/rate_the_app"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toRightOf="@+id/rate_icon"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginStart="16dp"
-                    android:textAppearance="?attr/textAppearanceSubtitle2"
-                    />
-
-                <TextView
-                    android:text="@string/enjoying_the_app_let_us_know"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toLeftOf="@id/rate_title"
-                    app:layout_constraintTop_toBottomOf="@+id/rate_title"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="16dp"
-                android:background="@color/divider" />
-
-            <!-- Feature request -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/feature_request"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <ImageView
-                    android:id="@+id/feedback_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:srcCompat="@drawable/ic_round_code_24px"
-                    android:tint="@color/colorSecondary"
-                    />
-
-                <TextView
-                    android:id="@+id/feedback_title"
-                    android:text="@string/open_source"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toRightOf="@+id/feedback_icon"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginStart="16dp"
-                    android:textAppearance="?attr/textAppearanceSubtitle2"
-                    />
-
-                <TextView
-                    android:text="@string/open_source_descr"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/feedback_title"
-                    app:layout_constraintLeft_toLeftOf="@id/feedback_title"
-                    app:layout_constraintRight_toRightOf="parent"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- Tutorial Title -->
-            <TextView
-                android:text="@string/tutorial"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textStyle="bold"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingTop="16dp"
-                android:textColor="@color/colorSecondary"
-                />
-
-            <!-- Activate tutorial -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/tutorial"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <ImageView
-                    android:id="@+id/tutorial_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:srcCompat="@drawable/ic_round_help_outline_24px"
-                    android:tint="@color/colorOnBackground"
-                    />
-
-                <TextView
-                    android:id="@+id/tutorial_title"
-                    android:text="@string/activate_tutorial"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toRightOf="@+id/tutorial_icon"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginStart="16dp"
-                    android:textAppearance="?attr/textAppearanceSubtitle2"
-                    />
-
-                <TextView
-                    android:text="@string/need_some_hints"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toLeftOf="@id/tutorial_title"
-                    app:layout_constraintTop_toBottomOf="@+id/tutorial_title"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- About Title -->
-            <TextView
-                android:text="@string/about"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textStyle="bold"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingTop="16dp"
-                android:textColor="@color/colorSecondary"
-                />
-
-            <!-- Version of the app -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:clickable="true"
-                android:orientation="vertical"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:text="@string/version"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceSubtitle2"
-                    />
-
-                <TextView
-                    android:id="@+id/version"
-                    tools:text="1.0.4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    />
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	tools:context="com.bridou_n.beaconscanner.features.settings.SettingsActivity">
+	
+	<!-- Toolbar -->
+	<androidx.appcompat.widget.Toolbar
+		android:id="@+id/toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="?actionBarSize"
+		android:background="@color/colorToolbar"
+		android:stateListAnimator="@animator/toolbar_elevation"
+		>
+		
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center">
+			
+			<TextView
+				android:id="@+id/toolbar_title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/settings"
+				android:textAppearance="?attr/textAppearanceHeadline5"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
+			
+			<TextView
+				android:id="@+id/app_version"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="8dp"
+				android:textAppearance="?attr/textAppearanceCaption"
+				app:layout_constraintBottom_toBottomOf="@+id/toolbar_title"
+				app:layout_constraintStart_toEndOf="@+id/toolbar_title"
+				tools:text="v1.3.4" />
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</androidx.appcompat.widget.Toolbar>
+	
+	<ScrollView
+		android:id="@+id/content"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:overScrollMode="never">
+		
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+			
+			<!-- Scanner title-->
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingStart="16dp"
+				android:paddingTop="16dp"
+				android:paddingEnd="16dp"
+				android:text="@string/scanner"
+				android:textAppearance="?attr/textAppearanceBody1"
+				android:textColor="@color/colorPrimaryVariant"
+				android:textStyle="bold" />
+			
+			<!-- Scan on open toggle -->
+			<androidx.appcompat.widget.SwitchCompat
+				android:id="@+id/scan_open"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="16dp"
+				android:text="@string/start_scanning_when_app_opens"
+				android:textAppearance="?attr/textAppearanceSubtitle2" />
+			
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:layout_marginStart="16dp"
+				android:layout_marginEnd="16dp"
+				android:background="@color/divider" />
+			
+			<!-- Scan delay -->
+			<LinearLayout
+				android:id="@+id/scan_delay_container"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="?attr/selectableItemBackground"
+				android:clickable="true"
+				android:focusable="true"
+				android:orientation="vertical"
+				android:padding="16dp">
+				
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/delay_in_between_each_scan"
+					android:textAppearance="?attr/textAppearanceSubtitle2" />
+				
+				<TextView
+					android:id="@+id/scan_delay"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?attr/textAppearanceBody1"
+					tools:text="5 seconds" />
+			</LinearLayout>
+			
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:layout_marginStart="16dp"
+				android:layout_marginEnd="16dp"
+				android:background="@color/divider" />
+			
+			<!-- "Prevent sleep" while scanning -->
+			<androidx.appcompat.widget.SwitchCompat
+				android:id="@+id/prevent_sleep"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="16dp"
+				android:text="@string/prevent_sleep_while_scanning"
+				android:textAppearance="?attr/textAppearanceSubtitle2" />
+			
+			<!-- Logging title-->
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingStart="16dp"
+				android:paddingTop="16dp"
+				android:paddingEnd="16dp"
+				android:text="@string/logging"
+				android:textAppearance="?attr/textAppearanceBody1"
+				android:textColor="@color/colorPrimaryVariant"
+				android:textStyle="bold" />
+			
+			<!-- Logging toggle -->
+			<androidx.appcompat.widget.SwitchCompat
+				android:id="@+id/logging_enabled"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="16dp"
+				android:text="@string/enable_logging"
+				android:textAppearance="?attr/textAppearanceSubtitle2" />
+			
+			<!-- Logging description -->
+			<TextView
+				android:id="@+id/logging_description"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingStart="16dp"
+				android:paddingEnd="16dp"
+				android:paddingBottom="16dp"
+				android:text="@string/logging_description"
+				android:textAppearance="?attr/textAppearanceBody1" />
+			
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:layout_marginStart="16dp"
+				android:background="@color/divider" />
+			
+			<!-- Logging endpoint -->
+			<LinearLayout
+				android:id="@+id/logging_endpoint_container"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="?attr/selectableItemBackground"
+				android:clickable="true"
+				android:focusable="true"
+				android:orientation="vertical"
+				android:padding="16dp">
+				
+				<TextView
+					android:id="@+id/logging_endpoint_title"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/logging_endpoint"
+					android:textAppearance="?attr/textAppearanceSubtitle2" />
+				
+				<TextView
+					android:id="@+id/logging_endpoint"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?attr/textAppearanceBody1"
+					tools:text="http://example.com/logging" />
+			</LinearLayout>
+			
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:layout_marginStart="16dp"
+				android:layout_marginEnd="16dp"
+				android:background="@color/divider" />
+			
+			<!-- Device name -->
+			<LinearLayout
+				android:id="@+id/device_name_container"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="?attr/selectableItemBackground"
+				android:clickable="true"
+				android:focusable="true"
+				android:orientation="vertical"
+				android:padding="16dp">
+				
+				<TextView
+					android:id="@+id/device_name_title"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/device_name"
+					android:textAppearance="?attr/textAppearanceSubtitle2" />
+				
+				<TextView
+					android:id="@+id/device_name"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?attr/textAppearanceBody1"
+					tools:text="Red beacon" />
+			</LinearLayout>
+			
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:layout_marginStart="16dp"
+				android:background="@color/divider" />
+			
+			<!-- Logging frequency -->
+			<LinearLayout
+				android:id="@+id/logging_frequency_container"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="?attr/selectableItemBackground"
+				android:clickable="true"
+				android:focusable="true"
+				android:orientation="vertical"
+				android:padding="16dp">
+				
+				<TextView
+					android:id="@+id/logging_frequency_title"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/logging_frequency"
+					android:textAppearance="?attr/textAppearanceSubtitle2" />
+				
+				<TextView
+					android:id="@+id/logging_frequency"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?attr/textAppearanceBody1"
+					tools:text="Every scan" />
+			</LinearLayout>
+			
+			<!-- Blacklist title-->
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingStart="16dp"
+				android:paddingTop="16dp"
+				android:paddingEnd="16dp"
+				android:text="@string/blacklist"
+				android:textAppearance="?attr/textAppearanceBody1"
+				android:textColor="@color/colorPrimaryVariant"
+				android:textStyle="bold" />
+			
+			<!-- Blacklist content-->
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:id="@+id/blacklist"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="?attr/selectableItemBackground"
+				android:clickable="true"
+				android:focusable="true"
+				android:padding="16dp">
+				
+				<ImageView
+					android:id="@+id/blacklist_icon"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:tint="@color/divider"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintLeft_toLeftOf="parent"
+					app:layout_constraintTop_toTopOf="parent"
+					app:srcCompat="@drawable/ic_block_black_24dp" />
+				
+				<TextView
+					android:id="@+id/blacklist_title"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:text="@string/blacklist"
+					android:textAppearance="?attr/textAppearanceSubtitle2"
+					app:layout_constraintLeft_toRightOf="@+id/blacklist_icon"
+					app:layout_constraintTop_toTopOf="parent" />
+				
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:text="@string/see_the_blocked_beacons"
+					android:textAppearance="?attr/textAppearanceBody1"
+					app:layout_constraintLeft_toLeftOf="@+id/blacklist_title"
+					app:layout_constraintTop_toBottomOf="@+id/blacklist_title" />
+			</androidx.constraintlayout.widget.ConstraintLayout>
+			
+			<!-- Feedback and Rating title-->
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingStart="16dp"
+				android:paddingTop="16dp"
+				android:paddingEnd="16dp"
+				android:text="@string/feedback"
+				android:textAppearance="?attr/textAppearanceBody1"
+				android:textColor="@color/colorPrimaryVariant"
+				android:textStyle="bold" />
+			
+			<!-- Rate the app -->
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:id="@+id/rate"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="?attr/selectableItemBackground"
+				android:clickable="true"
+				android:focusable="true"
+				android:orientation="vertical"
+				android:padding="16dp">
+				
+				<ImageView
+					android:id="@+id/rate_icon"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:tint="@color/rateStarColor"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintLeft_toLeftOf="parent"
+					app:layout_constraintTop_toTopOf="parent"
+					app:srcCompat="@drawable/ic_star_24px" />
+				
+				<TextView
+					android:id="@+id/rate_title"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:text="@string/rate_the_app"
+					android:textAppearance="?attr/textAppearanceSubtitle2"
+					app:layout_constraintLeft_toRightOf="@+id/rate_icon"
+					app:layout_constraintTop_toTopOf="parent" />
+				
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:text="@string/enjoying_the_app_let_us_know"
+					android:textAppearance="?attr/textAppearanceBody1"
+					app:layout_constraintLeft_toLeftOf="@id/rate_title"
+					app:layout_constraintTop_toBottomOf="@+id/rate_title" />
+			</androidx.constraintlayout.widget.ConstraintLayout>
+			
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:layout_marginStart="16dp"
+				android:background="@color/divider" />
+			
+			<!-- Feature request -->
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:id="@+id/feature_request"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="?attr/selectableItemBackground"
+				android:clickable="true"
+				android:focusable="true"
+				android:orientation="vertical"
+				android:padding="16dp">
+				
+				<ImageView
+					android:id="@+id/feedback_icon"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:tint="@color/colorSecondary"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintLeft_toLeftOf="parent"
+					app:layout_constraintTop_toTopOf="parent"
+					app:srcCompat="@drawable/ic_round_code_24px" />
+				
+				<TextView
+					android:id="@+id/feedback_title"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:text="@string/open_source"
+					android:textAppearance="?attr/textAppearanceSubtitle2"
+					app:layout_constraintLeft_toRightOf="@+id/feedback_icon"
+					app:layout_constraintTop_toTopOf="parent" />
+				
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:text="@string/open_source_descr"
+					android:textAppearance="?attr/textAppearanceBody1"
+					app:layout_constraintLeft_toLeftOf="@id/feedback_title"
+					app:layout_constraintRight_toRightOf="parent"
+					app:layout_constraintTop_toBottomOf="@+id/feedback_title" />
+			</androidx.constraintlayout.widget.ConstraintLayout>
+			
+			<!-- Tutorial Title -->
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingStart="16dp"
+				android:paddingTop="16dp"
+				android:paddingEnd="16dp"
+				android:text="@string/tutorial"
+				android:textAppearance="?attr/textAppearanceBody1"
+				android:textColor="@color/colorPrimaryVariant"
+				android:textStyle="bold" />
+			
+			<!-- Activate tutorial -->
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:id="@+id/tutorial"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="?attr/selectableItemBackground"
+				android:clickable="true"
+				android:focusable="true"
+				android:orientation="vertical"
+				android:padding="16dp">
+				
+				<ImageView
+					android:id="@+id/tutorial_icon"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:tint="@color/colorOnBackground"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintLeft_toLeftOf="parent"
+					app:layout_constraintTop_toTopOf="parent"
+					app:srcCompat="@drawable/ic_round_help_outline_24px" />
+				
+				<TextView
+					android:id="@+id/tutorial_title"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:text="@string/activate_tutorial"
+					android:textAppearance="?attr/textAppearanceSubtitle2"
+					app:layout_constraintLeft_toRightOf="@+id/tutorial_icon"
+					app:layout_constraintTop_toTopOf="parent" />
+				
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:text="@string/need_some_hints"
+					android:textAppearance="?attr/textAppearanceBody1"
+					app:layout_constraintLeft_toLeftOf="@id/tutorial_title"
+					app:layout_constraintTop_toBottomOf="@+id/tutorial_title" />
+			</androidx.constraintlayout.widget.ConstraintLayout>
+		</LinearLayout>
+	</ScrollView>
 </LinearLayout>

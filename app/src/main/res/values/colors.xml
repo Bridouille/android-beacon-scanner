@@ -1,35 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#344955</color>
-    <color name="colorPrimaryVariant">#0b222c</color>
+    <color name="colorPrimary">#4285F4</color>
+    <color name="colorPrimaryVariant">#4285F4</color>
     <color name="colorOnPrimary">#FFF</color>
 
-    <color name="colorSecondary">#2196F3</color>
-    <color name="colorSecondaryVariant">#1976D2</color>
+    <!-- Used for switches, OK / CANCEL buttons on dialogs -->
+    <color name="colorSecondary">#4285F4</color>
+    <color name="colorSecondaryVariant">#FFC107</color> <!-- This one is never used-->
     <color name="colorOnSecondary">#FFF</color>
 
     <color name="colorBackground">#FAFAFA</color>
     <color name="colorOnBackground">#212121</color>
+
+    <color name="colorOutline">#33212121</color>
 
     <color name="colorSurface">#FFF</color>
 
     <!-- Used for the snackbars colors -->
     <color name="colorOnSurface">#212121</color>
 
+    <!-- Used for cards, bottomsheet -->
+    <color name="colorElevatedComponent">#FFF</color>
+
+    <!-- Statusbar + toolbar background color -->
+    <color name="colorToolbar">@color/colorBackground</color>
+    <color name="colorStatusBarLollipop">@color/colorPrimary</color>
+
     <color name="divider">#33424242</color>
 
-    <!-- End of Material Theme colors -->
-
-    <color name="toolbarColor">#FFFFFF</color>
-    <color name="toolbarTextColor">#424242</color>
+    <color name="colorOnError">#ff6347</color>
 
     <!-- Bluetooth State colors -->
-    <color name="bluetoothStateTextcolor">#CCFFFFFF</color>
-    <color name="bluetoothDisabled">#F44336</color>
+    <color name="bluetoothStateTextcolor">#DDFFFFFF</color>
+    <color name="bluetoothDisabled">@color/colorOnError</color>
     <color name="bluetoothTurningOff">#FF9800</color>
     <color name="bluetoothTurningOn">#8BC34A</color>
 
     <color name="colorPauseFab">#EF5350 </color>
 
-    <color name="rateStarColor">#FFD54F</color>
+    <color name="rateStarColor">#FFC107</color>
 </resources>

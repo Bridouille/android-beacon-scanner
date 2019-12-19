@@ -1,94 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <!-- Remove -->
-    <LinearLayout
-        android:id="@+id/remove"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_round_delete_24px"
-            android:tint="@color/colorOnSurface"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textSize="16sp"
-            android:text="@string/remove_from_the_list"
-            />
-    </LinearLayout>
-
-    <!-- Copy to clip board -->
-    <LinearLayout
-        android:id="@+id/clipboard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_content_copy_black_24dp"
-            android:tint="@color/colorOnSurface"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textSize="16sp"
-            android:text="@string/copy_infos_to_clipboard"
-            />
-    </LinearLayout>
-
-
-    <!-- Block -->
-    <LinearLayout
-        android:id="@+id/block"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_block_black_24dp"
-            android:tint="@color/colorOnSurface"
-            />
-
-        <TextView
-            android:id="@+id/block_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textSize="16sp"
-            android:text="@string/add_to_the_blocked_list"
-            />
-    </LinearLayout>
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+	
+	<!-- Remove -->
+	<LinearLayout
+		android:id="@+id/remove"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="?attr/selectableItemBackground"
+		android:clickable="true"
+		android:focusable="true"
+		android:orientation="horizontal"
+		android:padding="16dp">
+		
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:tint="@color/colorOnError"
+			app:srcCompat="@drawable/ic_round_delete_24px" />
+		
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+			android:text="@string/remove_from_the_list"
+			android:textAppearance="?attr/textAppearanceBody1" />
+	</LinearLayout>
+	
+	<!-- Copy to clip board -->
+	<LinearLayout
+		android:id="@+id/clipboard"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="?attr/selectableItemBackground"
+		android:clickable="true"
+		android:focusable="true"
+		android:orientation="horizontal"
+		android:padding="16dp">
+		
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:tint="@color/colorOnSurface"
+			app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+		
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+			android:text="@string/copy_infos_to_clipboard"
+			android:textAppearance="?attr/textAppearanceBody1" />
+	</LinearLayout>
+	
+	<!-- Block -->
+	<LinearLayout
+		android:id="@+id/block"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="?attr/selectableItemBackground"
+		android:clickable="true"
+		android:focusable="true"
+		android:orientation="horizontal"
+		android:padding="16dp">
+		
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:tint="@color/colorOnSurface"
+			app:srcCompat="@drawable/ic_block_black_24dp" />
+		
+		<TextView
+			android:id="@+id/block_label"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+			android:text="@string/add_to_the_blocked_list"
+			android:textAppearance="?attr/textAppearanceBody1" />
+	</LinearLayout>
 </LinearLayout>

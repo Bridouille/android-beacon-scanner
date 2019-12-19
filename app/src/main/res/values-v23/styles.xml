@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppThemeNoActionBarLightStatusBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppThemeNoActionBarLightStatusBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Make the statusbar light -->
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@color/colorBackground</item>

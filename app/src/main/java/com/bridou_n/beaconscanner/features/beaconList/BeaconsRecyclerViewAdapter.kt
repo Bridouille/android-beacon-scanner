@@ -31,7 +31,7 @@ typealias OnControlsOpen = (beacon: BeaconSaved) -> Unit
 
 class BeaconsRecyclerViewAdapter(
         val ctx: Context,
-        val onLongClickListener: OnControlsOpen?
+        val clickListener: OnControlsOpen?
 ) : ListAdapter<BeaconSaved, BeaconsRecyclerViewAdapter.BeaconViewHolder>(diffCallback) {
 
     companion object {
@@ -47,9 +47,8 @@ class BeaconsRecyclerViewAdapter(
 
         fun bindView(beacon: BeaconSaved) {
             val ctx = itemView.context
-
-            // TODO: fix nested RV click
-            itemView.card.setOnLongClickListener {
+            
+            itemView.header_container.setOnClickListener {
                 true.also { listener?.invoke(beacon) }
             }
 
@@ -137,7 +136,7 @@ class BeaconsRecyclerViewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BeaconViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_beacon, parent, false)
 
-        return BeaconViewHolder(view, onLongClickListener)
+        return BeaconViewHolder(view, clickListener)
     }
 
     override fun onBindViewHolder(holder: BeaconViewHolder, position: Int) {

@@ -16,40 +16,41 @@ import javax.inject.Inject
  */
 
 class AppSingleton : MultiDexApplication() {
-
-    companion object {
-        lateinit var appComponent: AppComponent
-    }
-
-    @Inject lateinit var tracker: FirebaseAnalytics
-
-    override fun onCreate() {
-        super.onCreate()
-
-        // Dagger
-        appComponent = DaggerAppComponent.builder()
-                .contextModule(ContextModule(this))
-                .build()
-        appComponent.inject(this)
-
-        // Timber
-        Timber.plant(CrashReportingTree())
-
-        // Analytics
-        tracker.setAnalyticsCollectionEnabled(BuildTypes.isRelease())
-    }
+	
+	companion object {
+		lateinit var appComponent: AppComponent
+	}
+	
+	@Inject
+	lateinit var tracker: FirebaseAnalytics
+	
+	override fun onCreate() {
+		super.onCreate()
+		
+		// Dagger
+		appComponent = DaggerAppComponent.builder()
+			.contextModule(ContextModule(this))
+			.build()
+		appComponent.inject(this)
+		
+		// Timber
+		Timber.plant(CrashReportingTree())
+		
+		// Analytics
+		tracker.setAnalyticsCollectionEnabled(BuildTypes.isRelease())
+	}
 }
 
 /** A tree which logs important information for crash reporting.  */
 class CrashReportingTree : Timber.DebugTree() {
-
-    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        Crashlytics.log(priority, tag, message)
-
-        t?.let {
-            if (priority == ERROR) {
-                Crashlytics.logException(t)
-            }
-        }
-    }
+	
+	override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+		Crashlytics.log(priority, tag, message)
+		
+		t?.let {
+			if (priority == ERROR) {
+				Crashlytics.logException(t)
+			}
+		}
+	}
 }
