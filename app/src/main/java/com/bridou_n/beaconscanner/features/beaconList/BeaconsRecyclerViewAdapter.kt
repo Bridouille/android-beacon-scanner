@@ -27,6 +27,8 @@ import java.util.*
  * Created by bridou_n on 30/09/2016.
  */
 
+typealias OnControlsOpen = (beacon: BeaconSaved) -> Unit
+
 class BeaconsRecyclerViewAdapter(
         val ctx: Context,
         val onLongClickListener: OnControlsOpen?
@@ -48,7 +50,7 @@ class BeaconsRecyclerViewAdapter(
 
             // TODO: fix nested RV click
             itemView.card.setOnLongClickListener {
-                true.also { listener?.onOpenControls(beacon) }
+                true.also { listener?.invoke(beacon) }
             }
 
             itemView.beacon_type.text = ctx.getString(when (beacon.beaconType) {
@@ -140,9 +142,5 @@ class BeaconsRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: BeaconViewHolder, position: Int) {
         holder.bindView(getItem(position))
-    }
-
-    interface OnControlsOpen {
-        fun onOpenControls(beacon: BeaconSaved)
     }
 }

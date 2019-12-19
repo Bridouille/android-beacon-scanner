@@ -22,7 +22,7 @@
     <string name="feature_bluetooth_content">Make sure the bluetooth is enabled before you start scanning</string>
     <string name="feature_scan_title">See what\'s around</string>
     <string name="feature_scan_content">Tap to start and stop scanning for nearby beacons!</string>
-    <string name="feature_clear_title">Need a fresh start ?</string>
+    <string name="feature_clear_title">Need a fresh start?</string>
     <string name="feature_clear_content">Hit this to clear your previous scans</string>
     <string name="scanner">Scanner</string>
     <string name="feedback">Feedback</string>
@@ -32,11 +32,11 @@
     <string name="activate_tutorial">Activate the tutorial</string>
     <string name="need_some_hints">Need some hints on how to use the app ?</string>
     <string name="tutorial">Tutorial</string>
-    <string name="enjoying_the_app_let_us_know">Enjoying the app ? Let people know!</string>
+    <string name="enjoying_the_app_let_us_know">Enjoying the app? Let people know!</string>
     <string name="start_scanning_when_app_opens">Start scanning when the app opens</string>
     <string name="the_tutorial_has_been_reset">The tutorial has been reset</string>
     <string name="delete_all">Delete all</string>
-    <string name="are_you_sure_delete_all">Are you sure you want to delete all the previous scans ?</string>
+    <string name="are_you_sure_delete_all">Are you sure you want to delete all the previous scans?</string>
 
     <string name="delay_in_between_each_scan">Delay in between each scan</string>
     <string name="logging">Logging</string>
@@ -46,7 +46,7 @@
     <string name="logging_frequency">Logging frequency</string>
     <string name="not_defined">Not defined</string>
     <string name="logging_description">If you choose to enable the logging a POST http request will be made to the specified endpoint at the logging frequency. The data will be send as a JSON object in the body of the request. If provided, a device name will be included in the http headers so you know which device is sending the logs. Be aware this will drain the battery a lot. </string>
-    <string name="logging_error_please_check">The logging request didn\'t work. Please check the endpoint and your connectivity.</string>
+    <string name="logging_error_please_check">The logging request did not work. Please check the endpoint and your connectivity.</string>
     <string name="prevent_sleep_while_scanning">Prevent device sleep while scanning</string>
 
     <string name="battery_title">Battery</string>

@@ -22,13 +22,11 @@ class BlockedActivity : AppCompatActivity() {
     @Inject lateinit var db: AppDatabase
 
     private val rvAdapter by lazy {
-        BeaconsRecyclerViewAdapter(this, object : BeaconsRecyclerViewAdapter.OnControlsOpen {
-            override fun onOpenControls(beacon: BeaconSaved) {
-                ControlsBottomSheetDialog.newInstance(beacon.hashcode, true).apply {
-                    show(supportFragmentManager, this.tag)
-                }
+        BeaconsRecyclerViewAdapter(this) { beacon ->
+            ControlsBottomSheetDialog.newInstance(beacon.hashcode, true).apply {
+                show(supportFragmentManager)
             }
-        })
+        }
     }
     private var dbQuery: Disposable? = null
 

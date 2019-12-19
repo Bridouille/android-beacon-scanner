@@ -85,13 +85,11 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
     private var isScanning = false
 
     private val rvAdapter by lazy {
-        BeaconsRecyclerViewAdapter(this, object : BeaconsRecyclerViewAdapter.OnControlsOpen {
-            override fun onOpenControls(beacon: BeaconSaved) {
-                ControlsBottomSheetDialog.newInstance(beacon.hashcode).apply {
-                    show(supportFragmentManager, this.tag)
-                }
+        BeaconsRecyclerViewAdapter(this) { beacon ->
+            ControlsBottomSheetDialog.newInstance(beacon.hashcode).apply {
+                show(supportFragmentManager)
             }
-        })
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

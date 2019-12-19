@@ -3,7 +3,6 @@ package com.bridou_n.beaconscanner.features.beaconList
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bridou_n.beaconscanner.AppSingleton
 import com.bridou_n.beaconscanner.Database.AppDatabase
 import com.bridou_n.beaconscanner.R
-import com.bridou_n.beaconscanner.utils.copyPaste.RoundedBsDialog
+import com.bridou_n.beaconscanner.utils.dialogs.RoundedBottomSheetDialog
 import com.bridou_n.beaconscanner.utils.extensionFunctions.showSnackBar
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,7 +26,7 @@ import javax.inject.Inject
  * Created by bridou_n on 23/10/2017.
  */
 
-class ControlsBottomSheetDialog : RoundedBsDialog() {
+class ControlsBottomSheetDialog : RoundedBottomSheetDialog() {
 
     companion object {
         const val KEY_BEACON_ID = "key_beacon_id"
