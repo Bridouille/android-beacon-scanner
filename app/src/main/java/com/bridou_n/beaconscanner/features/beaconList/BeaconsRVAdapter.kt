@@ -1,12 +1,14 @@
 package com.bridou_n.beaconscanner.features.beaconList
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -30,14 +32,35 @@ import java.util.*
 typealias OnControlsOpen = (beacon: BeaconSaved) -> Unit
 
 class BeaconsRecyclerViewAdapter(
-        val ctx: Context,
-        val clickListener: OnControlsOpen?
-) : ListAdapter<BeaconSaved, BeaconsRecyclerViewAdapter.BeaconViewHolder>(diffCallback) {
+    val clickListener: OnControlsOpen?
+) : ListAdapter<BeaconRow, RecyclerView.ViewHolder>(diffCallback) {
 
     companion object {
-        val diffCallback = object : DiffUtil.ItemCallback<BeaconSaved>() {
-            override fun areItemsTheSame(oldItem: BeaconSaved, newItem: BeaconSaved) = oldItem.hashcode == newItem.hashcode
-            override fun areContentsTheSame(oldItem: BeaconSaved, newItem: BeaconSaved) = oldItem == newItem
+        val diffCallback = object : DiffUtil.ItemCallback<BeaconRow>() {
+            override fun areItemsTheSame(oldItem: BeaconRow, newItem: BeaconRow) : Boolean {
+                return when (oldItem) {
+                    is BeaconRow.Beacon -> {
+                        when (newItem) {
+                            is BeaconRow.Beacon -> oldItem.beacon.hashcode == newItem.beacon.hashcode
+                            else -> false
+                        }
+                    }
+                    else -> oldItem == newItem
+                }
+            }
+            
+            override fun areContentsTheSame(oldItem: BeaconRow, newItem: BeaconRow) : Boolean {
+                return when (oldItem) {
+                    is BeaconRow.Beacon -> {
+                        when (newItem) {
+                            is BeaconRow.Beacon -> oldItem.beacon == newItem.beacon
+                            else -> false
+                        }
+                    }
+                    is BeaconRow.EmptyState -> newItem is BeaconRow.EmptyState
+                    is BeaconRow.Loading -> newItem is BeaconRow.Loading
+                }
+            }
         }
     }
 
@@ -45,13 +68,21 @@ class BeaconsRecyclerViewAdapter(
 
         private val beaconInfosAdapter = BeaconInfosRvAdapter()
 
+        @SuppressLint("StringFormatMatches")
         fun bindView(beacon: BeaconSaved) {
             val ctx = itemView.context
             
-            itemView.header_container.setOnClickListener {
+            itemView.beacon_actions.setOnClickListener {
                 true.also { listener?.invoke(beacon) }
             }
 
+            itemView.card.setCardBackgroundColor(ContextCompat.getColor(itemView.context, when (beacon.beaconType) {
+                TYPE_ALTBEACON -> R.color.colorAltBeacon
+                TYPE_EDDYSTONE_UID -> R.color.colorEddystoneUid
+                TYPE_EDDYSTONE_URL -> R.color.colorEddystoneUrl
+                TYPE_RUUVITAG -> R.color.colorRuuviTag
+                else -> R.color.colorIBeacon
+            }))
             itemView.beacon_type.text = ctx.getString(when (beacon.beaconType) {
                 TYPE_ALTBEACON -> R.string.altbeacon
                 TYPE_EDDYSTONE_UID -> R.string.eddystone_uid
@@ -132,14 +163,35 @@ class BeaconsRecyclerViewAdapter(
             } catch (e: Exception) { }
         }
     }
+    
+    class EmptyStateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BeaconViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_beacon, parent, false)
-
-        return BeaconViewHolder(view, clickListener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : RecyclerView.ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
+        
+        return when (viewType) {
+            R.layout.item_beacon -> BeaconViewHolder(view, clickListener)
+            R.layout.item_beacon_empty -> EmptyStateViewHolder(view)
+            R.layout.item_loading -> LoadingViewHolder(view)
+            else -> LoadingViewHolder(view) // Should never happen
+        }
     }
+    
+    override fun getItemViewType(position: Int) = getItem(position).layoutRes
 
-    override fun onBindViewHolder(holder: BeaconViewHolder, position: Int) {
-        holder.bindView(getItem(position))
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is BeaconViewHolder -> {
+                val beacon = (getItem(position) as BeaconRow.Beacon).beacon
+                holder.bindView(beacon)
+            }
+        }
     }
+}
+
+sealed class BeaconRow(@LayoutRes val layoutRes: Int) {
+    data class Beacon(val beacon: BeaconSaved) : BeaconRow(R.layout.item_beacon)
+    object EmptyState : BeaconRow(R.layout.item_beacon_empty)
+    object Loading : BeaconRow(R.layout.item_loading)
 }

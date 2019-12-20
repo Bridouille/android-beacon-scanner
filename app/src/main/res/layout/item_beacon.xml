@@ -14,6 +14,7 @@
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
@@ -22,10 +23,6 @@
             android:id="@+id/header_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:foreground="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,12 +64,25 @@
                 android:text="@string/metters_abbreviation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/beacon_actions"
                 app:layout_constraintBaseline_toBaselineOf="@+id/distance"
                 android:textAppearance="?attr/textAppearanceBody1"
                 android:textColor="@color/colorOnPrimary"
                 android:paddingStart="4dp"
+                />
+            
+            <ImageView
+                android:id="@+id/beacon_actions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/distance"
+                app:layout_constraintBottom_toBottomOf="@+id/last_seen"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@drawable/ic_more_vert_black_24dp"
+                android:tint="@color/colorOnPrimary"
                 />
     
             <!-- Address -->
@@ -121,10 +131,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 app:layout_constraintTop_toBottomOf="@id/distance"
                 app:layout_constraintStart_toEndOf="@+id/manufacturer"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/beacon_actions"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textAppearance="?attr/textAppearanceCaption"
@@ -133,18 +143,31 @@
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
         
-        <!-- List of other beacon informations -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/infos_rv"
+        <View
+            android:id="@+id/header_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
             app:layout_constraintTop_toBottomOf="@+id/header_container"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+	        android:layout_marginStart="16dp"
+	        android:layout_marginEnd="16dp"
+            android:background="@color/dividerOnSurface"
+            />
+        
+        <!-- List of other beacon informations -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/infos_rv"
+            app:layout_constraintTop_toBottomOf="@+id/header_divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
             android:overScrollMode="never"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingBottom="16dp"
             android:clipToPadding="false"
-            android:background="@color/colorSurface"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

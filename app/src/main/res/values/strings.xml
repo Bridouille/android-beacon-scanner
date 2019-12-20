@@ -16,7 +16,7 @@
     <string name="eddystone_url">Eddystone-URL</string>
     <string name="clear">Clear</string>
     <string name="no_scanned_beacons_yet">No scanned beacons yet!</string>
-    <string name="empty_state_content">To start scanning for nearby beacons just press the scan button. You\'ll see the scan results appear here.</string>
+    <string name="empty_state_content">Looks like there is nothing here just yet!</string>
     <string name="enable_bluetooth_to_start_scanning">Enable bluetooth to start scanning</string>
     <string name="bluetooth_control">Bluetooth control</string>
     <string name="feature_bluetooth_content">Make sure the bluetooth is enabled before you start scanning</string>

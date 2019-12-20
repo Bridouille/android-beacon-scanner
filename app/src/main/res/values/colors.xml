@@ -27,6 +27,7 @@
     <color name="colorStatusBarLollipop">@color/colorPrimary</color>
 
     <color name="divider">#33424242</color>
+	<color name="dividerOnSurface">#AAFFFFFF</color>
 
     <color name="colorOnError">#ff6347</color>
 
@@ -39,4 +40,11 @@
     <color name="colorPauseFab">#EF5350 </color>
 
     <color name="rateStarColor">#FFC107</color>
+    
+    <!-- Beacon types colors -->
+    <color name="colorIBeacon">#27ae60</color> <!-- 20A4F3 -->
+    <color name="colorAltBeacon">#27ae60</color>
+    <color name="colorRuuviTag">#27ae60</color> <!-- 078080 -->
+    <color name="colorEddystoneUid">#27ae60</color> <!-- 9656a1 -->
+    <color name="colorEddystoneUrl">#27ae60</color>
 </resources>

@@ -65,16 +65,11 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 		STATE_TURNING_ON(R.color.bluetoothTurningOn, R.string.turning_bluetooth_on)
 	}
 	
-	@Inject
-	lateinit var bluetoothState: BluetoothManager
-	@Inject
-	lateinit var db: AppDatabase
-	@Inject
-	lateinit var loggingService: LoggingService
-	@Inject
-	lateinit var prefs: PreferencesHelper
-	@Inject
-	lateinit var tracker: FirebaseAnalytics
+	@Inject lateinit var bluetoothState: BluetoothManager
+	@Inject lateinit var db: AppDatabase
+	@Inject lateinit var loggingService: LoggingService
+	@Inject lateinit var prefs: PreferencesHelper
+	@Inject lateinit var tracker: FirebaseAnalytics
 	
 	private var dialog: MaterialDialog? = null
 	private var menu: Menu? = null
@@ -89,11 +84,9 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 	
 	private var isScanning = false
 	
-	private val rvAdapter by lazy {
-		BeaconsRecyclerViewAdapter(this) { beacon ->
-			ControlsBottomSheetDialog.newInstance(beacon.hashcode).apply {
-				show(supportFragmentManager)
-			}
+	private val rvAdapter = BeaconsRecyclerViewAdapter { beacon ->
+		ControlsBottomSheetDialog.newInstance(beacon.hashcode).apply {
+			show(supportFragmentManager)
 		}
 	}
 	
@@ -211,11 +204,18 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 		
 		listQuery = db.beaconsDao().getBeacons(blocked = false)
 			.subscribeOn(Schedulers.io())
+			.map { list ->
+				if (list.isEmpty()) {
+					listOf(BeaconRow.EmptyState)
+				} else {
+					list.map { BeaconRow.Beacon(it) }
+				}
+			}
+			.doOnSubscribe { rvAdapter.submitList(listOf(BeaconRow.Loading)) }
 			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe { list ->
 				Timber.d("list: $list")
 				
-				showEmptyView(list.size == 0)
 				rvAdapter.submitList(list)
 			}
 		
@@ -239,11 +239,6 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 		}
 	}
 	
-	fun showEmptyView(show: Boolean) {
-		empty_view.visibility = if (show) View.VISIBLE else View.GONE
-		beacons_rv.visibility = if (show) View.GONE else View.VISIBLE
-	}
-	
 	fun updateBluetoothState(state: BluetoothState, isEnabled: Boolean) {
 		bluetooth_state.visibility = View.VISIBLE
 		bluetooth_state.setBackgroundColor(ContextCompat.getColor(this, state.bgColor))
@@ -263,7 +258,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 	
 	override fun onBeaconServiceConnect() {
 		Timber.d("beaconManager is bound, ready to start scanning")
-		beaconManager?.addRangeNotifier { beacons, region ->
+		beaconManager?.addRangeNotifier { beacons, _ ->
 			if (isScanning) {
 				storeBeaconsAround(beacons)
 				logToWebhookIfNeeded()

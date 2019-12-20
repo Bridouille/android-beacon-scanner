@@ -12,6 +12,7 @@
     <TextView
         android:id="@+id/item_title"
         style="?attr/textAppearanceSubtitle2"
+        android:textColor="@color/colorOnPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="8dp"
@@ -23,6 +24,7 @@
     <TextView
         android:id="@+id/item_content"
         style="?attr/textAppearanceBody1"
+        android:textColor="@color/colorOnPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"

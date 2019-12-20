@@ -9,5 +9,14 @@
             android:gravity="center"
             android:src="@mipmap/ic_launcher_foreground"/>
     </item>
+    
+    <!--
+        Img size:
+        xxx-hdpi = 1024
+        xx-hdpi = 768
+        x-hdpi = 512
+        hdpi = 384
+        mdpi = 256
+    -->
 
 </layer-list>

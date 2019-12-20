@@ -1,14 +1,17 @@
 package com.bridou_n.beaconscanner.models
 
+import android.text.format.DateUtils
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import com.bridou_n.beaconscanner.Database.BeaconsDao
+import com.bridou_n.beaconscanner.utils.BuildTypes
 import com.bridou_n.beaconscanner.utils.RuuviParser
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor
+import java.lang.IllegalStateException
 import java.util.*
 
 /**
@@ -161,6 +164,25 @@ data class BeaconSaved(
                     ruuviData = ruuviData,
 
                     isBlocked = isBlocked
+            )
+        }
+        
+        fun dogFood() : BeaconSaved {
+            check(!BuildTypes.isRelease()) { "Only use this for debugging purposes" }
+            return BeaconSaved(
+                hashcode = UUID.randomUUID().hashCode(),
+                beaconType = TYPE_IBEACON,
+                beaconAddress = "Some mac addr",
+                manufacturer = 0x04,
+                txPower = 60,
+                rssi = 15,
+                distance = 3.84,
+                lastSeen = Date().time - 40 * DateUtils.SECOND_IN_MILLIS,
+                ibeaconData = IbeaconData(
+                    uuid = "This can be a very long string",
+                    major = "654",
+                    minor = "32"
+                )
             )
         }
     }

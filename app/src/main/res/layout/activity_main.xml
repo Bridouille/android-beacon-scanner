@@ -68,49 +68,7 @@
 			android:paddingTop="8dp"
 			android:paddingBottom="72dp"
 			android:scrollbars="vertical"
-			android:visibility="gone"
 			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-		
-		<!-- Empty view -->
-		<RelativeLayout
-			android:id="@+id/empty_view"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerInParent="true">
-			
-			<ImageView
-				android:id="@+id/error_image"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_centerHorizontal="true"
-				android:tint="@color/colorPrimary"
-				app:srcCompat="@drawable/ic_round_track_changes_24px" />
-			
-			<TextView
-				android:id="@+id/empty_state_title"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_below="@+id/error_image"
-				android:layout_centerHorizontal="true"
-				android:layout_margin="@dimen/keyline_16"
-				android:text="@string/no_scanned_beacons_yet"
-				android:textColor="@color/colorOnBackground"
-				android:textSize="16sp" />
-			
-			<TextView
-				android:id="@+id/empty_state_content"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_below="@+id/empty_state_title"
-				android:layout_centerHorizontal="true"
-				android:layout_marginLeft="@dimen/keyline_32"
-				android:layout_marginRight="@dimen/keyline_32"
-				android:maxWidth="250dip"
-				android:text="@string/empty_state_content"
-				android:textAlignment="center"
-				android:textSize="14sp" />
-		
-		</RelativeLayout>
 	</RelativeLayout>
 	
 	<com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -2,14 +2,13 @@ package com.bridou_n.beaconscanner.features.blockedList
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bridou_n.beaconscanner.Database.AppDatabase
 import com.bridou_n.beaconscanner.R
+import com.bridou_n.beaconscanner.features.beaconList.BeaconRow
 import com.bridou_n.beaconscanner.features.beaconList.BeaconsRecyclerViewAdapter
 import com.bridou_n.beaconscanner.features.beaconList.ControlsBottomSheetDialog
-import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.utils.extensionFunctions.component
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -21,11 +20,9 @@ class BlockedActivity : AppCompatActivity() {
 
     @Inject lateinit var db: AppDatabase
 
-    private val rvAdapter by lazy {
-        BeaconsRecyclerViewAdapter(this) { beacon ->
-            ControlsBottomSheetDialog.newInstance(beacon.hashcode, true).apply {
-                show(supportFragmentManager)
-            }
+    private val rvAdapter = BeaconsRecyclerViewAdapter { beacon ->
+        ControlsBottomSheetDialog.newInstance(beacon.hashcode, true).apply {
+            show(supportFragmentManager)
         }
     }
     private var dbQuery: Disposable? = null
@@ -47,16 +44,17 @@ class BlockedActivity : AppCompatActivity() {
 
         dbQuery = db.beaconsDao().getBeacons(blocked = true)
                 .subscribeOn(Schedulers.io())
+                .map { list ->
+                    if (list.isEmpty()) {
+                        listOf(BeaconRow.EmptyState)
+                    } else {
+                        list.map { BeaconRow.Beacon(it) }
+                    }
+                }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    showEmptyView(it.size == 0)
                     rvAdapter.submitList(it)
                 }
-    }
-
-    fun showEmptyView(show: Boolean) {
-        empty_view.visibility = if (show) View.VISIBLE else View.GONE
-        beacons_rv.visibility = if (show) View.GONE else View.VISIBLE
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

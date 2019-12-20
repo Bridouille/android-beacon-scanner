@@ -24,46 +24,13 @@
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/beacons_rv"
 		android:layout_width="0dp"
-		android:layout_height="wrap_content"
+		android:layout_height="0dp"
 		android:clipToPadding="false"
 		android:paddingTop="8dp"
 		android:scrollbars="vertical"
-		android:visibility="gone"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/toolbar"
-		tools:visibility="visible" />
-	
-	<!-- Empty view -->
-	<androidx.constraintlayout.widget.ConstraintLayout
-		android:id="@+id/empty_view"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
 		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintRight_toRightOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/toolbar">
-		
-		<ImageView
-			android:id="@+id/empty_state_icon"
-			android:layout_width="48dp"
-			android:layout_height="48dp"
-			android:tint="@color/colorPrimary"
-			app:layout_constraintLeft_toLeftOf="parent"
-			app:layout_constraintRight_toRightOf="parent"
-			app:layout_constraintTop_toTopOf="parent"
-			app:srcCompat="@drawable/ic_verified_user_black_24dp" />
-		
-		<TextView
-			android:id="@+id/empty_state_title"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_margin="@dimen/keyline_16"
-			android:text="@string/no_blocked_beacons"
-			android:textColor="@color/colorOnBackground"
-			android:textSize="16sp"
-			app:layout_constraintLeft_toLeftOf="parent"
-			app:layout_constraintRight_toRightOf="parent"
-			app:layout_constraintTop_toBottomOf="@+id/empty_state_icon" />
-	</androidx.constraintlayout.widget.ConstraintLayout>
+	/>
 </androidx.constraintlayout.widget.ConstraintLayout>
