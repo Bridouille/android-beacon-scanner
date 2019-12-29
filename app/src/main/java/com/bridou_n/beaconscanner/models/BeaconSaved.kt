@@ -167,21 +167,106 @@ data class BeaconSaved(
             )
         }
         
-        fun dogFood() : BeaconSaved {
+        fun eddystoneUidSample() : BeaconSaved {
+            check(!BuildTypes.isRelease()) { "Only use this for debugging purposes" }
+            return BeaconSaved(
+                hashcode = UUID.randomUUID().hashCode(),
+                beaconType = TYPE_EDDYSTONE_UID,
+                beaconAddress = "74:FC:B0:45:0B:02",
+                manufacturer = 0xFEAA,
+                txPower = -63,
+                rssi = -38,
+                distance = 0.02,
+                lastSeen = Date().time - 40 * DateUtils.SECOND_IN_MILLIS,
+                eddystoneUidData = EddystoneUidData(
+                    namespaceId = "0x00010203040506070809",
+                    instanceId = "0xabcdefabcdef"
+                ),
+                telemetryData = TelemetryData(
+                    batteryMilliVolts = 400,
+                    temperature = 40.7F,
+                    pduCount = 654,
+                    uptime = 32
+                )
+            )
+        }
+    
+        fun eddystoneUrlSample() : BeaconSaved {
+            check(!BuildTypes.isRelease()) { "Only use this for debugging purposes" }
+            return BeaconSaved(
+                hashcode = UUID.randomUUID().hashCode(),
+                beaconType = TYPE_EDDYSTONE_URL,
+                beaconAddress = "74:FC:B0:45:0B:02",
+                manufacturer = 0xFEAA,
+                txPower = -63,
+                rssi = -38,
+                distance = 0.02,
+                lastSeen = Date().time - 40 * DateUtils.SECOND_IN_MILLIS,
+                eddystoneUrlData = EddystoneUrlData(
+                    url = "http://example.com"
+                ),
+                telemetryData = TelemetryData(
+                    batteryMilliVolts = 500,
+                    temperature = 42.5F,
+                    pduCount = 211345,
+                    uptime = 5234
+                )
+            )
+        }
+    
+        fun iBeaconSample() : BeaconSaved {
             check(!BuildTypes.isRelease()) { "Only use this for debugging purposes" }
             return BeaconSaved(
                 hashcode = UUID.randomUUID().hashCode(),
                 beaconType = TYPE_IBEACON,
-                beaconAddress = "Some mac addr",
-                manufacturer = 0x04,
-                txPower = 60,
-                rssi = 15,
-                distance = 3.84,
+                beaconAddress = "74:FC:B0:45:0B:02",
+                manufacturer = 0x004C,
+                txPower = -63,
+                rssi = -38,
+                distance = 0.02,
                 lastSeen = Date().time - 40 * DateUtils.SECOND_IN_MILLIS,
                 ibeaconData = IbeaconData(
-                    uuid = "This can be a very long string",
-                    major = "654",
-                    minor = "32"
+                    uuid = UUID.randomUUID().toString(),
+                    major = "1",
+                    minor = "602"
+                )
+            )
+        }
+    
+        fun altBeaconSample() : BeaconSaved {
+            check(!BuildTypes.isRelease()) { "Only use this for debugging purposes" }
+            return BeaconSaved(
+                hashcode = UUID.randomUUID().hashCode(),
+                beaconType = TYPE_ALTBEACON,
+                beaconAddress = "74:FC:B0:45:0B:02",
+                manufacturer = 0x0118,
+                txPower = -63,
+                rssi = -38,
+                distance = 0.02,
+                lastSeen = Date().time - 40 * DateUtils.SECOND_IN_MILLIS,
+                ibeaconData = IbeaconData(
+                    uuid = UUID.randomUUID().toString(),
+                    major = "2",
+                    minor = "342"
+                )
+            )
+        }
+    
+        fun ruuviTagSample() : BeaconSaved {
+            check(!BuildTypes.isRelease()) { "Only use this for debugging purposes" }
+            return BeaconSaved(
+                hashcode = UUID.randomUUID().hashCode(),
+                beaconType = TYPE_RUUVITAG,
+                beaconAddress = "77:CC:B7:45:0B:02",
+                manufacturer = 0xFEAA,
+                txPower = -63,
+                rssi = -38,
+                distance = 0.02,
+                lastSeen = Date().time - 40 * DateUtils.SECOND_IN_MILLIS,
+                ruuviData = RuuviData(
+                    humidity = 66,
+                    airPressure = 722,
+                    temperatue = 22
                 )
             )
         }
