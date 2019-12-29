@@ -10,11 +10,11 @@ import com.bridou_n.beaconscanner.R
  */
 
 class PreferencesHelper(ctx: Context) {
+    
     companion object {
         private val SHARED_PREF_KEY = "shared_pref"
 
         private val TUTO_KEY = "tutoKey"
-        private val SCAN_ON_OPEN_KEY = "scanOnOpenKey"
         private val SCANNING_STATE_KEY = "scanningState"
         private val SCAN_DELAY_KEY = "scanDelay"
         private val PREVENT_SLEEP_KEY = "preventSleep"
@@ -32,10 +32,6 @@ class PreferencesHelper(ctx: Context) {
         prefs = ctx.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         ressources = ctx.resources
     }
-
-    var isScanOnOpen: Boolean
-        get() = prefs.getBoolean(SCAN_ON_OPEN_KEY, false)
-        set(status) = prefs.edit().putBoolean(SCAN_ON_OPEN_KEY, status).apply()
 
     var preventSleep: Boolean
         get() = prefs.getBoolean(PREVENT_SLEEP_KEY, false)

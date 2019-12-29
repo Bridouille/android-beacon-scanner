@@ -6,9 +6,8 @@ import android.os.Bundle
 import android.text.InputType
 import android.util.Patterns
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.widget.TextViewCompat
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
@@ -43,7 +42,6 @@ class SettingsActivity : AppCompatActivity() {
 		supportActionBar?.title = ""
 		supportActionBar?.setHomeIcon(R.drawable.ic_round_arrow_back_24px, R.color.colorOnBackground)
 		
-		scan_open.isChecked = prefs.isScanOnOpen
 		scan_delay.text = prefs.getScanDelayName()
 		prevent_sleep.isChecked = prefs.preventSleep
 		logging_enabled.isChecked = prefs.isLoggingEnabled
@@ -62,14 +60,6 @@ class SettingsActivity : AppCompatActivity() {
 			}
 		}
 		
-		scan_open.setOnCheckedChangeListener { _, isChecked ->
-			
-			tracker.logEvent("scan_open_changed", Bundle().apply {
-				putBoolean("status", isChecked)
-			})
-			prefs.isScanOnOpen = isChecked
-		}
-		
 		scan_delay_container.setOnClickListener {
 			MaterialDialog(this)
 				.title(R.string.delay_in_between_each_scan)
@@ -85,6 +75,7 @@ class SettingsActivity : AppCompatActivity() {
 				.show()
 		}
 		
+		prevent_sleep_container.setOnClickListener { prevent_sleep.isChecked = !prevent_sleep.isChecked }
 		prevent_sleep.setOnCheckedChangeListener { _, isChecked ->
 			
 			tracker.logEvent("prevent_sleep_changed", Bundle().apply {
@@ -93,15 +84,14 @@ class SettingsActivity : AppCompatActivity() {
 			prefs.preventSleep = isChecked
 		}
 		
+		logging_container.setOnClickListener { logging_enabled.isChecked = !logging_enabled.isChecked }
 		logging_enabled.setOnCheckedChangeListener { _, isChecked ->
-			
 			tracker.logEvent("logging_changed", Bundle().apply {
 				putBoolean("status", isChecked)
 			})
 			prefs.isLoggingEnabled = isChecked
 			handleLoggingState(isChecked)
 		}
-		
 		
 		logging_frequency_container.setOnClickListener {
 			MaterialDialog(this)
@@ -202,7 +192,7 @@ class SettingsActivity : AppCompatActivity() {
 			}
 		}
 		
-		feature_request.setOnClickListener {
+		open_source.setOnClickListener {
 			startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Bridouille/android-beacon-scanner")))
 		}
 		
@@ -214,12 +204,13 @@ class SettingsActivity : AppCompatActivity() {
 	}
 	
 	fun handleLoggingState(isLoggingEnabled: Boolean) {
-		listOf(logging_endpoint_title, device_name_title, logging_frequency_title,
-			logging_endpoint, device_name, logging_frequency).forEach {
-			it.isEnabled = isLoggingEnabled
-		}
-		listOf(logging_endpoint_container, device_name_container, logging_frequency_container).forEach {
-			it.isClickable = isLoggingEnabled
+		listOf(
+			logging_endpoint_container,
+			device_name_container,
+			logging_frequency_container,
+			logging_div1, logging_div2, logging_div3
+		).forEach {
+			it.visibility = if (isLoggingEnabled) View.VISIBLE else View.GONE
 		}
 	}
 	

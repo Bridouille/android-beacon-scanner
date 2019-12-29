@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -75,14 +74,7 @@ class BeaconsRecyclerViewAdapter(
             itemView.beacon_actions.setOnClickListener {
                 true.also { listener?.invoke(beacon) }
             }
-
-            itemView.card.setCardBackgroundColor(ContextCompat.getColor(itemView.context, when (beacon.beaconType) {
-                TYPE_ALTBEACON -> R.color.colorAltBeacon
-                TYPE_EDDYSTONE_UID -> R.color.colorEddystoneUid
-                TYPE_EDDYSTONE_URL -> R.color.colorEddystoneUrl
-                TYPE_RUUVITAG -> R.color.colorRuuviTag
-                else -> R.color.colorIBeacon
-            }))
+            
             itemView.beacon_type.text = ctx.getString(when (beacon.beaconType) {
                 TYPE_ALTBEACON -> R.string.altbeacon
                 TYPE_EDDYSTONE_UID -> R.string.eddystone_uid

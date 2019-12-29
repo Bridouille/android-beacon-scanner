@@ -191,17 +191,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 		super.onResume()
 		beaconManager = component().providesBeaconManager()
 		
-		// Setup an observable on the bluetooth changes
-		bluetoothStateDisposable = bluetoothState.asFlowable()
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribe { newState ->
-				updateBluetoothState(newState, bluetoothState.isEnabled())
-				
-				if (newState == BluetoothState.STATE_OFF) {
-					stopScan()
-				}
-			}
-		
+		observeBluetoothState()
 		listQuery = db.beaconsDao().getBeacons(blocked = false)
 			.subscribeOn(Schedulers.io())
 			.map { list ->
@@ -224,9 +214,8 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 			prefs.setHasSeenTutorial(showTutorial())
 		}
 		
-		// Start scanning if the scan on open is activated or if we were previously scanning
-		if (prefs.isScanOnOpen || prefs.wasScanning()) {
-			isScanning = true
+		// Start scanning if we were previously scanning
+		if (prefs.wasScanning()) {
 			startScan()
 		}
 	}
@@ -237,6 +226,20 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 		} else {
 			window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 		}
+	}
+	
+	private fun observeBluetoothState() {
+		// Setup an observable on the bluetooth changes
+		bluetoothStateDisposable?.dispose()
+		bluetoothStateDisposable = bluetoothState.asFlowable()
+			.observeOn(AndroidSchedulers.mainThread())
+			.subscribe { newState ->
+				updateBluetoothState(newState, bluetoothState.isEnabled())
+				
+				if (newState == BluetoothState.STATE_OFF) {
+					stopScan()
+				}
+			}
 	}
 	
 	fun updateBluetoothState(state: BluetoothState, isEnabled: Boolean) {
@@ -331,8 +334,6 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 				} else {
 					tracker.log("permission_denied")
 					
-					// If the user refused the permission, we just disable the scan on open
-					prefs.isScanOnOpen = false
 					Snackbar.make(root_view, getString(R.string.enable_permission_from_settings), Snackbar.LENGTH_INDEFINITE)
 						.setAction(getString(R.string.enable)) {
 							startActivity(Intent(
@@ -383,6 +384,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 		menuInflater.inflate(R.menu.main_menu, menu)
 		
 		this.menu = menu
+		observeBluetoothState()
 		return true
 	}
 	
