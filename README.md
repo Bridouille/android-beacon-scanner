@@ -5,7 +5,7 @@ A simple android beacon scanner that can recognize iBeacons, AltBeacons, Eddysto
 
 <img src="screenshots/screen-1.png" width="25%" />     <img src="screenshots/screen-2.png" width="25%" />   <img src="screenshots/screen-3.png" width="25%" />
 
-Available for android 4.3+ and smartphones with Bluetooth LE.
+Available for android 5.0+ and smartphones with Bluetooth LE.
 
 ## :key: Features ##
 
@@ -53,18 +53,22 @@ It can display several frames emitted by a single beacon, allowing you to see if
 	 - Scanning for beacons nearby
 	 - Making the difference between iBeacons, AltBeacons and Eddystone beacons
 	 - Easily getting data emitted by the beacons (UUID, major, minor, namespaceID...)
- - [Realm & Realm adapters](https://github.com/realm/realm-java)
-	 - Storing and retrieving data on the phone
+ - [Room](https://developer.android.com/training/data-storage/room/index.html)
+	 - Local database wrapper
  - [Retrofit](http://square.github.io/retrofit/)
 	 - Network calls for POSTing to an endpoint
  - [RxJava (& RxAndroid)](https://github.com/ReactiveX/RxJava)
-	 - Easily threading and network calls abstraction
+	 - Easy threading and network calls abstraction
  - [Dagger 2](https://google.github.io/dagger/)
-	 - Inject dependencies such as Realm, BeaconManager, API services, Preferences into the app
- - [ButterKnife](https://github.com/JakeWharton/butterknife)
-	 - Bind Android views to fields.
+	 - Dependency injections into activities
+ - [FlexBox Layout](https://github.com/google/flexbox-layout)
+	 - Easily display a list of size-varying fields
  - [TapTargetView](https://github.com/KeepSafe/TapTargetView)
 	- Material design discovery feature made easy
+ - [Timber](https://github.com/JakeWharton/timber)
+	- A logger with a small, extensible API which provides utility on top of Android's normal Log class
+ - [Material dialog](https://github.com/afollestad/material-dialogs)
+	- Dialog API in Kotlin
 
 ## License ##
 
