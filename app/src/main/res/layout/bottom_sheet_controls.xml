@@ -28,6 +28,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginStart="16dp"
 			android:text="@string/remove_from_the_list"
+			android:textColor="@color/colorOnSurface"
 			android:textAppearance="?attr/textAppearanceBody1" />
 	</LinearLayout>
 	
@@ -53,6 +54,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginStart="16dp"
 			android:text="@string/copy_infos_to_clipboard"
+			android:textColor="@color/colorOnSurface"
 			android:textAppearance="?attr/textAppearanceBody1" />
 	</LinearLayout>
 	
@@ -79,6 +81,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginStart="16dp"
 			android:text="@string/add_to_the_blocked_list"
-			android:textAppearance="?attr/textAppearanceBody1" />
+			android:textAppearance="?attr/textAppearanceBody1"
+			android:textColor="@color/colorOnSurface"
+			/>
 	</LinearLayout>
 </LinearLayout>
