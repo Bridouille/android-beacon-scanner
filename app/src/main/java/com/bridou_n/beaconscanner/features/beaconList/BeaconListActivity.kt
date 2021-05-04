@@ -41,6 +41,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.bottom_sheet_controls.*
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconConsumer
 import org.altbeacon.beacon.BeaconManager
@@ -48,6 +49,7 @@ import org.altbeacon.beacon.Region
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 	
@@ -83,6 +85,8 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 	private var loggingRequests = CompositeDisposable()
 	
 	private var isScanning = false
+
+	private var isWhiting = false
 	
 	private val rvAdapter = BeaconsRecyclerViewAdapter { beacon ->
 		ControlsBottomSheetDialog.newInstance(beacon.hashcode).apply {
@@ -109,6 +113,10 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 		scan_fab.setOnClickListener {
 			toggleScan()
 		}
+
+		white_fab.setOnClickListener({
+			toogleWhite()
+		})
 	}
 	
 	private fun toggleScan() {
@@ -148,8 +156,22 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 		keepScreenOn(false)
 		isScanning = false
 	}
+
+
+	private fun toogleWhite(){
+		if (!isWhiting()){
+			tracker.logEvent("start_whiting_clicked",null)
+			isWhiting = true
+		}
+		else{
+			isWhiting = false
+		}
+		white_fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, if (isWhiting) R.color.colorPauseFab else R.color.colorSecondary))
+	}
 	
 	fun isScanning() = isScanning
+
+	fun isWhiting() = isWhiting
 	
 	private fun unbindBeaconManager() {
 		if (beaconManager?.isBound(this) == true) {
@@ -192,14 +214,26 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 		beaconManager = component().providesBeaconManager()
 		
 		observeBluetoothState()
-		listQuery = db.beaconsDao().getBeacons(blocked = false)
-			.subscribeOn(Schedulers.io())
-			.map { list ->
-				if (list.isEmpty()) {
-					listOf(BeaconRow.EmptyState)
-				} else {
-					list.map { BeaconRow.Beacon(it) }
+
+//		val listQuery = db.beaconsDao()
+		// here not possible to change the white setting:
+
+		listQuery = db.beaconsDao().getBeacons(blocked = false).subscribeOn(Schedulers.io())
+				.map { list ->
+				if(!isWhiting){
+					if (list.isEmpty()) {
+						listOf(BeaconRow.EmptyState)
+					} else {
+						list.map { BeaconRow.Beacon(it) }
+					}
+				}else{
+					if (list.filter{it.isWhite}.isEmpty()) {
+						listOf(BeaconRow.EmptyState)
+					} else {
+						list.filter{it.isWhite}.map { BeaconRow.Beacon(it) }
+					}
 				}
+
 			}
 			.doOnSubscribe { rvAdapter.submitList(listOf(BeaconRow.Loading)) }
 			.observeOn(AndroidSchedulers.mainThread())
@@ -283,8 +317,8 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 				} catch (e: EmptyResultSetException) {
 					null
 				}
-				
-				BeaconSaved.createFromBeacon(it, isBlocked = beaconInDb?.isBlocked ?: false)
+				Timber.d(it.toString())
+				BeaconSaved.createFromBeacon(it, isBlocked = beaconInDb?.isBlocked ?: false, isWhite= beaconInDb?.isWhite?:false)
 			}
 			.doOnNext {
 				db.beaconsDao().insertBeacon(it)
@@ -419,6 +453,11 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 				tracker.log("action_settings")
 				startActivity(Intent(this, SettingsActivity::class.java))
 			}
+
+			R.id.action_save -> {
+				tracker.log("white_lists")
+			}
+
 			else -> return super.onOptionsItemSelected(item)
 		}
 		return true

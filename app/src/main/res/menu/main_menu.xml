@@ -4,6 +4,7 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	tools:context=".features.beaconList.BeaconListActivity">
+
 	
 	<item
 		android:id="@+id/action_clear"
@@ -22,5 +23,12 @@
 		android:icon="@drawable/ic_outline_settings_24px"
 		android:title="@string/settings"
 		app:iconTint="?attr/colorOnSurface"
+		app:showAsAction="ifRoom" />
+
+	<item
+		android:id="@+id/action_save"
+		android:icon="@drawable/file_icon"
+		android:title="@string/save_result"
+		app:iconTint="?attr/colorOnError"
 		app:showAsAction="ifRoom" />
 </menu>

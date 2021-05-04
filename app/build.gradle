@@ -18,21 +18,21 @@ android {
         multiDexEnabled true
     }
 
-    signingConfigs {
-        release {
-            keyAlias 'BeaconScannerKey'
-            keyPassword beacon_scanner_key_password
-            storeFile file(beacon_scanner_store_file)
-            storePassword beacon_scanner_store_password
-        }
-    }
+//    signingConfigs {
+//        release {
+//            keyAlias 'BeaconScannerKey'
+////            keyPassword beacon_scanner_key_password
+//            storeFile file(beacon_scanner_store_file)
+//            storePassword beacon_scanner_store_password
+//        }
+//    }
 
     buildTypes {
         release {
             minifyEnabled true
             resValue "string", "app_name", "Beacon Scanner"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
 
         debug {

@@ -28,6 +28,5 @@ interface AppComponent {
     fun inject(activity: BeaconListActivity)
     fun inject(activity: SettingsActivity)
     fun inject(activity: BlockedActivity)
-
     fun inject(bs: ControlsBottomSheetDialog)
 }

@@ -42,7 +42,7 @@
 		android:focusable="true"
 		android:orientation="horizontal"
 		android:padding="16dp">
-		
+
 		<ImageView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
 		android:focusable="true"
 		android:orientation="horizontal"
 		android:padding="16dp">
-		
+
 		<ImageView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -84,5 +84,31 @@
 			android:textAppearance="?attr/textAppearanceBody1"
 			android:textColor="@color/colorOnSurface"
 			/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/white"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="?attr/selectableItemBackground"
+		android:clickable="true"
+		android:focusable="true"
+		android:orientation="horizontal"
+		android:padding="16dp">
+
+		<ImageView
+			android:layout_width="24dp"
+			android:layout_height="24dp"
+			android:tint="@color/colorOnSurface"
+			app:srcCompat="@drawable/file_icon" />
+
+		<TextView
+			android:id="@+id/white_label"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+			android:text="@string/add_to_the_white_list"
+			android:textAppearance="?attr/textAppearanceBody1"
+			android:textColor="@color/colorOnSurface" />
 	</LinearLayout>
 </LinearLayout>

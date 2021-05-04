@@ -13,12 +13,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bridou_n.beaconscanner.AppSingleton
 import com.bridou_n.beaconscanner.Database.AppDatabase
 import com.bridou_n.beaconscanner.R
+import com.bridou_n.beaconscanner.models.BeaconSaved
 import com.bridou_n.beaconscanner.utils.dialogs.RoundedBottomSheetDialog
 import com.bridou_n.beaconscanner.utils.extensionFunctions.showSnackBar
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -31,6 +33,7 @@ class ControlsBottomSheetDialog : RoundedBottomSheetDialog() {
     companion object {
         const val KEY_BEACON_ID = "key_beacon_id"
         const val KEY_BLOCKED = "key_blocked"
+        const val KEY_WHITE = "key_white"
 
         fun newInstance(beaconId: Int, blocked: Boolean = false) : ControlsBottomSheetDialog {
             return ControlsBottomSheetDialog().apply {
@@ -45,6 +48,8 @@ class ControlsBottomSheetDialog : RoundedBottomSheetDialog() {
     private var beaconId: Int = 0
     private var isBlockedLst: Boolean = false
 
+    private var isWhiteLst: Boolean = false
+
     private val queries = CompositeDisposable()
 
     @Inject lateinit var db: AppDatabase
@@ -53,6 +58,7 @@ class ControlsBottomSheetDialog : RoundedBottomSheetDialog() {
         if (bundle != null) {
             beaconId = bundle.getInt(KEY_BEACON_ID)
             isBlockedLst = bundle.getBoolean(KEY_BLOCKED)
+            isWhiteLst = bundle.getBoolean(KEY_WHITE)
         }
     }
 
@@ -60,6 +66,7 @@ class ControlsBottomSheetDialog : RoundedBottomSheetDialog() {
         super.onSaveInstanceState(outState)
         outState.putInt(KEY_BEACON_ID, beaconId)
         outState.putBoolean(KEY_BLOCKED, isBlockedLst)
+        outState.putBoolean(KEY_BLOCKED,isWhiteLst)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,9 +89,17 @@ class ControlsBottomSheetDialog : RoundedBottomSheetDialog() {
         val blockedContainer = contentView.findViewById<LinearLayout>(R.id.block)
         val blockLabel = contentView.findViewById<TextView>(R.id.block_label)
 
+        val whiteContainer = contentView.findViewById<LinearLayout>(R.id.white)
+        val whiteLabel = contentView.findViewById<TextView>(R.id.white_label)
+
+
         if (isBlockedLst) {
             removeContainer.visibility = View.GONE
             blockLabel.setText(R.string.unblock)
+        }
+
+        if(isWhiteLst){
+            whiteLabel.setText(R.string.exclude)
         }
 
         removeContainer.setOnClickListener {
@@ -96,6 +111,7 @@ class ControlsBottomSheetDialog : RoundedBottomSheetDialog() {
         }
 
         clipboardContainer.setOnClickListener {
+            Timber.d("click clipboard")
             context?.let { ctx ->
                 queries.add(
                     db.beaconsDao().getBeaconById(beaconId)
@@ -105,7 +121,6 @@ class ControlsBottomSheetDialog : RoundedBottomSheetDialog() {
                             val clipboard = ctx.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                             val clip = ClipData.newPlainText("Beacon infos", it.toJson())
                             clipboard.primaryClip = clip
-
                             dismissAllowingStateLoss()
                             (activity as? BeaconListActivity)?.showGenericError(ctx.getString(R.string.the_informations_has_been_copied)) ?:
                             (activity as? AppCompatActivity)?.showSnackBar(ctx.getString(R.string.the_informations_has_been_copied))
@@ -128,6 +143,20 @@ class ControlsBottomSheetDialog : RoundedBottomSheetDialog() {
                 .subscribe {
                     dismissAllowingStateLoss()
                 })
+        }
+
+        whiteContainer.setOnClickListener{
+            Timber.d("click white")
+            queries.add(db.beaconsDao().getBeaconById(beaconId).flatMapCompletable {
+                Completable.fromCallable{
+                    db.beaconsDao().insertBeacon(it.copy(isWhite=!isWhiteLst))
+                }
+            }.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        dismissAllowingStateLoss()
+                    })
+
         }
     }
 
