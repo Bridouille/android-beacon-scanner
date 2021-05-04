@@ -1,7 +1,11 @@
 
-# :cyclone: Android Beacon Scanner #
+# :cyclone: Android Beacon Scanner with white list #
 
-A simple android beacon scanner that can recognize iBeacons, AltBeacons, Eddystone beacons (UID and URL, with or without TLM) and RuuviTags [available on Google Play](https://play.google.com/store/apps/details?id=com.bridou_n.beaconscanner).
+This is a fork of "A simple android beacon scanner that can recognize iBeacons, AltBeacons, Eddystone beacons (UID and URL, with or without TLM) and RuuviTags [available on Google Play](https://play.google.com/store/apps/details?id=com.bridou_n.beaconscanner)."
+
+New features: 
+1. White list is utilized for filtering the iBeacons for experiments 
+2. (TODO) Records could be saved and exported for future data analysis
 
 <img src="screenshots/screen-1.png" width="25%" />     <img src="screenshots/screen-2.png" width="25%" />   <img src="screenshots/screen-3.png" width="25%" />
 
