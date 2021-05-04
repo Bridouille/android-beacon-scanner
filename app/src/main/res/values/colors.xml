@@ -21,6 +21,7 @@
 
     <!-- Used for cards, bottomsheet -->
     <color name="colorElevatedComponent">#FFF</color>
+    <color name="colorHightlight">#FF0</color>
 
     <!-- Statusbar + toolbar background color -->
     <color name="colorToolbar">@color/colorBackground</color>

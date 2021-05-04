@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -35,11 +36,12 @@ class ControlsBottomSheetDialog : RoundedBottomSheetDialog() {
         const val KEY_BLOCKED = "key_blocked"
         const val KEY_WHITE = "key_white"
 
-        fun newInstance(beaconId: Int, blocked: Boolean = false) : ControlsBottomSheetDialog {
+        fun newInstance(beaconId: Int, blocked: Boolean = false, white:Boolean = false) : ControlsBottomSheetDialog {
             return ControlsBottomSheetDialog().apply {
                 arguments = Bundle().apply {
                     putInt(KEY_BEACON_ID, beaconId)
                     putBoolean(KEY_BLOCKED, blocked)
+                    putBoolean(KEY_WHITE,white)
                 }
             }
         }
@@ -91,7 +93,7 @@ class ControlsBottomSheetDialog : RoundedBottomSheetDialog() {
 
         val whiteContainer = contentView.findViewById<LinearLayout>(R.id.white)
         val whiteLabel = contentView.findViewById<TextView>(R.id.white_label)
-
+        val whiteIcon = contentView.findViewById<ImageView>(R.id.fileimage)
 
         if (isBlockedLst) {
             removeContainer.visibility = View.GONE
@@ -100,6 +102,7 @@ class ControlsBottomSheetDialog : RoundedBottomSheetDialog() {
 
         if(isWhiteLst){
             whiteLabel.setText(R.string.exclude)
+            whiteIcon.setImageResource(R.drawable.ic_round_delete_24px)
         }
 
         removeContainer.setOnClickListener {

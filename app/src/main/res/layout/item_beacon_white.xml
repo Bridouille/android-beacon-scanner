@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="6dp"
     app:cardElevation="4dp"
-    app:cardBackgroundColor="@color/colorElevatedComponent"
+    app:cardBackgroundColor="@color/colorSecondaryVariant"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
     android:layout_marginBottom="12dp"
@@ -31,22 +31,23 @@
             >
     
             <!-- Type -->
+
+            <!-- Distance -->
             <TextView
                 android:id="@+id/beacon_type"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/distance"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:layout_marginTop="8dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textAppearance="?attr/textAppearanceHeadline5"
-                tools:text="Eddystone-UID+TLM title that can be long"
-                />
-    
-            <!-- Distance -->
+                app:layout_constraintEnd_toStartOf="@+id/distance"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Eddystone-UID+TLM title that can be long" />
+
             <TextView
                 android:id="@+id/distance"
                 android:layout_width="wrap_content"
@@ -154,15 +155,15 @@
         <!-- List of other beacon informations -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/infos_rv"
+            app:layout_constraintTop_toBottomOf="@+id/header_divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:overScrollMode="never"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
             android:paddingBottom="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/header_divider" />
+            android:clipToPadding="false"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

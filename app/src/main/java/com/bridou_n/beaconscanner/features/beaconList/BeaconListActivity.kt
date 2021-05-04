@@ -89,7 +89,7 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 	private var isWhiting = false
 	
 	private val rvAdapter = BeaconsRecyclerViewAdapter { beacon ->
-		ControlsBottomSheetDialog.newInstance(beacon.hashcode).apply {
+		ControlsBottomSheetDialog.newInstance(beacon.hashcode,false,beacon.isWhite).apply {
 			show(supportFragmentManager)
 		}
 	}
@@ -159,12 +159,15 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 
 
 	private fun toogleWhite(){
+		val ori_name = getString(if (isScanning()) R.string.scanning_for_beacons else R.string.app_name)
 		if (!isWhiting()){
 			tracker.logEvent("start_whiting_clicked",null)
 			isWhiting = true
+			toolbar.title = ori_name + " (whitelist)"
 		}
 		else{
 			isWhiting = false
+			toolbar.title = ori_name
 		}
 		white_fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, if (isWhiting) R.color.colorPauseFab else R.color.colorSecondary))
 	}
@@ -224,13 +227,16 @@ class BeaconListActivity : AppCompatActivity(), BeaconConsumer {
 					if (list.isEmpty()) {
 						listOf(BeaconRow.EmptyState)
 					} else {
-						list.map { BeaconRow.Beacon(it) }
+						list.map { when(it.isWhite){
+							true -> BeaconRow.BeaconWhite(it)
+							else -> BeaconRow.Beacon(it)
+						} }
 					}
 				}else{
 					if (list.filter{it.isWhite}.isEmpty()) {
 						listOf(BeaconRow.EmptyState)
 					} else {
-						list.filter{it.isWhite}.map { BeaconRow.Beacon(it) }
+						list.filter{it.isWhite}.map { BeaconRow.BeaconWhite(it) }
 					}
 				}
 
