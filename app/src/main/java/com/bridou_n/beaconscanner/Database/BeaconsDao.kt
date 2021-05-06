@@ -19,6 +19,10 @@ interface BeaconsDao {
     @Query("SELECT * FROM $TABLE_NAME WHERE is_blocked = :blocked")
     fun getBeacons(blocked: Boolean = false) : Flowable<List<BeaconSaved>>
 
+
+    @Query("SELECT * FROM $TABLE_NAME WHERE is_white = :whited")
+    fun getWhiteBeacons(whited: Boolean = true) : Flowable<List<BeaconSaved>>
+
     @Query("SELECT * FROM $TABLE_NAME WHERE hashcode = :hashcode")
     fun getBeaconById(hashcode: Int) : Single<BeaconSaved>
 
@@ -27,6 +31,9 @@ interface BeaconsDao {
 
     @Insert(onConflict = REPLACE)
     fun insertBeacon(beacon: BeaconSaved)
+
+//    @Update("")
+//    fun update
 
     @Delete
     fun deleteBeacon(beacon: BeaconSaved)

@@ -64,6 +64,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:layout_below="@+id/progress_2"
+			android:layout_marginTop="-5dp"
 			android:clipToPadding="false"
 			android:overScrollMode="never"
 			android:paddingTop="8dp"
@@ -71,7 +72,7 @@
 			android:scrollbars="vertical"
 			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 	</RelativeLayout>
-	
+
 	<com.google.android.material.floatingactionbutton.FloatingActionButton
 		android:id="@+id/scan_fab"
 		android:layout_width="wrap_content"
@@ -81,5 +82,16 @@
 		android:tint="@android:color/white"
 		app:fabSize="normal"
 		app:srcCompat="@drawable/play_icon" />
+
+	<com.google.android.material.floatingactionbutton.FloatingActionButton
+		android:id="@+id/white_fab"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom"
+		android:layout_margin="@dimen/keyline_16"
+		android:tint="@android:color/white"
+		app:fabSize="normal"
+		app:srcCompat="@drawable/file_icon"
+		/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

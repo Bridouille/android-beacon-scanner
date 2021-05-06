@@ -81,7 +81,11 @@ data class BeaconSaved(
     val ruuviData: RuuviData? = null,
 
     @ColumnInfo(name = "is_blocked")
-    val isBlocked: Boolean = false
+    val isBlocked: Boolean = false,
+
+    @ColumnInfo(name="is_white")
+    val isWhite: Boolean = false
+
 ) {
     companion object {
         const val TYPE_EDDYSTONE_UID = "eddystone_uid"
@@ -90,7 +94,7 @@ data class BeaconSaved(
         const val TYPE_IBEACON = "ibeacon"
         const val TYPE_RUUVITAG = "ruuvitag"
 
-        fun createFromBeacon(beacon: Beacon, isBlocked: Boolean = false) : BeaconSaved {
+        fun createFromBeacon(beacon: Beacon, isBlocked: Boolean = false, isWhite: Boolean = false) : BeaconSaved {
             // Common fields to every beacons
             var hashcode = beacon.hashCode()
             val lastSeen = Date().time
@@ -162,8 +166,8 @@ data class BeaconSaved(
                     eddystoneUidData = eddystoneUidData,
                     telemetryData = telemetryData,
                     ruuviData = ruuviData,
-
-                    isBlocked = isBlocked
+                    isBlocked = isBlocked,
+                    isWhite = isWhite
             )
         }
         

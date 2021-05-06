@@ -78,12 +78,16 @@
     <string name="remove_from_the_list">Remove from the list</string>
     <string name="copy_infos_to_clipboard">Copy infos to clipboard</string>
     <string name="add_to_the_blocked_list">Add to the blocked list</string>
+    <string name="add_to_the_white_list">Add to the white list</string>
     <string name="the_informations_has_been_copied">The informations have been copied to the clipboard!</string>
     <string name="blacklist">Blacklist</string>
     <string name="see_the_blocked_beacons">See the blocked beacons</string>
     <string name="no_blocked_beacons">No beacon has been blocked yet!</string>
     <string name="unblock">Unblock</string>
+    <string name="exclude">Remove from white list</string>
     <string name="open_source">Open source</string>
     <string name="open_source_descr">This app is open source! Want to see how it works under the hood or customize it to fits your needs?</string>
     <string name="prevent_sleep_descr">While scanning, the device won\'t be put in sleep mode</string>
+    <string name="show_white">Show beacons in white list</string>
+    <string name="save_result">Save Scanned BLE to csv</string>
 </resources>

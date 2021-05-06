@@ -14,7 +14,7 @@ import com.afollestad.materialdialogs.actions.getActionButton
 import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
-import com.bridou_n.beaconscanner.BuildConfig
+//import com.bridou_n.beaconscanner.BuildConfig
 import com.bridou_n.beaconscanner.R
 import com.bridou_n.beaconscanner.features.blockedList.BlockedActivity
 import com.bridou_n.beaconscanner.utils.PreferencesHelper
@@ -52,7 +52,7 @@ class SettingsActivity : AppCompatActivity() {
 		handleLoggingState(prefs.isLoggingEnabled)
 		
 		toolbar_title.text = getString(R.string.settings)
-		app_version.text = String.format("v%s", BuildConfig.VERSION_NAME)
+//		app_version.text = String.format("v%s", BuildConfig.VERSION_NAME)
 		
 		content.apply {
 			viewTreeObserver.addOnScrollChangedListener {
