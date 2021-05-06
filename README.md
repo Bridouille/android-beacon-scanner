@@ -9,10 +9,15 @@ The forked project has the following new features:
 * White list: white can help doing experiment without manualy blocking a lot of beacons; (this is helpful if there are a lot of beacons in the experiment enviroment); 
 * (TODO): dump the db to local csv files; 
 
+Available for android 5.0+ and smartphones with Bluetooth LE.
 
+* Original app visualization: 
 <img src="screenshots/screen-1.png" width="25%" />     <img src="screenshots/screen-2.png" width="25%" />   <img src="screenshots/screen-3.png" width="25%" />
 
-Available for android 5.0+ and smartphones with Bluetooth LE.
+* White list part: (new feature, under developing)
+<img src="screenshots/white_list_vis_1.png" width="25%" />     <img src="screenshots/white_list_vis_2.png" width="25%" /> 
+
+
 
 ## :key: Features ##
 
