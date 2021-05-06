@@ -12,9 +12,11 @@ The forked project has the following new features:
 Available for android 5.0+ and smartphones with Bluetooth LE.
 
 * Original app visualization: 
+
 <img src="screenshots/screen-1.png" width="25%" />     <img src="screenshots/screen-2.png" width="25%" />   <img src="screenshots/screen-3.png" width="25%" />
 
 * White list part: (new feature, under developing)
+
 <img src="screenshots/white_list_vis_1.png" width="25%" />     <img src="screenshots/white_list_vis_2.png" width="25%" /> 
 
 
